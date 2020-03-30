@@ -19,7 +19,7 @@ git clone git@gitlab.com:climate-movement-reporting-tool/climate-movement-report
   gem install bundler # needed to download gems
   bundle install # install gems set in Gemfile
 
-  #set local db password/or add the ENV variable to your bash/zsh file 
+  #set local db password/or add the ENV variable to your bash/zsh file
   export LOCAL_DB_PASSWORD="your_password"
 
   #create db
@@ -38,7 +38,14 @@ git clone git@gitlab.com:climate-movement-reporting-tool/climate-movement-report
 ## rSpec
 
 ```.bash
+#run all tests
 bundle exec rspec
+
+#run unit tests
+bundle exec rspec spec/unit
+
+#run integration tests
+bundle exec rspec spec/features
 ```
 
 ## Cucumber
