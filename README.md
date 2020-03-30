@@ -28,3 +28,11 @@ bundle exec rspec
 ```.bash
 bundle exec cucumber
 ```
+
+## Test that everything's ok
+
+```bash
+bundle exec rspec spec/canary_spec.rb
+bundle exec cucumber features/canary.feature
+```
+
