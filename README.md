@@ -1,20 +1,38 @@
 # Climate Movement Reporting Tool
 
-It will allow local chapters to input relevant data and enable the centralized collection, reporting, and communication of the overall impact of decentralized climate movements. 
+It will allow local chapters to input relevant data and enable the centralized collection, reporting, and communication of the overall impact of decentralized climate movements.
 
 # Install
 
 ```bash
 git clone git@gitlab.com:climate-movement-reporting-tool/climate-movement-reporting-tool.git
 ```
-
+# Dependencies
+ ```
+  Install rbenv and use Ruby 2.7.0 : https://github.com/rbenv/rbenv
+  Install MySQL 8.0.19
+ ```
 # Set up
 
 ```bash
-# gem install bundler
-bundle
+  #run these cmds in working directory
+  gem install bundler # needed to download gems
+  bundle install # install gems set in Gemfile
+
+  #set local db password/or add the ENV variable to your bash/zsh file 
+  export LOCAL_DB_PASSWORD="your_password"
+
+  #create db
+  rake db:create
 ```
- 
+# Starting up Rails
+
+```
+  rails s
+
+  #Go to http://localhost:3000/
+```
+
 # Tests
 
 ## rSpec
@@ -35,4 +53,3 @@ bundle exec cucumber
 bundle exec rspec spec/canary_spec.rb
 bundle exec cucumber features/canary.feature
 ```
-
