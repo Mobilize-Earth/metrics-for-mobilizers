@@ -8,11 +8,15 @@ variables:
   MYSQL_ROOT_PASSWORD: testdb
 
 before_script:
-  - apt-get update --qq && apt-get install -y qq build-essentials nodejs yarn
+  - apt-get update -qq && apt-get install -y qq build-essentials nodejs libmysql
   - ruby -v
   - which ruby
   - gem install bundler --no-document
   - bundle install
+
+stages:
+  - unit_test
+  - integration_test
 
 unit_test:
   script:
