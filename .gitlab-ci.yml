@@ -8,7 +8,7 @@ variables:
   MYSQL_ROOT_PASSWORD: testdb
 
 before_script:
-  - apt-get update -qq && apt-get install -y nodejs
+  - apt-get update -qq && apt-get install -y nodejs npm
   - npm install yarn
   - yarn -v
   - yarn install --check-files
