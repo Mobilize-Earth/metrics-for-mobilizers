@@ -8,11 +8,12 @@ variables:
   MYSQL_ROOT_PASSWORD: testdb
 
 before_script:
-  - apt-get update -qq && apt-get install -y build-essentials nodejs libmysql
+  - apt-get update -qq && apt-get install -y nodejs
   - ruby -v
   - which ruby
   - gem install bundler --no-document
   - bundle install
+  - rake db:create
 
 stages:
   - unit_test
