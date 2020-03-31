@@ -1,5 +1,12 @@
 image: "ruby:2.7"
 
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: climate_movement_reporting_tool_test
+  MYSQL_ROOT_PASSWORD: testdb
+
 before_script:
   - apt-get update --qq && apt-get install -y qq build-essentials nodejs yarn
   - ruby -v
