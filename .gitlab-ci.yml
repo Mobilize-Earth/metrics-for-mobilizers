@@ -7,16 +7,11 @@ before_script:
   - gem install bundler --no-document
   - bundle install
 
-stages:
-  - unit_test
-  - integration_test
 
-unit_test:
-  stage: unit_test
+test:unit_test:
   script:
     - bundle exec rspec spec/unit
 
-integration_test:
-  stage: integration_test
+test:integration_test:
   script:
     - bundle exec rspec spec/features
