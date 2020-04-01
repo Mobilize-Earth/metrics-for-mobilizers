@@ -12,17 +12,19 @@ build:
     - npm install yarn -g
     - gem install bundler --no-document
     - bundle install
+  artifacts:
+    - app/
 
 unit_test:
   stage: unit_test
   script:
-    - bundle exec rspec spec/unit
+    - cd app && bundle exec rspec spec/unit
   dependencies:
     - build
 
 integration_test:
   stage: integration_test
   script:
-    - bundle exec rspec spec/features
+    - cd app && bundle exec rspec spec/features
   dependencies:
     - build
