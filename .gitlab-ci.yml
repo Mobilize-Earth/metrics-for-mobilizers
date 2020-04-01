@@ -17,8 +17,12 @@ unit_test:
   stage: unit_test
   script:
     - bundle exec rspec spec/unit
+  dependencies:
+    - build
 
 integration_test:
   stage: integration_test
   script:
     - bundle exec rspec spec/features
+  dependencies:
+    - build
