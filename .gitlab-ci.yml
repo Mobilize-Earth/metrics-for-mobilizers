@@ -3,9 +3,20 @@ image: "ruby:2.7"
 before_script:
   - apt-get update -qq && apt-get install -y nodejs npm
   - npm install yarn -g
+  - yarn install --check-files
   - gem install bundler --no-document
   - bundle install
 
-all_tests:
+stages:
+  - unit_test
+  - integration_test
+
+unit_test:
+  stage: unit_test
   script:
-    - bundle exec rspec
+    - bundle exec rspec spec/unit
+
+integration_test:
+  stage: integration_test
+  script:
+    - bundle exec rspec spec/features
