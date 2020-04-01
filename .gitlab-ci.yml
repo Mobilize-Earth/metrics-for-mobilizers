@@ -9,7 +9,6 @@ before_script:
   - which ruby
   - gem install bundler --no-document
   - bundle install
-  - rake db:create
 
 stages:
   - unit_test
