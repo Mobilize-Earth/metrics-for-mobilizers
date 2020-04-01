@@ -1,31 +1,11 @@
 image: "ruby:2.7"
 
-stages:
-  - build
-  - unit_test
-  - integration_test
+before_script:
+  - apt-get update -qq && apt-get install -y nodejs npm
+  - npm install yarn -g
+  - gem install bundler --no-document
+  - bundle install
 
-build:
-  stage: build
+all_tests:
   script:
-    - apt-get update -qq && apt-get install -y nodejs npm
-    - npm install yarn -g
-    - gem install bundler --no-document
-    - bundle install
-  artifacts:
-    paths:
-      - app/
-
-unit_test:
-  stage: unit_test
-  script:
-    - cd app && bundle exec rspec spec/unit
-  dependencies:
-    - build
-
-integration_test:
-  stage: integration_test
-  script:
-    - cd app && bundle exec rspec spec/features
-  dependencies:
-    - build
+    - bundle exec rspec
