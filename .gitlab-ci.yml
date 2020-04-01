@@ -1,9 +1,8 @@
-image: "ruby:2.7"
+image: "ruby:2.7-alpine"
 
 before_script:
-  - apt-get update -qq && apt-get install -y nodejs npm
+  - apk update && apk add --no-cache nodejs npm
   - npm install yarn -g
-  - yarn install --check-files
   - gem install bundler --no-document
   - bundle install
 
