@@ -13,4 +13,5 @@ test:unit_test:
 
 test:integration_test:
   script:
+    - RAILS_ENV=test ./bin/rails webpacker:compile
     - bundle exec rspec spec/features
