@@ -13,8 +13,8 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password: <%= ENV["LOCAL_DB_PASSWORD"] %>
+  username: <%= ENV["DATABASE_USERNAME"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
   host: localhost
 
 development:
@@ -51,5 +51,5 @@ test:
 production:
   <<: *default
   database: climate_movement_reporting_tool_production
-  username: xr
-  password: <%= ENV['XR_DATABASE_PASSWORD'] %>
+  username: <%= ENV["DATABASE_USERNAME"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
