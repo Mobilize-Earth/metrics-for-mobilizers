@@ -1,7 +1,7 @@
-image: "ruby:2.7-alpine"
+image: "ruby:2.7.0-alpine"
 
 before_script:
-  - apk update && apk add --no-cache nodejs npm
+  - apk update && apk add --no-cache build-base nodejs npm
   - npm install yarn -g
   - gem install bundler --no-document
   - bundle install

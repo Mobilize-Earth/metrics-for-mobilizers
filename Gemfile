@@ -12,6 +12,7 @@ gem 'sass-rails', '>= 6'
 gem 'mysql2', '>= 0.5.3'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
+gem 'tzinfo-data'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
