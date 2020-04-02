@@ -14,5 +14,4 @@ test:unit_test:
 test:integration_test:
   script:
     - yarn add @rails/webpacker
-    - bundle update webpacker
     - bundle exec rspec spec/features
