@@ -19,8 +19,9 @@ git clone git@gitlab.com:climate-movement-reporting-tool/climate-movement-report
   gem install bundler # needed to download gems
   bundle install # install gems set in Gemfile
 
-  #set local db password/or add the ENV variable to your bash/zsh file
-  export LOCAL_DB_PASSWORD="your_password"
+  #set local db usernaem and password/or add the ENV variable to your bash/zsh file
+  export DATABASE_USERNAME="your_db_user"
+  export DATABASE_PASSWORD="your_db_password"
 
   #create db
   rake db:create
