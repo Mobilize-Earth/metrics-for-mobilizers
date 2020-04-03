@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  db:
+    image: mariadb:10.3.0
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    expose:
+     - 3306
+    volumes:
+      - dbdata:/var/lib/mysql
+  web:
+    image: dunno282/climate-change-metrics-reporting:b2947f12
+    environment:
+      DATABASE_USERNAME: root
+      DATABASE_HOST: db
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    links:
+      - db
+    depends_on:
+      - db
+volumes:
+  dbdata:
