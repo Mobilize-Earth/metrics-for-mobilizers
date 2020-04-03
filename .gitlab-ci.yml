@@ -8,10 +8,12 @@ before_script:
 
 
 test:unit_test:
+  tags: docker
   script:
     - bundle exec rspec spec/unit
 
 test:integration_test:
+  tags: docker
   script:
     - yarn add @rails/webpacker
     - bundle exec rspec spec/features
