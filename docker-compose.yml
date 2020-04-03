@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.0'
 services:
   db:
     image: mariadb:10.3.0
@@ -13,8 +13,6 @@ services:
     environment:
       DATABASE_USERNAME: root
       DATABASE_HOST: db
-    volumes:
-      - .:/app
     ports:
       - "3000:3000"
     links:

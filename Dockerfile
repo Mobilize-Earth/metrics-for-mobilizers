@@ -11,9 +11,10 @@ COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 COPY startup.sh /app/startup.sh
 
+RUN RUN gem install sassc -- --disable-march-tune-native
 RUN bundle install
 
 COPY . /app
 EXPOSE 3000
 
-CMD ["sh", "./startup.sh" ]
+CMD rm -f tmp/pids/server.pid && bundle exec rake db:migrate 2>/dev/null || bundle exec rake db:create db:migrate &&
