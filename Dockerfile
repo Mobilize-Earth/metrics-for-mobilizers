@@ -9,6 +9,7 @@ WORKDIR /app
 
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
+COPY startup.sh /app/startup.sh
 
 RUN bundle install
 
