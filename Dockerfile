@@ -11,7 +11,7 @@ COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 COPY startup.sh /app/startup.sh
 
-RUN RUN gem install sassc -- --disable-march-tune-native
+RUN gem install sassc -- --disable-march-tune-native
 RUN bundle install
 
 COPY . /app
