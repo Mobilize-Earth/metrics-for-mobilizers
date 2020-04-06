@@ -24,8 +24,12 @@ git clone git@gitlab.com:climate-movement-reporting-tool/climate-movement-report
   export DATABASE_USERNAME="your_db_user"
   export DATABASE_PASSWORD="your_db_password"
 
-  #create db
+  #create db. This is only needed when you set up the app for the first time.
   rake db:create
+  rake db:migrate
+
+  #Run this when there are new changes to the database schema.
+  rake db:migrate
 ```
 # Starting up Rails
 
