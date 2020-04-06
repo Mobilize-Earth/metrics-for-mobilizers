@@ -6,7 +6,6 @@ before_script:
   - gem install bundler --no-document
   - bundle install
 
-
 test:unit_test:
   tags:
     - docker
@@ -20,3 +19,12 @@ test:integration_test:
     - yarn add @rails/webpacker
     - rails db:migrate RAILS_ENV=test
     - bundle exec rspec spec/features
+
+image:create_push:
+    tags:
+      - docker
+    script:
+      - docker login -u=$DOCKER_USER -p=$DOCKER_PASSWORD
+      - IMAGE_TAG=git rev-parse HEAD | cut -c 1-8
+      - docker build -t $DOCKER_USER/$DOCKER_REPO:$IMAGE_TAG .
+      - docker push $DOCKER_USER/$DOCKER_REPO:$IMAGE_TAG
