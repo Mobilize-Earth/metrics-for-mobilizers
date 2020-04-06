@@ -1,10 +1,21 @@
-<h1>Climate Movement Reporting Tool</h1>
-<div class="alert alert-primary" role="alert">
-  A simple primary alert—check it out!
+<div class="container-fluid header landing">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <p class="intro">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mauris metus, ultrices vel nisi at,
+        elementum laoreet massa. Morbi ut elit ac arcu venenatis porta. Aliquam condimentum justo sed lectus sodales,
+        at mollis orci semper. In dapibus volutpat eleifend. Aenean egestas nisi sed velit efficitur, eget laoreet enim lobortis.
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <p class="write-to">
+        To sign up write to
+      </p>
+      <p class="email-to">
+        reports@XXXXX.com
+      </p>
+    </div>
+  </div>
 </div>
-<% if current_user.nil? %>
-	<%= link_to new_user_session_path, class: 'login-button' do %>Sign in<% end %>
-<% else %>
-  <%= link_to dashboard_index_url, class: 'login-button' do %>Go to App<% end %>
-  <%= link_to destroy_user_session_path, method: :delete do %>Log out<% end %>
-<% end %>
