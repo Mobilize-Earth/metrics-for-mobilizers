@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'sign in', :devise do
     scenario 'user with access Dashboard page with valid credentials' do
-        user = FactoryGirl.create(:user)
+        user = FactoryBot.create(:user)
         signin(user.email, user.password)
         expect(page).to have_content "Dashboard"
     end
