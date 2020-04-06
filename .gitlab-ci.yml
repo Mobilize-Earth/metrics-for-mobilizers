@@ -6,13 +6,20 @@ before_script:
   - gem install bundler --no-document
   - bundle install
 
-test:unit_test:
+stages:
+  - unit_test
+  - integration_test
+  - create_push_image
+
+unit_test:
+  stage: unit_test
   tags:
     - docker
   script:
     - bundle exec rspec spec/unit
 
-test:integration_test:
+integration_test:
+  stage: integration_test
   tags:
     - docker
   script:
@@ -20,7 +27,8 @@ test:integration_test:
     - rails db:migrate RAILS_ENV=test
     - bundle exec rspec spec/features
 
-image:create_push:
+create_push:
+    stage: create_push_image
     tags:
       - docker
     script:
