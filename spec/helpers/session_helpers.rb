@@ -1,7 +1,7 @@
 module Helpers
     module SessionHelpers
-        def singin(email, password)
-            visit_singin_page
+        def sign_in(email, password)
+            visit_sign_in_page
             fill_in "Email", with: email
             fill_in "Password", with: password
             click_button "Log in"
@@ -12,10 +12,9 @@ module Helpers
             visit "/"
         end
 
-        def visit_singin_page
+        def visit_sign_in_page
             visit_home_page
-            click_link "Sign in"
+            click_link "Log In"
         end
     end
 end
-  
