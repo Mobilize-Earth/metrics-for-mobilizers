@@ -20,3 +20,9 @@
   text-align: center;
   font-size: 25px;
 }
+
+@media(max-width: 760px) {
+  .intro { font-size: 15px; }
+  .write-to { font-size: 25px; }
+  .email-to { font-size: 20px; }
+}
