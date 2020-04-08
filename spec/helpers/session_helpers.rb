@@ -2,9 +2,9 @@ module Helpers
     module SessionHelpers
         def sign_in(email, password)
             visit_sign_in_page
-            fill_in "Email", with: email
+            fill_in "Your Email", with: email
             fill_in "Password", with: password
-            click_button "Log in"
+            click_button "Log In"
         end
 
         def visit_home_page

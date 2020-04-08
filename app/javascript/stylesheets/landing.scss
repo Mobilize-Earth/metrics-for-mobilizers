@@ -1,6 +1,6 @@
-.landing {
+.default-background {
   background-color: #F4F5F0;
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
 }
 
 .intro {

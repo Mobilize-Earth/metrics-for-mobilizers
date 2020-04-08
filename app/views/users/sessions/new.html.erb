@@ -1,4 +1,4 @@
-<div class="container-fluid header login">
+<div class="container-fluid default-background">
   <div class="row">
     <div class="col-md-3 offset-md-3 ">
       <div class="data_form_title">
@@ -7,24 +7,24 @@
       <div class= "data_form">
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
           <div class="field data_field">
-            <%= f.label "Your email" %><br />
+            <%= f.label :email, "Your Email" %><br />
             <%= f.email_field :email, autofocus: true, autocomplete: "email", :class=>'data_entry' %>
           </div>
-      
+
           <div class="field data_field">
             <%= f.label :password %><br />
             <%= f.password_field :password, autocomplete: "current-password", :class=>'data_entry' %>
           </div>
-      
+
           <% if devise_mapping.rememberable? %>
             <div class="field">
               <%= f.check_box :remember_me %>
               <%= f.label :remember_me %>
             </div>
           <% end %>
-      
+
           <div class="actions login_button_section">
-            <%= f.submit 'Log In' , :class => 'button right login_button' %>
+            <%= f.submit "Log In" , :class => 'button right login_button' %>
           </div>
         <% end %>
       </div>
