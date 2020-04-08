@@ -1,16 +1,15 @@
 .default-background {
   background-color: #F4F5F0;
   min-height: calc(100vh - 100px);
+  font-family: 'Poppins', sans-serif;
 }
 
 .intro {
-  font-family: 'Poppins', sans-serif;
   margin-top: 110px;
   font-size: 20px;
 }
 
 .write-to {
-  font-family: 'Poppins', sans-serif;
   text-align: center;
   margin-top: 25px;
   font-size: 36px;
@@ -18,7 +17,6 @@
 }
 
 .email-to {
-  font-family: 'Poppins', sans-serif;
   text-align: center;
   font-size: 25px;
 }
