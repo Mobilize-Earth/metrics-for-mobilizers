@@ -1,16 +1,21 @@
-<div class="container-fluid header">
-  <div class="row">
-    <div class="col-md">
+<div class="container-fluid">
+  <div class="row header">
+    <div class="col-sm-5">
     </div>
-    <div class="col-md">
+    <div class="col-sm-4 ">
     </div>
-    <div class="col-md offset-md-3">
+    <div class="col-sm-3 text-center my-auto align-self-end">
       <% if current_user.nil? %>
-       <%= link_to new_user_session_path, class: "btn login-button" do %>Log In<% end %>
+       <%= link_to new_user_session_path, class: "btn btn-lg login-button" do %>Log In<% end %>
       <% else %>
-       <%= link_to dashboard_index_url, class: "btn regular-button" do %>Go to App<% end %>
-       <%= link_to destroy_user_session_path, class: "btn regular-button", method: :delete do %>Log out<% end %>
+       <%= link_to dashboard_index_url, class: "btn btn-lg regular-button" do %>Go to App<% end %>
+       <%= link_to destroy_user_session_path, class: "btn btn-lg regular-button", method: :delete do %>Log out<% end %>
       <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="header-logo">
+      <%= image_tag("/images/mob_earth_circle.svg") %>
     </div>
   </div>
 </div>
