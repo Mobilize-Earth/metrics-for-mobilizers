@@ -12,13 +12,13 @@ feature 'sign in', :devise do
         expect(page).to have_content "Log In"
     end
 
-    scenario 'user cannot sigin with incorrect email' do
+    scenario 'user cannot sign in with incorrect email' do
         user = FactoryBot.create(:user)
         sign_in('invalid@email.com', user.password)
         expect(page).to have_content "Log In"
     end
 
-    scenario 'user cannot sigin with incorrect password' do
+    scenario 'user cannot sign in with incorrect password' do
         user = FactoryBot.create(:user)
         sign_in(user.email, 'invalidPassword')
         expect(page).to have_content "Log In"

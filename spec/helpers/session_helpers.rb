@@ -8,7 +8,7 @@ module Helpers
         end
 
         def visit_home_page
-            Capybara.app_host = "https://reporting.dev.organise.earth/"
+            Capybara.app_host = "http://localhost"
             visit "/"
         end
 
