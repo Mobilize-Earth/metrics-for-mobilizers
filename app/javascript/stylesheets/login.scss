@@ -2,11 +2,13 @@
     margin-top: 100px;
     font-size: 24px;
     font-weight: 500;
+    font-family: 'Poppins', sans-serif;
 }
 
 .data_form {
     font-size: 18px;
     font-weight: 400;
+    font-family: 'Poppins', sans-serif;
 }
 
 .data_field {
@@ -28,9 +30,36 @@
 .login_button {
     width: 207.5px;
     height: 75px;
-    background-color: #03AD6F;
-    color: #FFFFFF;
     font-size: 24px;
     font-weight: 700;
     border: 1px solid black;
+    font-family: 'Poppins', sans-serif;
+}
+
+.login_input {
+    position: relative;
+}
+
+.login_input input { 
+    text-indent: 35px;
+}
+
+.login_input_icon { 
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    cursor: pointer;
+}
+
+.image_logo {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 0px;
+}
+
+@media (max-width: 1250px) {
+    img#logo_left_image {
+      display: none;
+    }
 }

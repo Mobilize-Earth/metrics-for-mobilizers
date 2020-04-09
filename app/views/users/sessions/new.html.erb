@@ -1,4 +1,11 @@
 <div class="container-fluid default-background">
+  <% if flash[:alert].present? %>
+    <div class="alert alert-danger alert-dismissible fade show">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
   <div class="row">
     <div class="col-md-3 offset-md-3 ">
       <div class="data_form_title">
@@ -8,12 +15,18 @@
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
           <div class="field data_field">
             <%= f.label :email, "Your Email" %><br />
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", :class=>'data_entry' %>
+            <div class="login_input">
+              <i class="fa fa-envelope login_input_icon"></i>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", :class=>'data_entry' %>
+            </div>
           </div>
 
           <div class="field data_field">
             <%= f.label :password %><br />
-            <%= f.password_field :password, autocomplete: "current-password", :class=>'data_entry' %>
+            <div class="login_input">
+              <span class="fa fa-key login_input_icon"></span>
+              <%= f.password_field :password, autocomplete: "current-password", :class=>'data_entry' %>
+            </div>
           </div>
 
           <% if devise_mapping.rememberable? %>
@@ -24,10 +37,13 @@
           <% end %>
 
           <div class="actions login_button_section">
-            <%= f.submit "Log In" , :class => 'button right login_button' %>
+            <%= f.submit "Log In" , :class => 'btn btn-success login_button' %>
           </div>
         <% end %>
       </div>
     </div>
+  </div>
+  <div class="offset-md-6" >
+    <%= image_tag("/images/mob_earth_circle.svg", :class => "image_logo", id: "logo_left_image")%>
   </div>
 </div>
