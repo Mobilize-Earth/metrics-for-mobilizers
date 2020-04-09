@@ -8,7 +8,7 @@
       <% if current_user.nil? %>
        <%= link_to new_user_session_path, class: "btn btn-lg login-button" do %>Log In<% end %>
       <% else %>
-       <%= link_to destroy_user_session_path, class: "btn btn-lg regular-button", method: :delete do %>Log out<% end %>
+       <%= link_to destroy_user_session_path, class: "btn btn-lg logout-button", method: :delete do %>Log out<% end %>
       <% end %>
     </div>
   </div>
