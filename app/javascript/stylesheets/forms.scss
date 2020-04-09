@@ -40,4 +40,17 @@ a:hover.form-tile {
     margin-top: 90px;
     font-size: 20px;
   }
+  .half-logo { display: none; }
+}
+
+@media(max-width: 770px) {
+  .half-logo { display: none; }
+}
+
+.half-logo {
+  width: 275px;
+  height: 575px;
+  position: absolute;
+  top: 200px;
+  right: 0px;
 }
