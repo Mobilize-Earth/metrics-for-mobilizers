@@ -1,0 +1,43 @@
+.form-title {
+  color: #03AD6F;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 41px;
+}
+
+.form-tile  {
+  height: 240px;
+  border: 1px solid #03AD6F;
+  background-color: #FFFFFF;
+  text-align: center;
+  color: #000000;
+  font-size: 22px;
+  font-weight: 600;
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+a:link.form-tile {
+  text-decoration: none;
+}
+
+a:hover.form-tile {
+  color: black;
+}
+
+.tile-desc {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tile-title {
+  padding-top: 25px;
+  padding-bottom: 50px;
+}
+
+@media(max-width: 575px) {
+  .form-title {
+    margin-top: 90px;
+    font-size: 20px;
+  }
+}

@@ -12,6 +12,15 @@ Rails.application.routes.draw do
   end
 
   root to: "home#index"
-
   get '/dashboard/index' => 'dashboard#index'
+
+  get '/form/index' => 'form#index'
+  get '/form/mobilization' => 'form#mobilization'
+  get '/form/training' => 'form#training'
+  get '/form/arrestable' => 'form#arrestable'
+  get '/form/street' => 'form#street'
+
+
+
+
 end
