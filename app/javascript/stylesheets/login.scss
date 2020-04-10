@@ -32,7 +32,6 @@
     height: 75px;
     font-size: 24px;
     font-weight: 700;
-    border: 1px solid black;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -51,15 +50,27 @@
     cursor: pointer;
 }
 
-.image_logo {
-    width: 100%;
-    height: auto;
-    position: absolute;
-    top: 0px;
+.login_message_error {
+    padding-top: 25px;
+    width: 415px;
 }
 
-@media (max-width: 1250px) {
-    img#logo_left_image {
-      display: none;
-    }
+.login_forget_password {
+    padding-top: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    font-style: italic;
+}
+
+@media(max-width: 950px) {
+    .half_login_logo { display: none; }
+}
+
+.half_login_logo {
+    width: 275px;
+    height: 575px;
+    position: absolute;
+    top: 200px;
+    right: 0px;
 }

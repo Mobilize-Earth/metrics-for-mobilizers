@@ -6,7 +6,9 @@
     </div>
     <div class="col-5 col-sm-4 col-md-3 text-center my-auto align-self-end">
       <% if current_user.nil? %>
-       <%= link_to new_user_session_path, class: "btn btn-lg login-button" do %>Log In<% end %>
+        <% unless current_page?(new_user_session_url) %>
+          <%= link_to new_user_session_path, id: "login_button", class: "btn btn-lg login-button" do %>Log In<% end %>
+        <% end %>
       <% else %>
        <%= link_to destroy_user_session_path, class: "btn btn-lg logout-button", method: :delete do %>Log out<% end %>
       <% end %>
