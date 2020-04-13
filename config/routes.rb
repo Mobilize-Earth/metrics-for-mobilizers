@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get '/form/arrestable' => 'form#arrestable'
   get '/form/street' => 'form#street'
 
+  get 'admin/index' =>  'admin#index'
 
 
 
