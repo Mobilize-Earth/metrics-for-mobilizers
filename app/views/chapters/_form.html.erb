@@ -1,0 +1,22 @@
+<% if flash[:errors] %>
+  <% flash[:errors].each do |error | %>
+    <p><%= error %></p>
+  <% end %>
+<% end %>
+
+
+<%= form_for @chapter do |f| %>
+  <%= f.label :name, "Chapter Name:" %>
+  <%= f.text_field :name %>
+
+  <%= f.label :active_members, "Total Active Members:" %>
+  <%= f.text_field :active_members %>
+
+  <%= f.label :total_subscription_amount, "Total Subscription Dollar Amount:" %>
+  <%= f.text_field :total_subscription_amount %>
+
+  <%= f.label :description, "Chapter Description:" %>
+  <%= f.text_area :description %>
+
+  <%= f.submit %>
+<% end %>
