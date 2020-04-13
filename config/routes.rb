@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   }
 
   resources :users
+  # resources :chapters, only: [:new, :create, :update]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   authenticated :user do
     root to: "dashboard#index", as: :user_root
@@ -20,8 +21,10 @@ Rails.application.routes.draw do
   get '/form/arrestable' => 'form#arrestable'
   get '/form/street' => 'form#street'
 
-  get 'admin/index' =>  'admin#index'
+  get 'admin/index' => 'admin#index'
 
-
-
+  get '/chapter/new', to: 'chapter#new'
+  post '/chapters', to: 'chapter#create'
+  get '/chapters/:id/edit', to: 'chapter#edit'
+  put '/chapters/:id', to: 'chapter#update'
 end
