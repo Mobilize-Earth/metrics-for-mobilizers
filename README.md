@@ -5,13 +5,16 @@ It will allow local chapters to input relevant data and enable the centralized c
 # Install
 
 ```bash
-git clone git@gitlab.com:climate-movement-reporting-tool/climate-movement-reporting-tool.git
+git clone https://code.organise.earth/rilau/climate-movement-reporting-tool.git
 ```
+
 # Dependencies
- ```
+
+```
   Install rbenv and use Ruby 2.7.0 : https://github.com/rbenv/rbenv
   Install MySQL 8.0.19
- ```
+```
+
 # Set up
 
 ```bash
@@ -31,6 +34,7 @@ git clone git@gitlab.com:climate-movement-reporting-tool/climate-movement-report
   #Run this when there are new changes to the database schema.
   rake db:migrate
 ```
+
 # Starting up Rails
 
 ```
