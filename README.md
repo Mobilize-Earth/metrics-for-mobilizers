@@ -27,9 +27,19 @@ git clone https://code.organise.earth/rilau/climate-movement-reporting-tool.git
   export DATABASE_USERNAME="your_db_user"
   export DATABASE_PASSWORD="your_db_password"
 
+  #create database and user with permissions
+  mysql -u root -p<root_password>
+   - CREATE USER 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
+   - CREATE DATABASE climate_movement_reporting_tool_development;
+   - GRANT ALL ON climate_movement_reporting_tool_development.* TO 'your_db_user'@'localhost';
+
   #create db. This is only needed when you set up the app for the first time.
   rake db:create
   rake db:migrate
+  rake db:seed
+
+  #install frontend dependencies
+  yarn
 
   #Run this when there are new changes to the database schema.
   rake db:migrate
