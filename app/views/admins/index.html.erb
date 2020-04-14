@@ -1,7 +1,10 @@
 <div class="default-background">
-  <h1 class="admin-title">Admin Dashboard</h1>
+  <% if can? :access, :admins_index_url %>
+    <h1 class="admin-title">Admin Dashboard</h1>
 
-  <div class="admin-title">
-    <%= link_to "Create New Chapter", new_chapter_path, class: "chapter-link" %>
-  </div>
+    <div class="admin-title">
+      <%= link_to "Create New Chapter", new_chapter_path, class: "chapter-link" %>
+    </div>
+  <% end %>
+  <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
 </div>
