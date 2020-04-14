@@ -1,5 +1,5 @@
 $grey: #9b9b9b;
-$light-grey: #ccc;
+$light-grey: #ddd;
 $box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 $border: 0.1rem solid $grey;
 
@@ -35,7 +35,7 @@ $border: 0.1rem solid $grey;
   .left-nav-item {
     padding: 0.5rem 0;
     display: block;
-    color: #000;
+    color: inherit;
     cursor: pointer;
 
     &:hover {
@@ -87,7 +87,7 @@ $border: 0.1rem solid $grey;
   }
 
   .content-header {
-    background-color: $light-grey;
+    background-color: $grey;
     border-bottom: $border;
     height: 2.5rem;
 
@@ -95,6 +95,8 @@ $border: 0.1rem solid $grey;
       line-height: 2.5rem;
       font-weight: 600;
       color: #fff;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
 
@@ -104,6 +106,23 @@ $border: 0.1rem solid $grey;
 
     .column {
       line-height: 3rem;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    a {
+      color: inherit;
+      display: flex;
+      height: calc(100% - 1rem);
+      justify-content: center;
+      align-items: center;
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+    }
+
+    a:hover {
+      text-decoration: none;
+      background-color: $light-grey;
     }
   }
 

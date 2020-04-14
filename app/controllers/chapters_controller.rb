@@ -11,7 +11,7 @@ class ChaptersController < ApplicationController
     @chapter = Chapter.create(params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, :description))
 
     if @chapter.valid?
-      redirect_to admin_index_path
+      redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
       redirect_to new_chapter_path
@@ -27,7 +27,7 @@ class ChaptersController < ApplicationController
     @chapter.update(params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, :description))
 
     if @chapter.valid?
-      redirect_to chapters_path
+      redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
       redirect_to edit_chapter_path(@chapter.id)

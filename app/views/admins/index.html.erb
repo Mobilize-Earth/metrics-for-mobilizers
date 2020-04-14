@@ -37,7 +37,7 @@
                     <div class="column col-3"><%= chapter.active_members %></div>
                     <div class="column col-3"><%= chapter.total_subscription_amount %></div>
                     <div class="column col-2"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
-                    <div class="column col-1">Edit</div>
+                    <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>
                 <% end %>
               </div>
@@ -55,7 +55,7 @@
                     <div class="column col-4"><%= user.email %></div>
                     <div class="column col-4">No link yet</div>
                     <div class="column col-3"><%= user.created_at.strftime("%m/%d/%Y") %></div>
-                    <div class="column col-1">Edit</div>
+                    <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>
                 <% end %>
               </div>
