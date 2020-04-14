@@ -1,3 +1,107 @@
+$grey: #9b9b9b;
+$light-grey: #ccc;
+$box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+$border: 0.1rem solid $grey;
+
 .admin-title {
   text-align: center;
+}
+
+.admin-page {
+  height: 800px;
+  padding-top: 60px;
+
+  .row {
+    height: 100%;
+  }
+
+  .left-nav,
+  .content {
+    box-shadow: $box-shadow;
+    border: $border;
+    background: #fff;
+    height: 100%;
+    z-index: 1;
+  }
+
+  h2 {
+    color: $grey;
+    text-align: center;
+    padding: 1rem 0 0.75rem 0;
+    letter-spacing: 1.35px;
+    font-weight: 600;
+  }
+
+  .left-nav-item {
+    padding: 0.5rem 0;
+    display: block;
+    color: #000;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $light-grey;
+      text-decoration: none;
+    }
+
+    font-size: 1.25rem;
+  }
+
+  .left-nav-icon {
+    display: inline-block;
+    width: 40%;
+    text-align: right;
+    padding: 0 10px 0 0;
+  }
+
+  .extra-padding {
+    padding-right: 13px;
+  }
+
+  .left-nav-text {
+    display: inline-block;
+    width: 58%;
+  }
+
+  .content-top-row {
+    border-bottom: $border;
+    height: 3.75rem;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    padding-right: 0.8rem;
+
+    a {
+      color: #000;
+    }
+
+    .fa {
+      padding-top: 0.25rem;
+      font-size: 2.25rem;
+    }
+  }
+
+  .content-header {
+    background-color: $light-grey;
+    border-bottom: $border;
+    height: 2.5rem;
+
+    .column {
+      line-height: 2.5rem;
+      font-weight: 600;
+      color: #fff;
+    }
+  }
+
+  .content-row {
+    border-bottom: $border;
+    height: 3rem;
+
+    .column {
+      line-height: 3rem;
+    }
+  }
+
+  #content-users {
+    display: none;
+  }
 }
