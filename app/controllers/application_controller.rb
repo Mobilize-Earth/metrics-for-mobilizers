@@ -5,10 +5,19 @@ class ApplicationController < ActionController::Base
     skip_before_action :authenticate_user!, :only => [:index]
 
     def after_sign_in_path_for(resource)
-        if @user.rol == 0 then
+        if @user.role == 'admin' then
             admins_index_url
-        elsif @user.rol == 1 then
+        elsif @user.role == 'external' then
             dashboard_index_url
         end
     end
+
+    rescue_from CanCan::AccessDenied do |exception|
+        if current_user.role == 'admin' then
+            redirect_to admins_index_url
+        elsif current_user.role == 'external' then
+            redirect_to dashboard_index_url
+        end
+    end
+
 end

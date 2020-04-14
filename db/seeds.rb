@@ -8,7 +8,7 @@
 
 #First user
 User.create!([
-  { password: 'admin1', email: 'admin@test.com', rol: 0 },
-  { password: 'external', email: 'external@test.com', rol: 1 },
-  { password: 'consumer', email: 'consumer@test.com', rol: 2 }
+  { password: 'admin1', email: 'admin@test.com', role: 'admin' },
+  { password: 'external', email: 'external@test.com', role: 'external' },
+  { password: 'consumer', email: 'consumer@test.com', role: 'consumer' }
 ])

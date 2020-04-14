@@ -1,75 +1,73 @@
 <div class="default-background">
-  <% if can? :access, :admins_index_url %>
-    <div class="admin-page container">
-      <div class="row">
-        <div class="col-3 display-over-bg-image">
-          <div class="left-nav">
-            <h2>Navigation</h2>
-            <a class="left-nav-item" id="users-nav-link" onclick="showUsers()">
-              <div class="left-nav-icon extra-padding"><span class="fa fa-user"></span></div>
-              <div class="left-nav-text">User</div>
-            </a>
-            <a class="left-nav-item" id="chapters-nav-link" onclick="showChapters()">
-              <div class="left-nav-icon"><span class="fa fa-users"></span></div>
-              <div class="left-nav-text">Chapter</div>
-            </a>
-          </div>
+  <div class="admin-page container">
+    <div class="row">
+      <div class="col-3 display-over-bg-image">
+        <div class="left-nav">
+          <h2>Navigation</h2>
+          <a class="left-nav-item" id="users-nav-link" onclick="showUsers()">
+            <div class="left-nav-icon extra-padding"><span class="fa fa-user"></span></div>
+            <div class="left-nav-text">User</div>
+          </a>
+          <a class="left-nav-item" id="chapters-nav-link" onclick="showChapters()">
+            <div class="left-nav-icon"><span class="fa fa-users"></span></div>
+            <div class="left-nav-text">Chapter</div>
+          </a>
         </div>
-        <div class="col-9 display-over-bg-image">
-          <div class="content">
-            <div class="content-top-row">
-              <a id="link-chapters" href="<%= new_chapter_path %>"><span class="fa fa-plus-square-o"></span></a>
-              <a id="link-users" href="<%= new_user_path %>"><span class="fa fa-plus-square-o"></span></a>
+      </div>
+      <div class="col-9 display-over-bg-image">
+        <div class="content">
+          <div class="content-top-row">
+            <a id="link-chapters" href="<%= new_chapter_path %>"><span class="fa fa-plus-square-o"></span></a>
+            <a id="link-users" href="<%= new_user_path %>"><span class="fa fa-plus-square-o"></span></a>
+          </div>
+          <div class="content-container container">
+            <div id="content-chapters">
+              <div class="content-header row">
+                <div class="column col-3">Name</div>
+                <div class="column col-3">Active Members</div>
+                <div class="column col-3">Subscription Amt ($)</div>
+                <div class="column col-2">Created</div>
+                <div class="column col-1"></div>
+              </div>
+
+              <% @chapters.each do |chapter| %>
+                <div class="content-row row">
+                  <div class="column col-3"><%= chapter.name %></div>
+                  <div class="column col-3"><%= chapter.active_members %></div>
+                  <div class="column col-3"><%= chapter.total_subscription_amount %></div>
+                  <div class="column col-2"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
+                  <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
+                </div>
+              <% end %>
             </div>
-            <div class="content-container container">
-              <div id="content-chapters">
-                <div class="content-header row">
-                  <div class="column col-3">Name</div>
-                  <div class="column col-3">Active Members</div>
-                  <div class="column col-3">Subscription Amt ($)</div>
-                  <div class="column col-2">Created</div>
-                  <div class="column col-1"></div>
-                </div>
 
-                <% @chapters.each do |chapter| %>
-                  <div class="content-row row">
-                    <div class="column col-3"><%= chapter.name %></div>
-                    <div class="column col-3"><%= chapter.active_members %></div>
-                    <div class="column col-3"><%= chapter.total_subscription_amount %></div>
-                    <div class="column col-2"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
-                    <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
-                  </div>
-                <% end %>
+            <div id="content-users">
+              <div class="content-header row">
+                <div class="column col-4">Email</div>
+                <div class="column col-4">Chapter</div>
+                <div class="column col-3">Created</div>
+                <div class="column col-1"></div>
               </div>
 
-              <div id="content-users">
-                <div class="content-header row">
-                  <div class="column col-4">Email</div>
-                  <div class="column col-4">Chapter</div>
-                  <div class="column col-3">Created</div>
-                  <div class="column col-1"></div>
+              <% @users.each do |user| %>
+                <div class="content-row row">
+                  <div class="column col-4"><%= user.email %></div>
+                  <div class="column col-4">No link yet</div>
+                  <div class="column col-3"><%= user.created_at.strftime("%m/%d/%Y") %></div>
+                  <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
                 </div>
-
-                <% @users.each do |user| %>
-                  <div class="content-row row">
-                    <div class="column col-4"><%= user.email %></div>
-                    <div class="column col-4">No link yet</div>
-                    <div class="column col-3"><%= user.created_at.strftime("%m/%d/%Y") %></div>
-                    <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
-                  </div>
-                <% end %>
-              </div>
+              <% end %>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    </div>
-    <div class="admin-title">
-      <%= link_to "See All Chapters", chapters_path %>
-    </div>
-  <% end %>
+  </div>
+  <div class="admin-title">
+    <%= link_to "See All Chapters", chapters_path %>
+  </div>
   <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
 </div>
 

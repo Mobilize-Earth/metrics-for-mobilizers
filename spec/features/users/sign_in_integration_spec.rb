@@ -4,7 +4,7 @@ feature 'sign in', :devise do
     scenario 'user with access Dashboard page with valid credentials' do
         user = FactoryBot.create(:user)
         sign_in(user.email, user.password)
-        expect(page).to have_content "Dashboard"
+        expect(page).to have_content "Navigation"
     end
 
     scenario 'user with invalid credentials does not access to Dashboard' do

@@ -7,6 +7,6 @@ class User < ApplicationRecord
 
 
   class Rol < ActiveRecord::Base
-    enum rol: { admin: 0, external_coordinator: 1, other_data_consumer: 2 }
+    enum rol: { admin: 'admin', external_coordinator: 'external', other_data_consumer: 'consumer' }
   end
 end

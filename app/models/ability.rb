@@ -31,10 +31,14 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
 
-    if user.rol == 0 then
-      can :access, :admins_index_url
-    elsif user.rol == 1 then
-      can :access, :dashboard_index_url
+    user ||= User.new
+
+    if user.role == 'admin' then
+      can :index, AdminsController
+    end
+
+    if user.role == 'external' then
+      can :index, DashboardController
     end
   end
 end
