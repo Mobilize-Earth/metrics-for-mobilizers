@@ -2,9 +2,11 @@
   <% if can? :access, :admins_index_url %>
     <h1 class="admin-title">Admin Dashboard</h1>
 
-    <div class="admin-title">
-      <%= link_to "Create New Chapter", new_chapter_path, class: "chapter-link" %>
-    </div>
-  <% end %>
+  <div class="admin-title">
+    <%= link_to "Create A New Chapter", new_chapter_path %>
+  </div>
+  <div class="admin-title">
+    <%= link_to "See All Chapters", chapters_path %>
+  </div>
   <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
 </div>

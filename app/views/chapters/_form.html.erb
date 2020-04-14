@@ -24,8 +24,16 @@
       </div>
       <div class="form-row chapter-row">
         <div class="form-group col-md-4 offset-md-4">
-          <%= f.label :total_subscription_amount, "Total Subscription Dollar Amount:" %>
-          <%= f.text_field :total_subscription_amount, class: "form-control" %>
+          <%= f.label :total_subscription_amount, "Total Subscription Amount:" %>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <%= f.text_field :total_subscription_amount, class: "form-control" %>
+            <div class="input-group-append">
+              <span class="input-group-text">.00</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-row chapter-row">
@@ -36,6 +44,9 @@
       </div>
       <div class="form-row">
         <%= f.submit class: "btn btn-success col-md-4  offset-md-4"%>
+      </div>
+      <div class="form-row chapter-row">
+        <%= link_to "Go Back", admins_index_path, class: "btn btn-danger col-md-4 offset-md-4" %>
       </div>
     <% end %>
   </div>
