@@ -48,18 +48,18 @@ $border: 0.1rem solid $grey;
 
   .left-nav-icon {
     display: inline-block;
-    width: 40%;
+    width: 35%;
     text-align: right;
-    padding: 0 10px 0 0;
+    padding: 0 0.6rem 0 0;
   }
 
   .extra-padding {
-    padding-right: 13px;
+    padding-right: 0.85rem;
   }
 
   .left-nav-text {
     display: inline-block;
-    width: 58%;
+    width: 55%;
   }
 
   .content-top-row {
@@ -72,10 +72,16 @@ $border: 0.1rem solid $grey;
 
     a {
       color: #000;
+
+      &:hover {
+        background-color: $light-grey;
+        border-radius: 0.5rem;
+      }
     }
 
     .fa {
-      padding-top: 0.25rem;
+      padding: 0.25rem;
+      padding-bottom: 0;
       font-size: 2.25rem;
     }
   }
@@ -101,7 +107,12 @@ $border: 0.1rem solid $grey;
     }
   }
 
-  #content-users {
+  #content-users,
+  #link-users {
     display: none;
+  }
+
+  .display-over-bg-image {
+    z-index: 1;
   }
 }

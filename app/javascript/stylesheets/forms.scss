@@ -1,14 +1,14 @@
 .form-title {
-  color: #03AD6F;
+  color: #03ad6f;
   font-size: 24px;
   font-weight: 600;
   margin-top: 41px;
 }
 
-.form-tile  {
+.form-tile {
   height: 240px;
-  border: 1px solid #03AD6F;
-  background-color: #FFFFFF;
+  border: 1px solid #03ad6f;
+  background-color: #ffffff;
   text-align: center;
   color: #000000;
   font-size: 22px;
@@ -35,16 +35,20 @@ a:hover.form-tile {
   padding-bottom: 50px;
 }
 
-@media(max-width: 575px) {
+@media (max-width: 575px) {
   .form-title {
     margin-top: 90px;
     font-size: 20px;
   }
-  .half-logo { display: none; }
+  .half-logo {
+    display: none;
+  }
 }
 
-@media(max-width: 770px) {
-  .half-logo { display: none; }
+@media (max-width: 770px) {
+  .half-logo {
+    display: none;
+  }
 }
 
 .half-logo {
@@ -53,4 +57,5 @@ a:hover.form-tile {
   position: absolute;
   top: 200px;
   right: 0px;
+  z-index: 0;
 }
