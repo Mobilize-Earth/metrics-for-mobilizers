@@ -8,11 +8,19 @@ $border: 0.1rem solid $grey;
 }
 
 .admin-page {
-  height: 800px;
   padding-top: 60px;
+
+  @include media-breakpoint-up(lg) {
+    height: 800px;
+  }
 
   .row {
     height: 100%;
+  }
+
+  .outer-box {
+    z-index: 1;
+    margin-bottom: 50px;
   }
 
   .left-nav,
@@ -63,7 +71,6 @@ $border: 0.1rem solid $grey;
   }
 
   .content-top-row {
-    border-bottom: $border;
     height: 3.75rem;
     display: flex;
     align-items: center;
@@ -131,7 +138,7 @@ $border: 0.1rem solid $grey;
     display: none;
   }
 
-  .display-over-bg-image {
-    z-index: 1;
+  .selected {
+    background-color: $light-grey;
   }
 }

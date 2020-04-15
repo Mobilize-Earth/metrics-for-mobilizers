@@ -1,20 +1,20 @@
 <div class="default-background">
   <div class="admin-page container">
     <div class="row">
-      <div class="col-3 display-over-bg-image">
+      <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 outer-box">
         <div class="left-nav">
           <h2>Navigation</h2>
-          <a class="left-nav-item" id="users-nav-link" onclick="showUsers()">
+          <a class="left-nav-item" id="users-nav-link">
             <div class="left-nav-icon extra-padding"><span class="fa fa-user"></span></div>
             <div class="left-nav-text">User</div>
           </a>
-          <a class="left-nav-item" id="chapters-nav-link" onclick="showChapters()">
+          <a class="left-nav-item selected" id="chapters-nav-link">
             <div class="left-nav-icon"><span class="fa fa-users"></span></div>
             <div class="left-nav-text">Chapter</div>
           </a>
         </div>
       </div>
-      <div class="col-9 display-over-bg-image">
+      <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 outer-box">
         <div class="content">
           <div class="content-top-row">
             <a id="link-chapters" href="<%= new_chapter_path %>"><span class="fa fa-plus-square-o"></span></a>
@@ -67,22 +67,23 @@
 </div>
 
 <script>
-  let showUsers;
-  let showChapters;
-
-  window.addEventListener('load', () => {
-    showUsers = () => {
+  (()=>{
+    document.getElementById('users-nav-link').addEventListener('click', () => {
       document.getElementById('content-users').style.display = 'block';
       document.getElementById('link-users').style.display = 'block';
+      document.getElementById('users-nav-link').classList.add('selected');
       document.getElementById('content-chapters').style.display = 'none';
       document.getElementById('link-chapters').style.display = 'none';
-    };
+      document.getElementById('chapters-nav-link').classList.remove('selected');
+    });
 
-    showChapters = () => {
+    document.getElementById('chapters-nav-link').addEventListener('click', () => {
       document.getElementById('content-users').style.display = 'none';
       document.getElementById('link-users').style.display = 'none';
+      document.getElementById('users-nav-link').classList.remove('selected');
       document.getElementById('content-chapters').style.display = 'block';
       document.getElementById('link-chapters').style.display = 'block';
-    };
-  });
+      document.getElementById('chapters-nav-link').classList.add('selected');
+    });
+  })();
 </script>
