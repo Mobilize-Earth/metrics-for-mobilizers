@@ -2,6 +2,7 @@
   color: #03ad6f;
   font-size: 24px;
   font-weight: 600;
+  letter-spacing: 1.8px;
   margin-top: 41px;
 }
 
@@ -32,11 +33,13 @@ a:hover.form-tile {
 .tile-desc {
   font-size: 14px;
   font-weight: 600;
+  letter-spacing: 1.05px;
 }
 
 .tile-title {
   padding-top: 25px;
   padding-bottom: 50px;
+  letter-spacing: 1.8px;
 }
 
 @media (max-width: 575px) {
