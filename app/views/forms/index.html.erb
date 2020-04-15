@@ -1,4 +1,4 @@
-<div class="container-fluid default-background">
+<div class="container-fluid default-background reporting">
   <div class="row">
     <div class="col-10 offset-1 col-sm-8 offset-sm-3 col-md-8 offset-md-2 col-lg-5 offset-lg-2 form-title">
       Click to complete for each activity category
@@ -7,8 +7,8 @@
   </div>
   <div class="row form-row">
     <%= link_to forms_mobilization_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
-        <p class="tile-title">Mobilizations</p>
-        <p class="tile-desc">All activities that are recruiting driven</p>
+      <p class="tile-title">Mobilizations</p>
+      <p class="tile-desc">All activities that are recruiting driven</p>
     <% end %>
     <%= link_to forms_training_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
       <p class="tile-title">Trainings</p>
@@ -25,5 +25,12 @@
       <p class="tile-desc">Insert definition of this activity here</p>
     <% end %>
   </div>
-  <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
+  <div class="row justify-content-center">
+    <div class="col-9 col-sm-4 col-md-3">
+      <%= link_to dashboard_index_path, class: "btn btn-lg", :action => 'go' do %>
+        I'm done
+      <% end %>
+    </div>
+  </div>
+  <%= image_tag('/images/half_circle.png', class: 'half-logo') %>
 </div>
