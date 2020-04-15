@@ -1,0 +1,31 @@
+require 'rails_helper'
+
+feature 'admin user', :devise do
+    
+    before(:each) do
+        @user = FactoryBot.create(:user, role: 'admin')
+    end
+
+    scenario 'should redirect to admin dashboard with valid credentials' do
+        sign_in(@user.email, @user.password)
+        expect(page).to have_content "Navigation"
+    end
+
+    scenario 'should redirect to admin dashboard when visit external dashboard' do
+        sign_in(@user.email, @user.password)
+        visit "/dashboard/index"
+        expect(page).to have_content "Navigation"
+    end
+
+    scenario 'redirected from landing page to admin dashboard' do
+        sign_in(@user.email, @user.password)
+        visit_home_page
+        expect(page).to have_content "Navigation"
+    end
+
+    scenario 'should not access to admin dashboard with invalid credentials' do
+        sign_in('', '')
+        expect(page).to have_content "Log In"
+    end
+
+end

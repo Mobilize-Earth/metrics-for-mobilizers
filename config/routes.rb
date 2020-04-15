@@ -7,9 +7,13 @@ Rails.application.routes.draw do
 
   resources :users
   resources :chapters
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  authenticated :user do
-    root to: "dashboard#index", as: :user_root
+    # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  authenticated :user, ->(u) { u.role == 'external' } do
+    root to: "dashboard#index", as: :external_root
+  end
+
+  authenticated :user, ->(u) { u.role == 'admin' } do
+    root to: "admins#index", as: :admins_root
   end
 
   root to: "home#index"
