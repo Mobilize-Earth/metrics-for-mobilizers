@@ -2,16 +2,22 @@ $grey: #9b9b9b;
 $light-grey: #ddd;
 $box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 $border: 0.1rem solid $grey;
+$page-padding-top: 4rem;
+$page-height: 50rem;
+$header-height: 3.75rem;
+$title-row-height: 2.5rem;
+$content-height: $page-height - $page-padding-top - $header-height -
+  $title-row-height;
 
 .admin-title {
   text-align: center;
 }
 
 .admin-page {
-  padding-top: 60px;
+  padding-top: $page-padding-top;
 
   @include media-breakpoint-up(lg) {
-    height: 800px;
+    height: $page-height;
   }
 
   .row {
@@ -71,7 +77,7 @@ $border: 0.1rem solid $grey;
   }
 
   .content-top-row {
-    height: 3.75rem;
+    height: $header-height;
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
@@ -96,15 +102,22 @@ $border: 0.1rem solid $grey;
   .content-header {
     background-color: $grey;
     border-bottom: $border;
-    height: 2.5rem;
+    height: $title-row-height;
 
     .column {
-      line-height: 2.5rem;
+      line-height: $title-row-height;
       font-weight: 600;
       color: #fff;
       overflow: hidden;
       white-space: nowrap;
     }
+  }
+
+  .content-row-container {
+    overflow: scroll;
+    height: $content-height;
+    padding: 0 0.5em;
+    margin: 0 -15px 0 -15px;
   }
 
   .content-row {
