@@ -107,6 +107,11 @@ $border: 0.1rem solid $grey;
     }
   }
 
+  .content-row-container {
+    overflow: scroll;
+    height: 500px;
+  }
+
   .content-row {
     border-bottom: $border;
     height: 3rem;
