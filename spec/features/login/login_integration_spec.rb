@@ -17,7 +17,7 @@ feature 'login', :devise do
     scenario 'page should have username and password fields' do
         visit_sign_in_page
         expect(find_field("Email").value).to eq ''
-        expect(find_field("Password").value).to eq nil
+        expect(find_field("Password").value).to eq ''
     end
 
     scenario 'user cannot sign in with incorrect email' do
