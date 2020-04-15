@@ -15,6 +15,7 @@ feature 'external coordinator', :devise do
         sign_in(@user.email, @user.password)
         visit "/admins/index"
         expect(page).to have_content "Dashboard"
+        expect(page).to have_content "You are not authorized to access this page."
     end
     
     scenario 'redirected from landing page to dashboard' do

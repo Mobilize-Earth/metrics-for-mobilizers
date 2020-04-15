@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
         elsif current_user.role == 'external' then
             redirect_to dashboard_index_url
         end
+        flash[:error] = exception.message
     end
 
 end

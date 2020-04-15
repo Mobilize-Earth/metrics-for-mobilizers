@@ -1,4 +1,13 @@
 <div class="default-background">
+  <div class="row">
+    <% if flash[:error].present? %>
+      <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <%= flash[:error] %>
+      </div>
+    <% end %>
+  </div>
   <div class="admin-page container">
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 outer-box">

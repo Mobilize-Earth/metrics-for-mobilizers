@@ -15,6 +15,7 @@ feature 'admin user', :devise do
         sign_in(@user.email, @user.password)
         visit "/dashboard/index"
         expect(page).to have_content "Navigation"
+        expect(page).to have_content "You are not authorized to access this page."
     end
 
     scenario 'redirected from landing page to admin dashboard' do
