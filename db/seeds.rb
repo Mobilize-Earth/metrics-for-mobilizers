@@ -8,7 +8,7 @@
 User.destroy_all
 #First user
 User.create!([
-  { password: 'admin1', email: 'admin@test.com', role: 'admin' },
-  { password: 'external', email: 'external@test.com', role: 'external' },
-  { password: 'consumer', email: 'consumer@test.com', role: 'consumer' }
+  { password: 'admin1', email: 'admin@test.com', role: 'admin', first_name: "Admin", last_name: "Istrator" },
+  { password: 'external', email: 'external@test.com', role: 'external', first_name: "External", last_name: "User" },
+  { password: 'consumer', email: 'consumer@test.com', role: 'consumer', first_name: "Consumer", last_name: "User" }
 ])

@@ -43,7 +43,7 @@
 
             <div id="content-users">
               <div class="content-header row">
-                <div class="column col-4">Email</div>
+                <div class="column col-4">Name</div>
                 <div class="column col-4">Chapter</div>
                 <div class="column col-3">Created</div>
                 <div class="column col-1"></div>
@@ -51,7 +51,7 @@
 
               <% @users.each do |user| %>
                 <div class="content-row row">
-                  <div class="column col-4"><%= user.email %></div>
+                  <div class="column col-4"><%= user.first_name %> <%= user.last_name %></div>
                   <div class="column col-4">No link yet</div>
                   <div class="column col-3"><%= user.created_at.strftime("%m/%d/%Y") %></div>
                   <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
