@@ -61,15 +61,17 @@
                 <div class="column col-1"></div>
               </div>
 
-              <% @users.each do |user| %>
-                <div class="content-row row">
-                  <div class="column col-4"><%= user.first_name %> <%= user.last_name %></div>
-                  <div class="column col-3">None</div>
-                  <div class="column col-2"><%= user.role.capitalize %></div>
-                  <div class="column col-2"><%= user.created_at.strftime("%m/%d/%Y") %></div>
-                  <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
-                </div>
-              <% end %>
+              <div class="content-row-container">
+                <% @users.each do |user| %>
+                  <div class="content-row row">
+                    <div class="column col-4"><%= user.first_name %> <%= user.last_name %></div>
+                    <div class="column col-3">None</div>
+                    <div class="column col-2"><%= user.role.capitalize %></div>
+                    <div class="column col-2"><%= user.created_at.strftime("%m/%d/%Y") %></div>
+                    <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
