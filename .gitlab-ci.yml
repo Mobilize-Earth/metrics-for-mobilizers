@@ -1,7 +1,7 @@
 image: "circleci/ruby:2.7.0-node-browsers-legacy"
 
 before_script:
-  - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm
+  - apt-get update && apt-get install build-essentials mariadb-dev sqlite-dev nodejs npm
   - npm install yarn -g
   - gem install bundler --no-document
   - bundle install
