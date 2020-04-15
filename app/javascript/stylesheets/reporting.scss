@@ -6,9 +6,32 @@
     width: 152px;
   }
 
-  div:last-child {
-    margin-top: 50px;
-    text-align: center;
+  .form-title {
+    margin-top: 0;
+    padding-top: 41px;
+  }
+
+  .title-prefix {
+    width: 303px;
+    height: 25px;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.35px;
+    color: #011b1c;
+  }
+
+  .strong {
+    font-weight: 600;
+  }
+
+  .reporting-tiles-container {
+    & > div.row:last-child {
+      margin-top: 50px;
+      text-align: center;
+    }
   }
 
 }
