@@ -1,16 +1,12 @@
 <div class="container-fluid">
   <div class="row header">
-    <div class="col-4 col-sm-4 col-md-5">
-    </div>
-    <div class="col-3 col-sm-4 col-md-4">
-    </div>
-    <div class="col-5 col-sm-4 col-md-3 text-center my-auto align-self-end">
+    <div class="col-12 text-center my-auto d-flex justify-content-end">
       <% if current_user.nil? %>
         <% unless current_page?(new_user_session_url) %>
           <%= link_to new_user_session_path, id: "login_button", class: "btn btn-lg login-button" do %>Log In<% end %>
         <% end %>
       <% else %>
-        <%= link_to dashboard_index_path, class: "btn btn-lg btn-link" do %>Home<% end %>
+        <%= link_to '/', class:"test-home" do %><span class="btn fa fa-home" title="Home"></span><% end %>
         <%= link_to destroy_user_session_path, class: "btn btn-lg logout-button", method: :delete do %>Log out<% end %>
       <% end %>
     </div>
