@@ -3,6 +3,8 @@ require 'rails_helper'
 feature 'admin user', :devise do
     
     before(:each) do
+        Chapter.create(params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, :description))
+
         @user = FactoryBot.create(:user, role: 'admin')
     end
 
@@ -29,10 +31,8 @@ feature 'admin user', :devise do
         expect(page).to have_content "Log In"
     end
 
-    scenario 'displays chapters by default, toggling between users and chapters', :js => true do
+    scenario 'displays chapters by default, toggling between users and chapters' do
       sign_in(@user.email, @user.password)
-
-      expect(page).to have_content "Navigation"
       
       find('#chapters-nav-link').click
       expect(find('#chapters-nav-link')[:class]).to have_content 'selected'
@@ -47,41 +47,41 @@ feature 'admin user', :devise do
       expect(find('#users-nav-link')[:class]).to have_no_content 'selected'
     end
 
-    scenario 'displays chapter information', :js => true do
+    scenario 'displays chapter information' do
       sign_in(@user.email, @user.password)
-      visit_home_page
-      # Expect chapter data
+
+      expect(find('#content-chapters').native.css_value('display')).to have_content 'block'
     end
 
-    scenario 'displays user information', :js => true do
+    scenario 'displays user information' do
       sign_in(@user.email, @user.password)
-      visit_home_page
-      # Click users-nav-link
-      # Expect user data
+      find('#users-nav-link').click
+
+      expect(find('#content-users').native.css_value('display')).to have_content 'block'
     end
 
-    scenario 'links to add chapter form', :js => true do
+    scenario 'links to add chapter form' do
       sign_in(@user.email, @user.password)
       visit_home_page
       # Click chapters add link
       # Expect to be on chapter add page
     end
 
-    scenario 'links to edit chapter form', :js => true do
+    scenario 'links to edit chapter form' do
       sign_in(@user.email, @user.password)
       visit_home_page
       # Click chapters edit link
       # Expect to be on chapter edit page
     end
 
-    scenario 'links to add user form', :js => true do
+    scenario 'links to add user form' do
       sign_in(@user.email, @user.password)
       visit_home_page
       # Click user add link
       # Expect to be on user add page
     end
 
-    scenario 'links to edit user form', :js => true do
+    scenario 'links to edit user form' do
       sign_in(@user.email, @user.password)
       visit_home_page
       # Click user edit link
