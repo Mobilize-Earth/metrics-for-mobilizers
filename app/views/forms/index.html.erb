@@ -25,17 +25,22 @@
         <p class="tile-title">Trainings</p>
         <p class="tile-desc">All activities conducted for XRA members</p>
       <% end %>
-    </div>
-    <div class="row">
       <%= link_to forms_street_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
         <p class="tile-title">Street Swarms</p>
         <p class="tile-desc">Insert definition of this activity here</p>
       <% end %>
+    </div>
+    <div class="row">
       <%= link_to forms_arrestable_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
         <p class="tile-title">Arrestable Actions</p>
         <p class="tile-desc">Insert definition of this activity here</p>
       <% end %>
+      <div class="col-9 col-sm-4 col-md-3 form-tile contrast no-data-tile">
+        <p class="tile-title">No New Data This Week</p>
+        <p class="tile-desc">Only when there is no activity for your chapter this week</p>
+      </div>
     </div>
+
     <div class="row justify-content-center">
       <div class="col-9 col-sm-4 col-md-3">
         <%= link_to dashboard_index_path, class: "btn btn-lg", :action => 'go' do %>
@@ -63,5 +68,9 @@
         let to = `${String(nextFriday.getMonth()).padStart(2, '0')}/${String(nextFriday.getDate()).padStart(2, '0')}/${nextFriday.getFullYear()}`;
 
         document.getElementById('reporting-period').innerHTML = `from ${from} to ${to}`;
+
+        $('.reporting .no-data-tile').click(function () {
+            $('.reporting .form-tile').addClass('disabled');
+        });
     })();
 </script>

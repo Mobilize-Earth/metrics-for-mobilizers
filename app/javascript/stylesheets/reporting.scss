@@ -34,4 +34,11 @@
     }
   }
 
+  @media (max-width: 575px) {
+    .form-title {
+      margin-top: 0;
+      padding-top: 90px;
+    }
+  }
+
 }

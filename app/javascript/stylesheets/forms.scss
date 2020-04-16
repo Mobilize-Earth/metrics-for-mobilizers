@@ -16,9 +16,25 @@
   margin-left: 50px;
   margin-top: 50px;
   box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.5);
+  z-index: 1;
+
+  &.disabled {
+    pointer-events: none;
+    background: #a6a6a6;
+  }
 
   &:hover {
     border: 1px solid #03ad6f;
+  }
+
+  &.contrast {
+    background-color: #03ad6f;
+    color: #ffffff;
+
+    &:hover {
+      border: 1px solid #ffffff;
+      color: #ffffff;
+    }
   }
 }
 
