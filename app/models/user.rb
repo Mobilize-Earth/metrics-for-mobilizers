@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  belongs_to :chapter
+  belongs_to :chapter, optional: true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable,  :rememberable, :trackable and :omniauthable
   devise :database_authenticatable, :recoverable, :validatable
