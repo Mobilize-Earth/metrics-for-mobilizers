@@ -1,7 +1,7 @@
-image: "circleci/ruby:2.7.0-node-browsers"
+image: "ruby:2.7.0-alpine"
 
 before_script:
-  - su root -c apt-get update && apt-get install -y build-essentials mariadb-dev sqlite-dev nodejs npm
+  - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
   - npm install yarn -g
   - gem install bundler --no-document
   - bundle install
