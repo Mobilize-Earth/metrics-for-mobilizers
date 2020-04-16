@@ -1,13 +1,13 @@
 <div class="container-fluid">
-  <div class="row">
-    <% if flash[:errors] %>
+  <% if flash[:errors] %>
+    <div class="row">
       <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
         <% flash[:errors].each do |error | %>
           <li><%= error %></li>
         <% end %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
   <div class="chapter-form-body">
     <%= form_for @chapter do |f| %>
       <div class="form-row chapter-row">
@@ -23,9 +23,9 @@
         </div>
       </div>
       <div class="form-row chapter-row">
-        <div class="form-group col-md-4 offset-md-4">
+        <div class="col-md-4 offset-md-4">
           <%= f.label :total_subscription_amount, "$ Total of Subscriptions*" %>
-          <div class="input-group mb-3">
+          <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
             </div>
@@ -36,19 +36,21 @@
           </div>
         </div>
       </div>
-      <div class="form-row ">
-        <span class="col-md-4 offset-md-4">Current Chapter Coordinators:</span>
-        <div>
-          <% @chapter.users.each do | chapter_coordinator | %>
-            <ul> <%= chapter_coordinator.first_name %> </ul>
-          <% end %>
+      <% if @current_coordinators%>
+        <div class="form-row chapter-row">
+          <div class="col-md-4 offset-md-4">
+            <span>Current Coordinators</span>
+            <ul class="list-group">
+              <% @current_coordinators.each do | coordinator | %>
+              <li class="list-group-item"> <%= coordinator.first_name %> </li>
+              <% end %>
+            </ul>
+          </div>
         </div>
+      <% end %>
+      <div class="form-row chapter-row">
         <%= f.label :users, "Add Coordinators:", class: "col-md-4 offset-md-4"  %>
-        <select multiple class="col-md-4 offset-md-4">
-          <% @coordinators.each do | coordinator | %>
-            <option> <%= coordinator.first_name %> </option>
-          <% end %>
-        </select>
+        <%= f.select :users, @potential_coordinators.collect { |c| [c.first_name, c.id] }, { include_hidden: false }, { multiple: true, class: "col-md-4 offset-md-4"} %>
       </div>
       <div class="form-row chapter-row">
         <%= f.submit class: "btn btn-success col-md-4  offset-md-4"%>
