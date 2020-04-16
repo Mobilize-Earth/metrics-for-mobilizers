@@ -2,6 +2,7 @@ image: "ruby:2.7.0-alpine"
 
 before_script:
   - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
+  - mkdir -p /root/.webdrivers
   - cp /usr/bin/chromedriver /root/.webdrivers/chromedriver
   - npm install yarn -g
   - gem install bundler --no-document
