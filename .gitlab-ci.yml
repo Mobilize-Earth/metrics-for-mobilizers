@@ -2,8 +2,7 @@ image: "ruby:2.7.0-alpine"
 
 before_script:
   - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
-  - which chromedriver
-  - which chromium-chromedriver
+  - chromedriver --verbose
   - npm install yarn -g
   - gem install bundler --no-document
   - bundle install
@@ -25,9 +24,6 @@ integration_test:
   tags:
     - docker
   script:
-    - export PATH="/usr/bin/chromedriver:${PATH}"
-    - which chromedriver
-    - which chromium-chromedriver
     - yarn add @rails/webpacker
     - rails db:migrate RAILS_ENV=test
     - bundle exec rspec spec/features
