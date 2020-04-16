@@ -1,3 +1,8 @@
+$green: #03ad6f;
+$lighter-green: #3c3;
+$red: #f99;
+$lighter-grey: #f4f5f0;
+
 .chapter-row {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -6,4 +11,23 @@
 .chapter-title {
   padding-top: 20px;
   padding-bottom: 10px;
+}
+
+.submit-btn {
+  background-color: $green;
+  color: $lighter-grey;
+
+  &:hover {
+    color: $lighter-grey;
+    background-color: $lighter-green;
+  }
+}
+
+.cancel-btn {
+  border: 2px solid $green;
+  background-color: #fff;
+
+  &:hover {
+    background-color: #aaa;
+  }
 }

@@ -12,19 +12,24 @@
     <%= form_for @chapter do |f| %>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-4">
-          <%= f.label :name, "Chapter Name*" %>
+          * Required
+        </div>
+      </div>
+      <div class="form-row chapter-row">
+        <div class="col-md-4 offset-md-4">
+          <%= f.label :name, "Chapter Name *" %>
           <%= f.text_field :name, class: "form-control" %>
         </div>
       </div>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-4">
-          <%= f.label :active_members, "# of Members Total*" %>
+          <%= f.label :active_members, "# of Members Total *" %>
           <%= f.text_field :active_members, class: "form-control" %>
         </div>
       </div>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-4">
-          <%= f.label :total_subscription_amount, "$ Total of Subscriptions*" %>
+          <%= f.label :total_subscription_amount, "$ Total of Subscriptions *" %>
           <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
@@ -53,10 +58,10 @@
         <%= f.select :users, @potential_coordinators.collect { |c| [c.first_name, c.id] }, { include_hidden: false }, { multiple: true, class: "col-md-4 offset-md-4"} %>
       </div>
       <div class="form-row chapter-row">
-        <%= f.submit class: "btn btn-success col-md-4  offset-md-4"%>
+        <%= f.submit class: "btn col-md-4 offset-md-4 submit-btn"%>
       </div>
       <div class="form-row chapter-row">
-        <%= link_to "Go Back", admins_index_path, class: "btn btn-danger col-md-4 offset-md-4" %>
+        <%= link_to "Cancel", admins_index_path, class: "btn col-md-4 offset-md-4 cancel-btn" %>
       </div>
     <% end %>
   </div>
