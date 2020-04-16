@@ -3,5 +3,6 @@ FactoryBot.define do
       email { "test@example.com" }
       password { "password123" }
       role { "consumer" }
+      chapter
     end
   end

@@ -8,23 +8,23 @@
       </div>
     <% end %>
   </div>
-  <div>
+  <div class="chapter-form-body">
     <%= form_for @chapter do |f| %>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-4">
-          <%= f.label :name, "Chapter Name:" %>
+          <%= f.label :name, "Chapter Name*" %>
           <%= f.text_field :name, class: "form-control" %>
         </div>
       </div>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-4">
-          <%= f.label :active_members, "Total Active Members:" %>
+          <%= f.label :active_members, "# of Members Total*" %>
           <%= f.text_field :active_members, class: "form-control" %>
         </div>
       </div>
       <div class="form-row chapter-row">
         <div class="form-group col-md-4 offset-md-4">
-          <%= f.label :total_subscription_amount, "Total Subscription Amount:" %>
+          <%= f.label :total_subscription_amount, "$ Total of Subscriptions*" %>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
@@ -36,7 +36,21 @@
           </div>
         </div>
       </div>
-      <div class="form-row">
+      <div class="form-row ">
+        <span class="col-md-4 offset-md-4">Current Chapter Coordinators:</span>
+        <div>
+          <% @chapter.users.each do | chapter_coordinator | %>
+            <ul> <%= chapter_coordinator.first_name %> </ul>
+          <% end %>
+        </div>
+        <%= f.label :users, "Add Coordinators:", class: "col-md-4 offset-md-4"  %>
+        <select multiple class="col-md-4 offset-md-4">
+          <% @coordinators.each do | coordinator | %>
+            <option> <%= coordinator.first_name %> </option>
+          <% end %>
+        </select>
+      </div>
+      <div class="form-row chapter-row">
         <%= f.submit class: "btn btn-success col-md-4  offset-md-4"%>
       </div>
       <div class="form-row chapter-row">
