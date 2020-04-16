@@ -7,12 +7,12 @@ class ChaptersController < ApplicationController
 
   def new
     @chapter = Chapter.new
+    @coordinators = User.where(role: "external")
   end
 
   def create
-    @chapter = Chapter.create(params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, :description))
-
-    if @chapter.valid?
+    @chapter = Chapter.new(chapter_params)
+    if @chapter.save
       redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
@@ -22,17 +22,23 @@ class ChaptersController < ApplicationController
 
   def edit
     @chapter = Chapter.find(params[:id])
+    @coordinators = User.where(role: "external")
   end
 
   def update
     @chapter = Chapter.find(params[:id])
-    @chapter.update(params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, :description))
-
+    @chapter.update(chapter_params)
     if @chapter.valid?
       redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
       redirect_to edit_chapter_path(@chapter.id)
     end
+  end
+
+  private
+
+  def chapter_params
+    params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, :user_id)
   end
 end
