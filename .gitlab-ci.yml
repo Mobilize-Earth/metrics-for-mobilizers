@@ -7,22 +7,23 @@ before_script:
   - bundle install
 
 stages:
-  - unit_test
+  # - unit_test
   - integration_test
-  - create_push_image
+  # - create_push_image
 
-unit_test:
-  stage: unit_test
-  tags:
-    - docker
-  script:
-    - bundle exec rspec spec/unit
+# unit_test:
+#   stage: unit_test
+#   tags:
+#     - docker
+#   script:
+#     - bundle exec rspec spec/unit
 
 integration_test:
   stage: integration_test
   tags:
     - docker
   script:
+    - ENV PATH="/usr/bin/chromedriver:${PATH}"
     - yarn add @rails/webpacker
     - rails db:migrate RAILS_ENV=test
     - bundle exec rspec spec/features
