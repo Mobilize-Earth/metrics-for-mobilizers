@@ -1,7 +1,7 @@
 image: "circleci/ruby:2.7.0-node-browsers"
 
 before_script:
-  - apt-get update && apt-get install build-essentials mariadb-dev sqlite-dev nodejs npm
+  - su root -c apt-get update && apt-get install -y build-essentials mariadb-dev sqlite-dev nodejs npm
   - npm install yarn -g
   - gem install bundler --no-document
   - bundle install
