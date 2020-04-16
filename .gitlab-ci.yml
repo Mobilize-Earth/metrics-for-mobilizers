@@ -23,7 +23,7 @@ integration_test:
   tags:
     - docker
   script:
-    - ENV PATH="/usr/bin/chromedriver:${PATH}"
+    - export PATH="/usr/bin/chromedriver:${PATH}"
     - yarn add @rails/webpacker
     - rails db:migrate RAILS_ENV=test
     - bundle exec rspec spec/features
