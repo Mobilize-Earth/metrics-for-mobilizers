@@ -1,13 +1,13 @@
 <div class="default-background">
-  <div class="row">
-    <% if flash[:error].present? %>
+  <% if flash[:error].present? %>
+    <div class="row">
       <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
         <%= flash[:error] %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
   <div class="admin-page container">
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 outer-box">
@@ -33,8 +33,8 @@
             <div id="content-chapters">
               <div class="content-header row">
                 <div class="column col-4">Name</div>
-                <div class="column col-2"># Members</div>
-                <div class="column col-3">Subscription</div>
+                <div class="column col-2">Country</div>
+                <div class="column col-3">State</div>
                 <div class="column col-2">Created</div>
                 <div class="column col-1"></div>
               </div>
@@ -43,8 +43,8 @@
                 <% @chapters.each do |chapter| %>
                   <div class="content-row row">
                     <div class="column col-4"><%= chapter.name %></div>
-                    <div class="column col-2"><%= chapter.active_members %></div>
-                    <div class="column col-3">$<%= chapter.total_subscription_amount %></div>
+                    <div class="column col-2">United States</div>
+                    <div class="column col-3">Oregon</div>
                     <div class="column col-2"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
                     <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>
