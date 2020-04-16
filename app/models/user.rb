@@ -9,4 +9,8 @@ class User < ApplicationRecord
   class Rol < ActiveRecord::Base
     enum rol: { admin: 'admin', external_coordinator: 'external', other_data_consumer: 'consumer' }
   end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 end
