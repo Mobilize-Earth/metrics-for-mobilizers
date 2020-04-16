@@ -7,12 +7,27 @@ class ChaptersController < ApplicationController
 
   def new
     @chapter = Chapter.new
-    @coordinators = User.where(role: "external")
+    @potential_coordinators = User.where(role: "external", chapter: nil)
   end
 
   def create
-    @chapter = Chapter.new(chapter_params)
+    chapter_params = params[:chapter]
+
+    @chapter = Chapter.new(
+      name: chapter_params[:name],
+      active_members: chapter_params[:active_members],
+      total_subscription_amount: chapter_params[:total_subscription_amount]
+    )
     if @chapter.save
+      coordinator_ids = chapter_params[:users]
+
+      if coordinator_ids
+        coordinator_ids.each do |id|
+          user = User.find(id)
+          user.update!(chapter: @chapter)
+        end
+      end
+
       redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
@@ -22,23 +37,34 @@ class ChaptersController < ApplicationController
 
   def edit
     @chapter = Chapter.find(params[:id])
-    @coordinators = User.where(role: "external")
+    @current_coordinators = User.where(role: "external", chapter: @chapter)
+    @potential_coordinators = User.where(role: "external", chapter: nil)
   end
 
   def update
+    chapter_params = params[:chapter]
+
     @chapter = Chapter.find(params[:id])
-    @chapter.update(chapter_params)
+    @chapter.update(
+      name: chapter_params[:name],
+      active_members: chapter_params[:active_members],
+      total_subscription_amount: chapter_params[:total_subscription_amount]
+    )
+
     if @chapter.valid?
+      coordinator_ids = chapter_params[:users]
+
+      if coordinator_ids
+        coordinator_ids.each do |id|
+          user = User.find(id)
+          user.update!(chapter: @chapter)
+        end
+      end
+
       redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
       redirect_to edit_chapter_path(@chapter.id)
     end
-  end
-
-  private
-
-  def chapter_params
-    params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, :user_id)
   end
 end

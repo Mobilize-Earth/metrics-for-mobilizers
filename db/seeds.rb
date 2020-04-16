@@ -6,9 +6,15 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 User.destroy_all
+Chapter.destroy_all
+chapter = Chapter.create!(
+  name: "Chapter 1", active_members: 10, total_subscription_amount: 100
+)
+
 #First user
 User.create!([
   { password: 'admin1', email: 'admin@test.com', role: 'admin', first_name: "Admin", last_name: "Istrator" },
-  { password: 'external', email: 'external@test.com', role: 'external', first_name: "External", last_name: "User" },
+  { password: 'external', email: 'external@test.com', role: 'external', first_name: "External", last_name: "User", chapter: chapter },
+  { password: 'external', email: 'john@test.com', role: 'external', first_name: "John", last_name: "Smith" },
   { password: 'consumer', email: 'consumer@test.com', role: 'consumer', first_name: "Consumer", last_name: "User" }
 ])
