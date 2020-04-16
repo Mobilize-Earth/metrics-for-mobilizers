@@ -1,4 +1,4 @@
-image: "circleci/ruby:2.7.0-node-browsers-legacy"
+image: "circleci/ruby:2.7.0-node-browsers"
 
 before_script:
   - apt-get update && apt-get install build-essentials mariadb-dev sqlite-dev nodejs npm
