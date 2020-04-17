@@ -7,7 +7,7 @@ class ChaptersController < ApplicationController
 
   def new
     @chapter = Chapter.new
-    @potential_coordinators = User.where(role: "external", chapter: nil)
+    @current_coordinators = User.none
   end
 
   def create
@@ -38,7 +38,6 @@ class ChaptersController < ApplicationController
   def edit
     @chapter = Chapter.find(params[:id])
     @current_coordinators = User.where(role: "external", chapter: @chapter)
-    @potential_coordinators = User.where(role: "external", chapter: nil)
   end
 
   def update

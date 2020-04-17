@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-      <% if @current_coordinators%>
+      <% if @current_coordinators.exists? %>
         <div class="form-row chapter-row">
           <div class="col-md-4 offset-md-4">
             <span>Current Coordinators</span>
@@ -53,10 +53,6 @@
           </div>
         </div>
       <% end %>
-      <div class="form-row chapter-row">
-        <%= f.label :users, "Add Coordinators:", class: "col-md-4 offset-md-4"  %>
-        <%= f.select :users, @potential_coordinators.collect { |c| [c.first_name, c.id] }, { include_hidden: false }, { multiple: true, class: "col-md-4 offset-md-4"} %>
-      </div>
       <div class="form-row chapter-row">
         <%= f.submit class: "btn col-md-4 offset-md-4 submit-btn"%>
       </div>
