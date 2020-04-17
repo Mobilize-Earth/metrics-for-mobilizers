@@ -27,7 +27,7 @@ class ChaptersController < ApplicationController
           user.update!(chapter: @chapter)
         end
       end
-
+      flash[:success] = "#{@chapter.name} was successfully created!"
       redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
@@ -60,6 +60,7 @@ class ChaptersController < ApplicationController
         end
       end
 
+      flash[:success] = "#{@chapter.name} was successfully updated!"
       redirect_to admins_index_path
     else
       flash[:errors] = @chapter.errors.full_messages
