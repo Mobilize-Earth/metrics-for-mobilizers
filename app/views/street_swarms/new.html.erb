@@ -10,6 +10,12 @@
       </div>
   <% end %>
 
+  <% if flash[:success] %>
+      <div class="show" role="alert">
+          <li><%= flash[:success] %></li>
+      </div>
+  <% end %>
+
   <%= form_for @street_swarm do |f| %>
     <%= f.label :xr_members_attended, "# of Participants" %>
     <%= f.text_field :xr_members_attended%>
