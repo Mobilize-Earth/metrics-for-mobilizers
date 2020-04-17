@@ -1,24 +1,4 @@
 <div class="default-background ">
-
-  <h1 class="chapter-title">Street Swarms</h1>
-
-  <% if flash[:errors] %>
-      <div class="show" role="alert">
-        <% flash[:errors].each do |error | %>
-          <li><%= error %></li>
-        <% end %>
-      </div>
-  <% end %>
-
-  <% if flash[:success] %>
-      <div class="show" role="alert">
-          <li><%= flash[:success] %></li>
-      </div>
-  <% end %>
-
-  <%= form_for @street_swarm do |f| %>
-    <%= f.label :xr_members_attended, "# of Participants" %>
-    <%= f.text_field :xr_members_attended%>
-    <%= f.submit "Submit Section"%>
-  <% end %>
+  <h1 class="form-title">Street Swarms</h1>
+  <%= render "street_swarms/form" %>
 </div>

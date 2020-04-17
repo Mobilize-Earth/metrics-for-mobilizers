@@ -14,7 +14,7 @@ class StreetSwarmsController < ApplicationController
       render street_swarms_path
     else
       flash[:errors] = @street_swarm.errors.full_messages
-      render street_swarms_path
+      render "new"
     end
   end
 end
