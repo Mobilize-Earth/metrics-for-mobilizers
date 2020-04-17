@@ -22,7 +22,8 @@ Rails.application.routes.draw do
   get '/forms/mobilization' => 'forms#mobilization'
   get '/forms/training' => 'forms#training'
   get '/forms/arrestable' => 'forms#arrestable'
-  get '/forms/street' => 'forms#street'
+  get '/forms/street', to: 'street_swarms#new', as: 'street_swarms'
+  post '/forms/street', to: 'street_swarms#create'
 
   get 'admins/index' => 'admins#index'
 
