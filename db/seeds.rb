@@ -13,8 +13,8 @@ chapter = Chapter.create!(
 
 #First user
 User.create!([
-  { password: 'admin1', email: 'admin@test.com', role: 'admin', first_name: "Admin", last_name: "Istrator" },
-  { password: 'external', email: 'external@test.com', role: 'external', first_name: "External", last_name: "User", chapter: chapter },
-  { password: 'external', email: 'john@test.com', role: 'external', first_name: "John", last_name: "Smith" },
-  { password: 'consumer', email: 'consumer@test.com', role: 'consumer', first_name: "Consumer", last_name: "User" }
+  { password: 'external', password_confirmation: 'external', email: 'john@test.com', role: 'external', first_name: "John", last_name: "Smith", phone_number: "1" },
+  { password: 'admin1', password_confirmation: 'admin1', email: 'admin@test.com', role: 'admin', first_name: "Admin", last_name: "Istrator", phone_number: "2"  },
+  { password: 'external', password_confirmation: 'external', email: 'external@test.com', role: 'external', first_name: "External", last_name: "User", phone_number: "3"  },
+  { password: 'consumer', password_confirmation: 'consumer', email: 'consumer@test.com', role: 'consumer', first_name: "Consumer", last_name: "User", phone_number: "4"  }
 ])

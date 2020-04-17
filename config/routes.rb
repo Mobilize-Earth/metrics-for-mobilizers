@@ -1,8 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: {
     sessions: 'users/sessions',
-    passwords: 'users/passwords',
-    registrations: 'users/registrations'
+    passwords: 'users/passwords'
   }
 
   resources :users
@@ -26,4 +25,6 @@ Rails.application.routes.draw do
   get '/forms/street' => 'forms#street'
 
   get 'admins/index' => 'admins#index'
+
+  get  'new_user' => 'users#new'
 end

@@ -3,12 +3,10 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :registerable,  :rememberable, :trackable and :omniauthable
   devise :database_authenticatable, :recoverable, :validatable
+  attr_accessor :password_confirmation
 
-  validates :email, presence: true, :email => true
-
-  class Rol < ActiveRecord::Base
-    enum rol: { admin: 'admin', external_coordinator: 'external', other_data_consumer: 'consumer' }
-  end
+  validates :first_name, :last_name, :password_confirmation, :phone_number, presence: true
+  validates :email, :email => true
 
   def full_name
     "#{first_name} #{last_name}"
