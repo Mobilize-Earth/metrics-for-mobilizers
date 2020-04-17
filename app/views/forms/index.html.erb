@@ -54,21 +54,51 @@
 
 <script>
     (() => {
-        let today = new Date(Date.now());
+        let from = getLastSaturday();
+        let to = getNextFriday();
+        set_week(from, to);
 
-        let nextFriday = new Date(today.getTime());
-        nextFriday.setDate(today.getDate() + (7 + 5 - today.getDay()) % 7);
+        const isReportCompleted = document.cookie.split(';').some((item) => item.trim().startsWith('report_completed='));
+        if (isReportCompleted) {
+            disableTiles();
+        } else {
+            $('.reporting .no-data-tile').click(function () {
+                setReportCompletedCookie(to);
+            });
+        }
 
-        let previousSaturday = new Date(today.getTime());
-        previousSaturday.setDate(today.getDate() - (7 - 6 + today.getDay()) % 7);
+        function set_week(fromDate, toDate) {
+            let from = `${String(fromDate.getMonth()).padStart(2, '0')}/${String(fromDate.getDate()).padStart(2, '0')}/${fromDate.getFullYear()}`;
+            let to = `${String(toDate.getMonth()).padStart(2, '0')}/${String(toDate.getDate()).padStart(2, '0')}/${toDate.getFullYear()}`;
+            document.getElementById('reporting-period').innerHTML = `from ${from} to ${to}`;
+        }
 
-        let from = `${String(previousSaturday.getMonth()).padStart(2, '0')}/${String(previousSaturday.getDate()).padStart(2, '0')}/${previousSaturday.getFullYear()}`;
-        let to = `${String(nextFriday.getMonth()).padStart(2, '0')}/${String(nextFriday.getDate()).padStart(2, '0')}/${nextFriday.getFullYear()}`;
+        function getNextFriday() {
+            let today = new Date(Date.now());
+            let nextFriday = new Date(today.getTime());
+            nextFriday.setDate(today.getDate() + (7 + 5 - today.getDay()) % 7);
+            nextFriday.setHours(23, 59, 59);
+            return nextFriday;
+        }
 
-        document.getElementById('reporting-period').innerHTML = `from ${from} to ${to}`;
+        function getLastSaturday() {
+            let today = new Date(Date.now());
+            let previousSaturday = new Date(today.getTime());
+            previousSaturday.setDate(today.getDate() - (7 - 6 + today.getDay()) % 7);
+            previousSaturday.setHours(0, 0, 0);
+            return previousSaturday;
+        }
 
-        $('.reporting .no-data-tile').click(function () {
+        function disableTiles() {
             $('.reporting .form-tile').addClass('disabled');
-        });
+        }
+
+        function setReportCompletedCookie(expirationDate) {
+            let expiration = `;expires=${expirationDate.toUTCString()}`;
+            document.cookie = "report_completed=true" + expiration;
+            disableTiles();
+        }
+
+
     })();
 </script>
