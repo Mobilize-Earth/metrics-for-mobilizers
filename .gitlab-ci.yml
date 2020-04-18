@@ -36,7 +36,7 @@ create_push:
       - docker
     variables:
       DOCKER_DRIVER: overlay
-
+      DOCKER_HOST: tcp://localhost:2375
     script:
       - docker login -u=$DOCKER_USER -p=$DOCKER_PASSWORD
       - IMAGE_TAG=$(git rev-parse HEAD | cut -c 1-8)
