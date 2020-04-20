@@ -18,11 +18,11 @@
       <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 outer-box">
         <div class="left-nav">
           <h2>Navigation</h2>
-          <a class="left-nav-item" id="users-nav-link">
+          <a class="left-nav-item selected" id="users-nav-link">
             <div class="left-nav-icon extra-padding"><span class="fa fa-user"></span></div>
             <div class="left-nav-text">User</div>
           </a>
-          <a class="left-nav-item selected" id="chapters-nav-link">
+          <a class="left-nav-item" id="chapters-nav-link">
             <div class="left-nav-icon"><span class="fa fa-users"></span></div>
             <div class="left-nav-text">Chapter</div>
           </a>
@@ -39,17 +39,18 @@
               <div class="content-header row">
                 <div class="column col-4">Name</div>
                 <div class="column col-2">Country</div>
-                <div class="column col-3">State</div>
+                <div class="column col-2">State</div>
+                <div class="column col-1">ZIP</div>
                 <div class="column col-2">Created</div>
                 <div class="column col-1"></div>
               </div>
-
               <div class="content-row-container">
                 <% @chapters.each do |chapter| %>
                   <div class="content-row row">
                     <div class="column col-4"><%= chapter.name %></div>
                     <div class="column col-2">United States</div>
-                    <div class="column col-3">Oregon</div>
+                    <div class="column col-2">Oregon</div>
+                    <div class="column col-1">90210</div>
                     <div class="column col-2"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
                     <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>
