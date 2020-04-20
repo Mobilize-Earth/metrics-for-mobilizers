@@ -1,18 +1,16 @@
 <div class="container-fluid">
   <% if flash[:errors] %>
   <div class="row">
-    <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
-      <% flash[:errors].each do |error | %>
-        <li><%= error %></li>
-      <% end %>
+    <div class="col-md-6 offset-md-2 alert alert-danger alert-dismissable fade show" role="alert">
+      <%= flash[:errors] %>
     </div>
   </div>
   <% end %>
 
   <% if flash[:success] %>
   <div class="row">
-      <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="success">
-        <li><%= flash[:success] %></li>
+      <div class="col-md-6 offset-md-2 alert alert-success alert-dismissable fade show" role="success">
+        <%= flash[:success] %>
       </div>
   </div>
   <% end %>

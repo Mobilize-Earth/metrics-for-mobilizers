@@ -11,9 +11,9 @@ class StreetSwarmsController < ApplicationController
     )
     if @street_swarm.save
       flash[:success] = "Street Swarm data successfully entered"
-      render street_swarms_path
+      redirect_to street_swarms_path
     else
-      flash[:errors] = @street_swarm.errors.full_messages
+      flash[:errors] = "Street Swarm not saved. Please try again."
       render "new"
     end
   end
