@@ -67,4 +67,14 @@ class ChaptersController < ApplicationController
       redirect_to edit_chapter_path(@chapter.id)
     end
   end
+
+  def show
+    authorize! :show, ChaptersController
+    @chapter = Chapter.find(params[:id])
+  end
+
+
+  def current_user_chapter
+    redirect_to chapter_path(current_user.chapter)
+  end
 end

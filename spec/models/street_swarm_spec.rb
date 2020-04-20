@@ -26,10 +26,9 @@ RSpec.describe StreetSwarm, type: :model do
     end
 
     it 'should have user, chapter and xr_members_attended' do
-      @street_swarm.valid?
       expect(@street_swarm.errors[:user]).to include('can\'t be blank')
       expect(@street_swarm.errors[:chapter]).to include('can\'t be blank')
-      expect(@street_swarm.errors[:xr_members_attended]).to include('is not a number')
+      expect(@street_swarm.errors[:xr_members_attended]).to include('can\'t be blank')
     end
   end
 end

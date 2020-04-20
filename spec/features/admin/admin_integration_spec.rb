@@ -11,9 +11,9 @@ feature 'admin user', :devise do
         expect(page).to have_content "Navigation"
     end
 
-    scenario 'should redirect to admin dashboard when visit external dashboard' do
+    scenario 'should redirect to admin dashboard when visit chapter dashboard' do
         sign_in(@user.email, @user.password)
-        visit "/dashboard/index"
+        visit "/chapters/1"
         expect(page).to have_content "Navigation"
         expect(page).to have_content "You are not authorized to access this page."
     end

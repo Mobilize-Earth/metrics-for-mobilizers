@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :chapters
     # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   authenticated :user, ->(u) { u.role == 'external' } do
-    root to: "dashboard#index", as: :external_root
+    root to: "chapters#current_user_chapter", as: :external_root
   end
 
   authenticated :user, ->(u) { u.role == 'admin' } do
@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   end
 
   root to: "home#index"
-  get '/dashboard/index' => 'dashboard#index'
 
   get '/forms/index' => 'forms#index'
   get '/forms/mobilization' => 'forms#mobilization'

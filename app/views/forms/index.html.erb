@@ -41,7 +41,7 @@
 
     <div class="row justify-content-center">
       <div class="col-9 col-sm-4 col-md-3">
-        <%= link_to dashboard_index_path, class: "btn btn-lg", :action => 'go' do %>
+        <%= link_to chapter_path(current_user.chapter), class: "btn btn-lg", :action => 'go' do %>
           I'm done
         <% end %>
       </div>

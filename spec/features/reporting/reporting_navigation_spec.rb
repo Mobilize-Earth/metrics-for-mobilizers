@@ -11,7 +11,7 @@ feature 'reporting done' do
 
   scenario 'user redirected to dashboard when clicks done button' do
     click_link 'I\'m done'
-    expect(page).to have_current_path dashboard_index_path, ignore_query: true
+    expect(page).to have_current_path chapter_path(@user.chapter), ignore_query: true
   end
 
   xit 'skipping until we install selenium driver' do

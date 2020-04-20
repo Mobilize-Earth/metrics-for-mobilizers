@@ -39,7 +39,7 @@ class Ability
     end
 
     if user.role == 'external' then
-      can :index, DashboardController
+      can :show, ChaptersController
     end
   end
 end
