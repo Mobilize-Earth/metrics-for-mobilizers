@@ -17,20 +17,29 @@
   </div>
   <% end %>
 
-
-  <div class="report-form-body">
-    <%= form_for @street_swarm do |f| %>
-    <div class="form-group">
-      <div class="col-md-6">
-        <%= f.label :xr_members_attended, "# of Participants" %>
-        <%= f.text_field :xr_members_attended, class: "form-control"%>
+  <div class="nav col-md-12 action-form">
+    <div class="nav flex-column nav-pills col-md-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <a class="nav-link active action-btn-active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Street Swarms</a>
+    </div>
+    <div class="tab-content col-md-6 action-form-content" id="v-pills-tabContent">
+      <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+        <div class="report-form-body">
+          <%= form_for @street_swarm do |f| %>
+          <div class="form-group">
+            <div>
+              <%= f.label :xr_members_attended, "# of Participants", class: "action-form-label" %>
+              <%= f.text_field :xr_members_attended, class: "form-control action-form-input"%>
+            </div>
+          </div>
+          <div class="form-group">
+            <div>
+              <%= f.submit "Submit Section", class: "btn action-submit-btn"%>
+            </div>
+            <p class="warning">Cannot undo this action</p>
+          </div>
+          <% end %>
+        </div>
       </div>
     </div>
-    <div class="form-group">
-      <div class="col-md-6">
-        <%= f.submit "Submit Section", class: 'col-md-6 btn btn-success btn-block'%>
-      </div>
-    </div>
-    <% end %>
   </div>
 </div>

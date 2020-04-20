@@ -1,0 +1,52 @@
+.action-form {
+  .action-btn-active {
+    height: 44px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.5);
+    border: solid 1px #f4f5f0;
+  }
+
+  .nav-pills .nav-link.active {
+    background-color: #03ad6f;
+  }
+
+  .action-form-content {
+    background-color: white;
+    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.5);
+    border: solid 1px #f4f5f0;
+    padding: 20px;
+  }
+
+  .action-submit-btn {
+    padding: 10px 40px;
+    border: solid 2px #03ad6f;
+    background-color: #ffffff;
+    font-family: Poppins;
+    font-size: 15px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.35px;
+    text-align: center;
+    color: #000000;
+  }
+  .warning {
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+    font-style: italic;
+  }
+  .action-form-label {
+    color: #9b9b9b;
+    font-size: 15px;
+  }
+  .action-form-input {
+    max-width: 140px;
+  }
+}
+
+.action-form-finish-container {
+  margin-top: 30px;
+}

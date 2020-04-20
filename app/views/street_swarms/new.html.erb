@@ -1,11 +1,11 @@
-<div class="default-background ">
-  <div class="container-fluid">
-    <div class="form-group">
-      <div class="col-md-12">
-        <h1 class="form-title">Street Swarms</h1>
-        <p>Click the tab below to complete your form. Repeat if you did more than one Street Swarm. </p>
-      </div>
-    </div>
-  </div>
+<div class="default-background">
+  <%= render 'forms/form_header', title: 'Street Swarms', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Street Swarm.' %>
   <%= render "street_swarms/form" %>
+  <img class="half-logo" src="/images/half_circle.png">
+  <div class="text-center col-md-8 action-form-finish-container">
+    <p>Finish when you want to return to submit the rest of this weeks activites </p>
+    <%= link_to forms_index_path, :action => 'go', :class => "btn submit-btn" do %>
+    Finish Street Swarm
+    <% end %>
+  </div>
 </div>
