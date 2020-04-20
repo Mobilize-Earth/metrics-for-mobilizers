@@ -8,6 +8,7 @@ before_script:
   - npm install yarn -g
   - gem install bundler --no-document
   - bundle install
+  - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
 
 stages:
   # - unit_test

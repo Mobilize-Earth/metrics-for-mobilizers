@@ -10,6 +10,20 @@ require 'helpers/session_helpers'
 
 ActiveRecord::Migration.maintain_test_schema!
 
+Capybara.register_driver :headless_chrome do |app|
+  
+  driver_path = ENV['CHROMEDRIVER_PATH']
+
+  raise 'CHROMEDRIVER_PATH is required for running JS specs but is undefined in ENV' unless driver_path
+
+  service = Selenium::WebDriver::Service.new(path: driver_path, port: 9005)
+  options = ::Selenium::WebDriver::Chrome::Options.new
+  options.add_argument('--headless')
+  options.add_argument('--no-sandbox')
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, service: service, options: options)
+end
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -17,20 +31,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
   config.include Helpers::SessionHelpers, type: :feature
-end
 
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
-
-Capybara.register_driver :headless_chrome do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: %w(headless no-sandbox disable-gpu) }
-  )
-
-  Capybara::Selenium::Driver.new app,
-    browser: :chrome,
-    desired_capabilities: capabilities
 end
 
 Capybara.default_driver = :headless_chrome
