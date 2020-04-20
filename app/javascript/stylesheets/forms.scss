@@ -3,7 +3,7 @@
   font-size: 24px;
   font-weight: 600;
   letter-spacing: 1.8px;
-  margin-top: 41px;
+  width: 80%;
 }
 
 .form-tile {
@@ -58,13 +58,23 @@ a:hover.form-tile {
   letter-spacing: 1.8px;
 }
 
+.form-header {
+  padding-left: 210px;
+  padding-bottom: 30px;
+}
+
 @media (max-width: 575px) {
   .form-title {
     margin-top: 90px;
     font-size: 20px;
+    padding-left: 0px;
   }
   .half-logo {
     display: none;
+  }
+  .form-header {
+    padding-left: 0px;
+    margin: auto 2rem;
   }
 }
 
