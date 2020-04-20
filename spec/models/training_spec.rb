@@ -25,7 +25,7 @@ RSpec.describe Training, type: :model do
       expect(@training.errors[:number_attendees]).to include('must be an integer')
     end
 
-    it 'should have user, chapter and number_attendees' do
+    it 'should have user, chapter and training_type' do
       @training.valid?
       expect(@training.errors[:user]).to include('can\'t be blank')
       expect(@training.errors[:chapter]).to include('can\'t be blank')

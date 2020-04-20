@@ -22,14 +22,3 @@ chapter.users.create!([
   { password: 'external', password_confirmation: 'external', email: 'external@test.com', role: 'external', first_name: "External", last_name: "User", phone_number: "3" },
   { password: 'external', password_confirmation: 'external', email: 'john@test.com', role: 'external', first_name: "John", last_name: "Smith", phone_number: "1" }
 ])
-
-TrainingType.create!([
-  { name: 'Induction'},
-  { name: 'DNA'},
-  { name: 'H4E'},
-  { name: 'NVDA'},
-  { name: 'Facilitation'},
-  { name: 'How to start a new chapter'},
-  { name: 'Mass mobilization'},
-  { name: 'Oppression & Movement Building'}
-])

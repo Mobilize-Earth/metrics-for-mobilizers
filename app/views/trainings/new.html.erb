@@ -1,0 +1,66 @@
+<div class="container-fluid default-background reporting">
+
+  <h1>Training</h1>
+
+  <div class="form-title reporting-header">
+    <div class="row">
+      <div class="col-10 offset-1 col-sm-8 offset-sm-3 col-md-8 offset-md-2 col-lg-5 offset-lg-2">
+        <span class="title-prefix">Entering report <strong id="reporting-period">CW</strong></span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-10 offset-1 col-sm-8 offset-sm-3 offset-md-2 offset-lg-2">
+        Click to complete for each activity category
+        your chapter participated in this week.
+      </div>
+    </div>
+  </div>
+
+  <% if flash[:error].present? %>
+    <div class="row">
+      <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <%= flash[:error] %>
+      </div>
+    </div>
+  <% elsif flash[:success] %>
+    <div class="col-md-4 offset-md-4 alert alert-success alert-dismissable fade show" role="alert">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:success] %>
+  </div>
+  <% end %>
+
+  <div>
+    <% @types.each do |type| %>
+      <div><%= type %></div>
+    <% end %>
+  </div>
+  
+  <%= form_for @training, url: 'training/save' do |f| %>
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <div class="form-row chapter-row">
+      <div class="col-md-4 offset-md-1">
+        * Required
+      </div>
+    </div>
+    <div class="form-row chapter-row">
+      <div class="col-md-4 offset-md-1">
+        <%= f.label :number_attendees, "# of Members Total *" %>
+        <%= f.text_field :number_attendees, class: "form-control" %>
+      </div>
+
+      <div class="col-md-4 offset-md-1">
+        <%= f.label :training_type, "# of Members Total *" %>
+        <%= f.text_field :training_type, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-row chapter-form-btn">
+        <%= link_to "Cancel", forms_index_path, class: "btn col-md-2 offset-md-6 col-lg-1 offset-lg-6 btn-outline-danger" %>
+        <%= f.submit "Submit", class: "col-md-2 col-lg-1 btn btn-success chapter-submit-btn"%>
+    </div>
+  <% end %>
+
+  <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
+</div>
