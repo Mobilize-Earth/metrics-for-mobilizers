@@ -1,11 +1,5 @@
 image: "ruby:2.7.0-alpine"
 
-before_script:
-  - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm
-  - npm install yarn -g
-  - gem install bundler --no-document
-  - bundle install
-
 stages:
   - Unit Tests
   - Integration Tests
@@ -26,7 +20,10 @@ Unit Tests:
 Intergration Tests:
   stage: Integration Tests
   before_script:
-    - apk update && apk add --no-cache chromium chromium-chromedriver
+    - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
+    - npm install yarn -g
+    - gem install bundler --no-document
+    - bundle install
     - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
   tags:
     - docker
