@@ -11,17 +11,20 @@ require 'helpers/session_helpers'
 ActiveRecord::Migration.maintain_test_schema!
 
 Capybara.register_driver :headless_chrome do |app|
-  
-  driver_path = ENV['CHROMEDRIVER_PATH']
 
-  raise 'CHROMEDRIVER_PATH is required for running JS specs but is undefined in ENV' unless driver_path
-
-  service = Selenium::WebDriver::Service.new(path: driver_path, port: 9005)
   options = ::Selenium::WebDriver::Chrome::Options.new
   options.add_argument('--headless')
   options.add_argument('--no-sandbox')
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, service: service, options: options)
+  driver_path = ENV['CHROMEDRIVER_PATH']
+
+  if driver_path # configure driver for alpine
+    service = Selenium::WebDriver::Service.new(path: driver_path, port: 9005)
+    Capybara::Selenium::Driver.new(app, browser: :chrome, service: service, options: options)
+  else # configure driver for local dev
+    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  end
+
 end
 
 RSpec.configure do |config|
