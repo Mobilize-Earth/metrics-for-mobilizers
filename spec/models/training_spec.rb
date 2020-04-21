@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Training, type: :model do
-  describe 'when number_attendees and type are saved' do
+  describe 'when saving a Training' do
 
     before :each do
       @training = Training.new
@@ -30,6 +30,25 @@ RSpec.describe Training, type: :model do
       expect(@training.errors[:user]).to include('can\'t be blank')
       expect(@training.errors[:chapter]).to include('can\'t be blank')
       expect(@training.errors[:training_type]).to include('can\'t be blank')
+    end
+
+    it 'should only accept enum values' do
+      chapter = Chapter.new
+      user = User.new
+
+      @training.chapter = chapter
+      @training.user = user
+      @training.number_attendees = 7
+
+      Training.training_type_options.each do |type|
+        @training.training_type = type
+        @training.valid?
+        expect(@training.errors[:training_type]).to be_empty  
+      end
+
+      @training.training_type = 'Garbage'
+      @training.valid?
+      expect(@training.errors[:training_type]).to include('must be a valid training type')
     end
   end
 end

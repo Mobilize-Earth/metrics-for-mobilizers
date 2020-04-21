@@ -4,15 +4,7 @@ class TrainingsController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @types = [
-      'Induction',
-      'DNA',
-      'H4E',
-      'NVDA',
-      'Facilitation',
-      'How to start a new chapter',
-      'Mass mobilization',
-      'Oppression & Movement Building']
+    @types = Training.training_type_options
     @training = Training.new
   end
 
@@ -26,11 +18,10 @@ class TrainingsController < ApplicationController
 
     if @training.save
       flash[:success] = "#{@training.training_type} training was successfully created!"
-      redirect_to forms_index_path
     else
-      p @training.errors.full_messages 
       flash[:errors] = @training.errors.full_messages
-      redirect_to forms_index_path
     end
+
+    redirect_to forms_index_path
   end
 end
