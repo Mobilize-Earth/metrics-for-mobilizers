@@ -6,7 +6,7 @@ FactoryBot.define do
       password { "password123" }
       password_confirmation { "password123" }
       phone_number {"123456789"}
-      role { "consumer" }
+      role { "external" }
       chapter
     end
   end

@@ -36,6 +36,7 @@ class Ability
     if user.role == 'admin' then
       can :index, AdminsController
       can :new, UsersController
+      can :edit, UsersController
     end
 
     if user.role == 'external' then
