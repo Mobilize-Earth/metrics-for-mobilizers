@@ -14,12 +14,10 @@ feature 'reporting done' do
     expect(page).to have_current_path chapter_path(@user.chapter), ignore_query: true
   end
 
-  xit 'skipping until we install selenium driver' do
-    scenario 'tiles should be disabled if use clicks on no new data tile' do
-      find('.no-data-tile').click
-      page.all('.form-tile').each do |tile|
-        expect(tile[:class].include?('disabled')).to be true
-      end
+  scenario 'tiles should be disabled if use clicks on no new data tile' do
+    find('.no-data-tile').click
+    page.all('.form-tile').each do |tile|
+      expect(tile[:class].include?('disabled')).to be true
     end
   end
 

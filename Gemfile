@@ -26,6 +26,8 @@ end
 group :test do
   gem 'cucumber-rails', require: false
   gem 'sqlite3', '1.4.2'
+  gem 'webdrivers'
+  gem 'capybara-selenium'
 end
 
 group :development do
