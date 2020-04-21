@@ -4,7 +4,7 @@ feature 'administration user' do
 
     before(:each) do
         @user = FactoryBot.create(:user, role: 'admin', chapter: nil)
-        @user_creted = User.create!(:first_name => 'Test', :last_name => 'Test', :email => 'test@test.com', :password => '123456', :phone_number => '123')
+        @user_creted = User.create!(:first_name => 'Test', :last_name => 'Test', :email => 'test@test.com', :password => '123456', :phone_number => '123', :role => 'admin')
     end
 
     scenario 'should be redirect to sign in page when access user administration page' do
@@ -59,5 +59,11 @@ feature 'administration user' do
         fill_in 'user_password_confirmation', with: '12345'
         click_button 'Submit'
         expect(page).to have_content "Password confirmation doesn't match Password"
+    end
+
+    scenario 'should have a chapter role disabled' do
+        sign_in(@user.email, @user.password)
+        visit edit_user_path(@user)
+        expect(page).to have_field('user_chapter_id', :type => 'select', :disabled => true)
     end
 end

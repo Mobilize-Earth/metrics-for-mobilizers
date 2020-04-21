@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   validates :first_name, :last_name, :phone_number, presence: true
   validate :check_role_dashboard
-  validates :phone_number, format: { with: /\A\d+\z/, message: "can be digits only." }
+  validates :phone_number, numericality: {only_integer: true, :greater_than_or_equal_to => 0}
   validates :email, :email => true
 
   def check_role_dashboard
