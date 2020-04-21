@@ -16,10 +16,9 @@ feature 'reporting done' do
 
   xit 'skipping until we install selenium driver' do
     scenario 'tiles should be disabled if use clicks on no new data tile' do
-
       find('.no-data-tile').click
       page.all('.form-tile').each do |tile|
-        tile.should have_css('.disabled')
+        expect(tile[:class].include?('disabled')).to be true
       end
     end
   end
