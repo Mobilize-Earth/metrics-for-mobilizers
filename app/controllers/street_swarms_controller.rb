@@ -1,6 +1,8 @@
 class StreetSwarmsController < ApplicationController
+
   def new
     @street_swarm = StreetSwarm.new
+    @types = StreetSwarm.options
   end
 
   def create
@@ -14,6 +16,7 @@ class StreetSwarmsController < ApplicationController
       redirect_to street_swarms_path
     else
       flash[:errors] = @street_swarm.errors.full_messages
+      @types = StreetSwarm.options
       render "new"
     end
   end
