@@ -17,17 +17,15 @@ class TrainingsController < ApplicationController
   end
 
   def save
-    training_params = params[:training]
-
     @training = Training.new(
-      number_attendees: training_params[:number_attendees],
-      training_type: training_params[:training_type],
+      number_attendees: params[:training][:number_attendees],
+      training_type: params[:training_type],
       chapter: current_user.chapter, 
       user: current_user
     )
 
     if @training.save
-      flash[:success] = "#{@training.training_type} Training was successfully created!"
+      flash[:success] = "#{@training.training_type} training was successfully created!"
       redirect_to forms_index_path
     else
       p @training.errors.full_messages 

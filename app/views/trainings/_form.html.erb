@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <% if flash[:errors] %>
+    <div class="row">
+      <div class="col-md-6 offset-md-2 alert alert-danger alert-dismissable fade show test-fail" role="alert">
+        <%= flash[:errors] %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if flash[:success] %>
+    <div class="row">
+        <div class="col-md-6 offset-md-2 alert alert-success alert-dismissable fade show test-success" role="success">
+          <%= flash[:success] %>
+        </div>
+    </div>
+  <% end %>
+
+  <div class="nav col-md-12 action-form">
+    <div class="nav flex-column nav-pills col-md-5 col-lg-4 col-xl-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <% @types.each do |type| %>
+        <a class="nav-link action-btn-active" id="v-pills-home-tab" data-toggle="pill"
+          href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false"><%= type %></a>
+      <% end %>
+    </div>
+    <div class="tab-content col-md-6 action-form-content" id="v-pills-tabContent">
+      <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+        <div class="report-form-body">
+          <%= form_for @training, url: 'training/save' do |f| %>
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+            <%= hidden_field_tag :training_type, "", id: "training-type-input" %>
+            <div class="form-group">
+              <div>
+                <%= f.label :number_attendees, "# of Attendees", class: "action-form-label" %>
+                <%= f.text_field :number_attendees, class: "form-control action-form-input"%>
+              </div>
+            </div>
+            <div class="form-group">
+              <div>
+                <%= f.submit "Submit Section", class: "btn action-submit-btn"%>
+              </div>
+              <p class="warning">Cannot undo this action</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(() => {
+  const navLinks = document.getElementsByClassName('nav-link');
+
+  if(navLinks.length > 1) {
+    for(const navLink of navLinks) {
+      navLink.addEventListener('click', e => {
+        document.getElementById('training-type-input').value = e.target.textContent;
+
+        for(const navLinkToModify of navLinks) {
+          navLinkToModify.classList.remove('active');
+          navLink.setAttribute('aria-selected', false);
+        }
+
+        navLink.classList.add('active');
+        navLink.setAttribute('aria-selected', true);
+      });
+    }
+  } else {
+    navLinks[0] && navLinks[0].classList.add('active');
+    navLinks[0] && navLinks[0].setAttribute('aria-selected', true);
+  }
+  
+})();
+</script>
