@@ -7,6 +7,7 @@ feature 'submitting street swarm' do
     sign_in(@user.email, @user.password)
     visit_home_page
     visit street_swarms_path
+    click_on 'Street Swarms'
   end
 
   scenario 'with 10 participants should save to database' do

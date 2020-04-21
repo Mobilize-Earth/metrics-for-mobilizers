@@ -1,12 +1,8 @@
 <div class="default-background">
   <%= render 'layouts/messages', flash: flash %>
   <%= render 'forms/form_header', title: 'Trainings', subtitle: 'Subtitle Copy Needed' %>
-  <%= render "trainings/form" %>
-  <img class="half-logo" src="/images/half_circle.png">
-  <div class="text-center col-md-8 action-form-finish-container">
-    <p>Finish when you want to return to submit the rest of this weeks activites </p>
-    <%= link_to forms_index_path, :action => 'go', :class => "btn submit-btn test-finish-street-swarm" do %>
-    Finish Training
-    <% end %>
-  </div>
+  <%= render "forms/form", training: @training do |f| %>
+    <%= render 'trainings/form_body' %>
+  <% end %>
+  <%= render "forms/form_footer", title: "Training" %>
 </div>
