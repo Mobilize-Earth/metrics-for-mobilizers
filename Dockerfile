@@ -15,6 +15,9 @@ RUN gem install sassc -- --disable-march-tune-native
 RUN bundle install
 
 COPY . /app
+
+RUN yarn
+
 EXPOSE 3000
 
 CMD ["sh", "./startup.sh" ]
