@@ -50,4 +50,9 @@ feature 'navigation' do
     expect(page).to have_current_path forms_index_path, ignore_query: true
   end
 
+  scenario 'should navigate to forms index when user clicks cancel street swarm' do
+    find('.test-cancel-street-swarm').click
+    expect(page).to have_current_path forms_index_path, ignore_query: true
+  end
+
 end
