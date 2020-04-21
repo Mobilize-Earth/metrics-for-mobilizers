@@ -1,6 +1,6 @@
 <div class="default-background">
   <%= render 'layouts/messages', flash: flash %>
-  <%= render 'forms/form_header', title: 'Trainings', subtitle: 'Subtitle Copy Needed' %>
+  <%= render 'forms/form_header', title: 'Trainings', subtitle: 'Click on tabs below to complete a form for each training activity your chapter completed this week.' %>
   <%= render "forms/form", training: @training do |f| %>
     <%= render 'trainings/form_body' %>
   <% end %>
