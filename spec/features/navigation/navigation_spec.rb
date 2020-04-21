@@ -8,7 +8,7 @@ feature 'navigation' do
   end
   scenario 'user should be redirected to dashboard when clicks home button' do
     visit forms_index_path
-    click_link 'Home'
-    expect(page).to have_current_path dashboard_index_path, ignore_query: true
+    find('.test-home').click
+    expect(page).to have_current_path '/chapters/1', ignore_query: true
   end
 end

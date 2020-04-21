@@ -18,7 +18,7 @@ describe Chapter, type: :model do
       chapter = Chapter.new
       chapter.name = "chapter"
       chapter.valid?
-      expect(chapter.errors[:name]).to include("This Chapter name has already been taken")
+      expect(chapter.errors[:name]).to include("of this chapter has already been taken")
 
       chapter2 = Chapter.new
       chapter.name = "chapter2"

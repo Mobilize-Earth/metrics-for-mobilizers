@@ -1,14 +1,13 @@
 class ApplicationController < ActionController::Base
     protect_from_forgery with: :exception
-
     before_action :authenticate_user!
     skip_before_action :authenticate_user!, :only => [:index]
 
     def after_sign_in_path_for(resource)
-        if @user.role == 'admin' then
+        if current_user.role == 'admin' then
             admins_index_url
-        elsif @user.role == 'external' then
-            dashboard_index_url
+        elsif current_user.role == 'external' then
+            chapter_url(current_user.chapter)
         end
     end
 
@@ -16,7 +15,7 @@ class ApplicationController < ActionController::Base
         if current_user.role == 'admin' then
             redirect_to admins_index_url
         elsif current_user.role == 'external' then
-            redirect_to dashboard_index_url
+            redirect_to chapter_url(current_user.chapter)
         end
         flash[:error] = exception.message
     end

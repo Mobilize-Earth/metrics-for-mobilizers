@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_15_020540) do
+ActiveRecord::Schema.define(version: 2020_04_20_164700) do
 
   create_table "chapters", force: :cascade do |t|
     t.string "name"
@@ -18,6 +18,27 @@ ActiveRecord::Schema.define(version: 2020_04_15_020540) do
     t.decimal "total_subscription_amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "street_swarms", force: :cascade do |t|
+    t.integer "xr_members_attended", default: 0
+    t.integer "chapter_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chapter_id"], name: "index_street_swarms_on_chapter_id"
+    t.index ["user_id"], name: "index_street_swarms_on_user_id"
+  end
+
+  create_table "trainings", force: :cascade do |t|
+    t.integer "number_attendees", default: 0
+    t.integer "chapter_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "training_type"
+    t.index ["chapter_id"], name: "index_trainings_on_chapter_id"
+    t.index ["user_id"], name: "index_trainings_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -28,7 +49,7 @@ ActiveRecord::Schema.define(version: 2020_04_15_020540) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "role", default: "consumer"
+    t.string "role", default: "reviewer"
     t.string "first_name"
     t.string "last_name"
     t.string "phone_number"
@@ -38,5 +59,9 @@ ActiveRecord::Schema.define(version: 2020_04_15_020540) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "street_swarms", "chapters"
+  add_foreign_key "street_swarms", "users"
+  add_foreign_key "trainings", "chapters"
+  add_foreign_key "trainings", "users"
   add_foreign_key "users", "chapters"
 end

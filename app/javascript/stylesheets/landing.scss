@@ -1,7 +1,8 @@
 .default-background {
-  background-color: #F4F5F0;
+  background-color: #f4f5f0;
   min-height: calc(100vh - 100px);
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
+  padding-top: 40px;
 }
 
 .intro {
@@ -13,7 +14,7 @@
   text-align: center;
   margin-top: 25px;
   font-size: 36px;
-  color: #03AD6F;
+  color: #03ad6f;
 }
 
 .email-to {
@@ -21,8 +22,14 @@
   font-size: 25px;
 }
 
-@media(max-width: 760px) {
-  .intro { font-size: 15px; }
-  .write-to { font-size: 25px; }
-  .email-to { font-size: 20px; }
+@media (max-width: 760px) {
+  .intro {
+    font-size: 15px;
+  }
+  .write-to {
+    font-size: 25px;
+  }
+  .email-to {
+    font-size: 20px;
+  }
 }

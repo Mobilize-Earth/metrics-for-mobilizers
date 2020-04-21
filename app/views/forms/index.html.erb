@@ -1,22 +1,41 @@
 <div class="container-fluid default-background reporting">
 
-  <div class="form-title reporting-header">
+  <% if flash[:errors] %>
     <div class="row">
-      <div class="col-10 offset-1 col-sm-8 offset-sm-3 col-md-8 offset-md-2 col-lg-5 offset-lg-2">
-        <span class="title-prefix">Entering report <strong id="reporting-period">CW</strong></span>
+      <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
+        <% flash[:errors].each do |error | %>
+          <li><%= error %></li>
+        <% end %>
       </div>
     </div>
+  <% elsif flash[:success] %>
+    <div class="col-md-4 offset-md-4 alert alert-success alert-dismissable fade show" role="alert">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash[:success] %>
+  </div>
+  <% end %>
 
-    <div class="row">
-      <div class="col-10 offset-1 col-sm-8 offset-sm-3 col-md-8 offset-md-2 col-lg-5 offset-lg-2">
-        Click to complete for each activity category
-        your chapter participated in this week.
+  <div class="form-header">
+    <div class="form-title reporting-header">
+      <div class="">
+        <div class="">
+          <span class="title-prefix">Entering report <strong id="reporting-period">CW</strong></span>
+        </div>
+      </div>
+
+      <div class="">
+        <div class="">
+          Click to complete for each activity category
+          your chapter participated in this week.
+        </div>
       </div>
     </div>
   </div>
 
+
+
   <div class="reporting-tiles-container">
-    <div class="row form-row">
+    <div class="row">
       <%= link_to forms_mobilization_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
         <p class="tile-title">Mobilizations</p>
         <p class="tile-desc">All activities that are recruiting driven</p>
@@ -25,9 +44,7 @@
         <p class="tile-title">Trainings</p>
         <p class="tile-desc">All activities conducted for XRA members</p>
       <% end %>
-    </div>
-    <div class="row">
-      <%= link_to forms_street_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
+      <%= link_to street_swarms_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
         <p class="tile-title">Street Swarms</p>
         <p class="tile-desc">Insert definition of this activity here</p>
       <% end %>
@@ -35,10 +52,15 @@
         <p class="tile-title">Arrestable Actions</p>
         <p class="tile-desc">Insert definition of this activity here</p>
       <% end %>
+      <div class="col-9 col-sm-4 col-md-3 form-tile contrast no-data-tile">
+        <p class="tile-title">No New Data This Week</p>
+        <p class="tile-desc">Only when there is no activity for your chapter this week</p>
+      </div>
     </div>
+
     <div class="row justify-content-center">
       <div class="col-9 col-sm-4 col-md-3">
-        <%= link_to dashboard_index_path, class: "btn btn-lg", :action => 'go' do %>
+        <%= link_to chapter_path(current_user.chapter), class: "btn btn-lg", :action => 'go' do %>
           I'm done
         <% end %>
       </div>
@@ -51,17 +73,51 @@
 
 <script>
     (() => {
-        let today = new Date(Date.now());
+        let from = getLastSaturday();
+        let to = getNextFriday();
+        set_week(from, to);
 
-        let nextFriday = new Date(today.getTime());
-        nextFriday.setDate(today.getDate() + (7 + 5 - today.getDay()) % 7);
+        const isReportCompleted = document.cookie.split(';').some((item) => item.trim().startsWith('report_completed='));
+        if (isReportCompleted) {
+            disableTiles();
+        } else {
+            $('.reporting .no-data-tile').click(function () {
+                setReportCompletedCookie(to);
+            });
+        }
 
-        let previousSaturday = new Date(today.getTime());
-        previousSaturday.setDate(today.getDate() - (7 - 6 + today.getDay()) % 7);
+        function set_week(fromDate, toDate) {
+            let from = `${String(fromDate.getMonth()).padStart(2, '0')}/${String(fromDate.getDate()).padStart(2, '0')}/${fromDate.getFullYear()}`;
+            let to = `${String(toDate.getMonth()).padStart(2, '0')}/${String(toDate.getDate()).padStart(2, '0')}/${toDate.getFullYear()}`;
+            document.getElementById('reporting-period').innerHTML = `from ${from} to ${to}`;
+        }
 
-        let from = `${String(previousSaturday.getMonth()).padStart(2, '0')}/${String(previousSaturday.getDate()).padStart(2, '0')}/${previousSaturday.getFullYear()}`;
-        let to = `${String(nextFriday.getMonth()).padStart(2, '0')}/${String(nextFriday.getDate()).padStart(2, '0')}/${nextFriday.getFullYear()}`;
+        function getNextFriday() {
+            let today = new Date(Date.now());
+            let nextFriday = new Date(today.getTime());
+            nextFriday.setDate(today.getDate() + (7 + 5 - today.getDay()) % 7);
+            nextFriday.setHours(23, 59, 59);
+            return nextFriday;
+        }
 
-        document.getElementById('reporting-period').innerHTML = `from ${from} to ${to}`;
+        function getLastSaturday() {
+            let today = new Date(Date.now());
+            let previousSaturday = new Date(today.getTime());
+            previousSaturday.setDate(today.getDate() - (7 - 6 + today.getDay()) % 7);
+            previousSaturday.setHours(0, 0, 0);
+            return previousSaturday;
+        }
+
+        function disableTiles() {
+            $('.reporting .form-tile').addClass('disabled');
+        }
+
+        function setReportCompletedCookie(expirationDate) {
+            let expiration = `;expires=${expirationDate.toUTCString()}`;
+            document.cookie = "report_completed=true" + expiration;
+            disableTiles();
+        }
+
+
     })();
 </script>

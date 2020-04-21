@@ -2,12 +2,12 @@
   color: #03ad6f;
   font-size: 24px;
   font-weight: 600;
-  margin-top: 41px;
+  letter-spacing: 1.8px;
+  width: 80%;
 }
 
 .form-tile {
   height: 240px;
-  border: 1px solid #03ad6f;
   background-color: #ffffff;
   text-align: center;
   color: #000000;
@@ -15,6 +15,27 @@
   font-weight: 600;
   margin-left: 50px;
   margin-top: 50px;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.5);
+  z-index: 1;
+
+  &.disabled {
+    pointer-events: none;
+    background: #a6a6a6;
+  }
+
+  &:hover {
+    border: 1px solid #03ad6f;
+  }
+
+  &.contrast {
+    background-color: #03ad6f;
+    color: #ffffff;
+
+    &:hover {
+      border: 1px solid #ffffff;
+      color: #ffffff;
+    }
+  }
 }
 
 a:link.form-tile {
@@ -28,20 +49,32 @@ a:hover.form-tile {
 .tile-desc {
   font-size: 14px;
   font-weight: 600;
+  letter-spacing: 1.05px;
 }
 
 .tile-title {
   padding-top: 25px;
   padding-bottom: 50px;
+  letter-spacing: 1.8px;
+}
+
+.form-header {
+  padding-left: 210px;
+  padding-bottom: 30px;
 }
 
 @media (max-width: 575px) {
   .form-title {
     margin-top: 90px;
     font-size: 20px;
+    padding-left: 0px;
   }
   .half-logo {
     display: none;
+  }
+  .form-header {
+    padding-left: 0px;
+    margin: auto 2rem;
   }
 }
 

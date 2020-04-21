@@ -80,3 +80,7 @@ bundle exec cucumber
 bundle exec rspec spec/canary_spec.rb
 bundle exec cucumber features/canary.feature
 ```
+## Deploy To Staging
+```
+  Follow the instructions here: https://code.organise.earth/rilau/pull-climate-movement-reporting-tool
+```

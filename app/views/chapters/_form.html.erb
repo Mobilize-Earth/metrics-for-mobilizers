@@ -1,31 +1,36 @@
 <div class="container-fluid">
-  <div class="row">
-    <% if flash[:errors] %>
+  <% if flash[:errors] %>
+    <div class="row">
       <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
         <% flash[:errors].each do |error | %>
           <li><%= error %></li>
         <% end %>
       </div>
-    <% end %>
-  </div>
-  <div>
+    </div>
+  <% end %>
+  <div class="chapter-form-body">
     <%= form_for @chapter do |f| %>
       <div class="form-row chapter-row">
-        <div class="col-md-4 offset-md-4">
-          <%= f.label :name, "Chapter Name:" %>
+        <div class="col-md-4 offset-md-1">
+          * Required
+        </div>
+      </div>
+      <div class="form-row chapter-row">
+        <div class="col-md-4 offset-md-1">
+          <%= f.label :name, "Chapter Name *" %>
           <%= f.text_field :name, class: "form-control" %>
         </div>
       </div>
       <div class="form-row chapter-row">
-        <div class="col-md-4 offset-md-4">
-          <%= f.label :active_members, "Total Active Members:" %>
+        <div class="col-md-4 offset-md-1">
+          <%= f.label :active_members, "# of Members Total *" %>
           <%= f.text_field :active_members, class: "form-control" %>
         </div>
       </div>
       <div class="form-row chapter-row">
-        <div class="form-group col-md-4 offset-md-4">
-          <%= f.label :total_subscription_amount, "Total Subscription Amount:" %>
-          <div class="input-group mb-3">
+        <div class="col-md-4 offset-md-1">
+          <%= f.label :total_subscription_amount, "$ Total of Subscriptions *" %>
+          <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text">$</span>
             </div>
@@ -36,11 +41,21 @@
           </div>
         </div>
       </div>
-      <div class="form-row">
-        <%= f.submit class: "btn btn-success col-md-4  offset-md-4"%>
-      </div>
-      <div class="form-row chapter-row">
-        <%= link_to "Go Back", admins_index_path, class: "btn btn-danger col-md-4 offset-md-4" %>
+      <% if @current_coordinators.exists? %>
+        <div class="form-row chapter-row">
+          <div class="col-md-4 offset-md-1">
+            <span>Current Coordinators</span>
+            <ul class="list-group">
+              <% @current_coordinators.each do | coordinator | %>
+                <li class="list-group-item"> <%= coordinator.full_name %> </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+      <div class="form-row chapter-form-btn">
+          <%= link_to "Cancel", admins_index_path, class: "btn col-md-2 offset-md-6 col-lg-1 offset-lg-6 btn-outline-danger" %>
+          <%= f.submit "Submit", class: "col-md-2 col-lg-1 btn btn-success chapter-submit-btn"%>
       </div>
     <% end %>
   </div>
