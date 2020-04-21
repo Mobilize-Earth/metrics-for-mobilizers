@@ -1,20 +1,6 @@
 <div class="container-fluid default-background reporting">
-
-  <% if flash[:errors] %>
-    <div class="row">
-      <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
-        <% flash[:errors].each do |error | %>
-          <li><%= error %></li>
-        <% end %>
-      </div>
-    </div>
-  <% elsif flash[:success] %>
-    <div class="col-md-4 offset-md-4 alert alert-success alert-dismissable fade show" role="alert">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <%= flash[:success] %>
-  </div>
-  <% end %>
-
+  <%= render 'layouts/messages', flash: flash %>
+  
   <div class="form-header">
     <div class="form-title reporting-header">
       <div class="">
@@ -32,15 +18,13 @@
     </div>
   </div>
 
-
-
   <div class="reporting-tiles-container">
     <div class="row">
       <%= link_to forms_mobilization_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
         <p class="tile-title">Mobilizations</p>
         <p class="tile-desc">All activities that are recruiting driven</p>
       <% end %>
-      <%= link_to forms_training_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
+      <%= link_to trainings_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
         <p class="tile-title">Trainings</p>
         <p class="tile-desc">All activities conducted for XRA members</p>
       <% end %>

@@ -13,7 +13,7 @@ class StreetSwarmsController < ApplicationController
       flash[:success] = "Street Swarm data successfully entered"
       redirect_to street_swarms_path
     else
-      flash[:errors] = "Street Swarm not saved. Please try again."
+      flash[:errors] = @street_swarm.errors.full_messages
       render "new"
     end
   end

@@ -8,7 +8,7 @@ class TrainingsController < ApplicationController
     @training = Training.new
   end
 
-  def save
+  def create
     @training = Training.new(
       number_attendees: params[:training][:number_attendees],
       training_type: params[:training_type],
@@ -18,10 +18,11 @@ class TrainingsController < ApplicationController
 
     if @training.save
       flash[:success] = "#{@training.training_type} training was successfully created!"
+      redirect_to trainings_path
     else
       flash[:errors] = @training.errors.full_messages
+      @types = Training.training_type_options
+      render "new"
     end
-
-    redirect_to forms_index_path
   end
 end

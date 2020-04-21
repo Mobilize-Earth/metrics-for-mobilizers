@@ -1,64 +1,53 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="row">
-            <% if flash[:errors] %>
-                <div class="alert alert-danger alert-dismissable fade show" role="alert">
-                    <% flash[:errors].each do |error | %>
-                    <li><%= error %></li>
-                    <% end %>
-                </div>
-            <% end %>
-        </div>
-        <div class="row">
-            <div class="user-form-div">
-                <%= form_for @user do |f| %>
-                    <div class="form-row chapter-row">
-                        <%= f.label :first_name, "First name *" %>
-                        <%= f.text_field :first_name, autofocus: true, class: "form-control", :maxlength => 50 %>
-                    </div>
-                    <div class="form-row chapter-row">
-                        <%= f.label :last_name, "Last name *" %>
-                        <%= f.text_field :last_name, class: "form-control", :maxlength => 50 %>
-                    </div>
-                    <div class="form-row chapter-row">
-                        <%= f.label :password, "Password *" %>
-                        <% if @minimum_password_length %>
-                            <em>(<%= @minimum_password_length %> characters minimum)</em>
-                        <% end %>
-                        <%= f.password_field :password, class: "form-control", :maxlength => 50 %>
-                    </div>
-                    <div class="form-row chapter-row">
-                        <%= f.label :password_confirmation, "Confirm your password *" %>
-                        <%= f.password_field :password_confirmation, class: "form-control", :maxlength => 50 %>
-                    </div>
-                    <div class="form-row chapter-row">
-                        <%= f.label :email, "Email *"%>
-                        <%= f.email_field :email, class: "form-control", :maxlength => 50 %>
-                    </div>
-                    <div class="form-row chapter-row">
-                        <%= f.label :phone_number, "Phone number *" %>
-                        <%= f.text_field :phone_number, class: "form-control", :maxlength => 30 %>
-                    </div>
-                    <div class="form-row chapter-row">
-                        <%= f.label :role, "Role *" %>
-                        <%= f.select(:role, Role.roles.map {|k, v| [v, k]}, {}, {class: "select form-control"}) %>
-                    </div>
-                    <div class="form-row chapter-row">
-                        <%= f.label :chapter, "Chapter" %>
-                        <%= f.collection_select :chapter_id, Chapter.order(:name),:id,:name, {include_blank: true}, {class: "form-control"} %>
-                    </div>
-                    <div class="row options-form-div">
-                        <div style="padding-left: 5px; padding-right: 5px">
-                            <%= link_to "Cancel", admins_index_path, class: "btn btn-cancel" %>
-                        </div>
-                        <div style="padding-left: 5px; padding-right: 5px">
-                            <%= f.submit "Submit", class: "btn btn-submit"%>
-                        </div>
-                    </div>
-                <% end %>
-            </div>
-        </div>
-    </div>
+  <div class="row">
+      <div class="user-form-div">
+          <%= form_for @user do |f| %>
+              <div class="form-row chapter-row">
+                  <%= f.label :first_name, "First name *" %>
+                  <%= f.text_field :first_name, autofocus: true, class: "form-control", :maxlength => 50 %>
+              </div>
+              <div class="form-row chapter-row">
+                  <%= f.label :last_name, "Last name *" %>
+                  <%= f.text_field :last_name, class: "form-control", :maxlength => 50 %>
+              </div>
+              <div class="form-row chapter-row">
+                  <%= f.label :password, "Password *" %>
+                  <% if @minimum_password_length %>
+                      <em>(<%= @minimum_password_length %> characters minimum)</em>
+                  <% end %>
+                  <%= f.password_field :password, class: "form-control", :maxlength => 50 %>
+              </div>
+              <div class="form-row chapter-row">
+                  <%= f.label :password_confirmation, "Confirm your password *" %>
+                  <%= f.password_field :password_confirmation, class: "form-control", :maxlength => 50 %>
+              </div>
+              <div class="form-row chapter-row">
+                  <%= f.label :email, "Email *"%>
+                  <%= f.email_field :email, class: "form-control", :maxlength => 50 %>
+              </div>
+              <div class="form-row chapter-row">
+                  <%= f.label :phone_number, "Phone number *" %>
+                  <%= f.text_field :phone_number, class: "form-control", :maxlength => 30 %>
+              </div>
+              <div class="form-row chapter-row">
+                  <%= f.label :role, "Role *" %>
+                  <%= f.select(:role, Role.roles.map {|k, v| [v, k]}, {}, {class: "select form-control"}) %>
+              </div>
+              <div class="form-row chapter-row">
+                  <%= f.label :chapter, "Chapter" %>
+                  <%= f.collection_select :chapter_id, Chapter.order(:name),:id,:name, {include_blank: true}, {class: "form-control"} %>
+              </div>
+              <div class="row options-form-div">
+                  <div style="padding-left: 5px; padding-right: 5px">
+                      <%= link_to "Cancel", admins_index_path, class: "btn btn-cancel" %>
+                  </div>
+                  <div style="padding-left: 5px; padding-right: 5px">
+                      <%= f.submit "Submit", class: "btn btn-submit"%>
+                  </div>
+              </div>
+          <% end %>
+      </div>
+  </div>
 </div>
 
 <script>

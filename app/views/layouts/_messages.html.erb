@@ -1,0 +1,22 @@
+<% if flash[:errors] %>
+  <div class="row">
+    <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
+      <% flash[:errors].each do |error | %>
+        <li><%= error %></li>
+      <% end %>
+    </div>
+  </div>
+<% elsif flash[:error].present? %>
+  <div class="row">
+    <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      <%= flash[:error] %>
+    </div>
+  </div>
+<% elsif flash[:success] %>
+  <div class="col-md-4 offset-md-4 alert alert-success alert-dismissable fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= flash[:success] %>
+  </div>
+<% end %>

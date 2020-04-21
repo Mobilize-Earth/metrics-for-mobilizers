@@ -18,7 +18,7 @@ feature 'submitting street swarm' do
   scenario 'with 1 participants should show a success message' do
     fill_in 'street_swarm_xr_members_attended', with: '1'
     find('input[name="commit"]').click
-    expect(page).to have_css '.test-success'
+    expect(page).to have_css '.alert-success'
   end
 
   scenario 'with -1 participants should not save to database' do
@@ -31,7 +31,7 @@ feature 'submitting street swarm' do
   scenario 'with -1 participants should show a fail message' do
     fill_in 'street_swarm_xr_members_attended', with: '-1'
     find('input[name="commit"]').click
-    expect(page).to have_css '.test-fail'
+    expect(page).to have_css '.alert-danger'
   end
 
 end

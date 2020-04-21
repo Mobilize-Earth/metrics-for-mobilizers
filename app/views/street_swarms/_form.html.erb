@@ -1,20 +1,4 @@
 <div class="container-fluid">
-  <% if flash[:errors] %>
-  <div class="row">
-    <div class="col-md-6 offset-md-2 alert alert-danger alert-dismissable fade show test-fail" role="alert">
-      <%= flash[:errors] %>
-    </div>
-  </div>
-  <% end %>
-
-  <% if flash[:success] %>
-  <div class="row">
-      <div class="col-md-6 offset-md-2 alert alert-success alert-dismissable fade show test-success" role="success">
-        <%= flash[:success] %>
-      </div>
-  </div>
-  <% end %>
-
   <div class="nav col-md-12 action-form">
     <div class="nav flex-column nav-pills col-md-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
       <a class="nav-link active action-btn-active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Street Swarms</a>

@@ -1,4 +1,5 @@
 <div class="default-background">
+  <%= render 'layouts/messages', flash: flash %>
   <%= render 'forms/form_header', title: 'Street Swarms', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Street Swarm.' %>
   <%= render "street_swarms/form" %>
   <img class="half-logo" src="/images/half_circle.png">

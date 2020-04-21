@@ -1,13 +1,5 @@
 <div class="container-fluid">
-  <% if flash[:errors] %>
-    <div class="row">
-      <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
-        <% flash[:errors].each do |error | %>
-          <li><%= error %></li>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+  <%= render 'layouts/messages', flash: flash %>
   <div class="chapter-form-body">
     <%= form_for @chapter do |f| %>
       <div class="form-row chapter-row">
