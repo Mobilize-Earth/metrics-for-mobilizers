@@ -1,58 +1,71 @@
-<div class="report-tiles-container">
-  <div class="row">
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1>1</h1>
-          <h3>Total</h3>
-        </div>
-        <h2>Members</h2>
+<div class="row">
+  <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-content">
+      <div class="report-card-left">
+        <h1 id="members-total">0</h1>
+        <h3>Total</h3>
       </div>
+      <h2>Members</h2>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1 class="text-success">+7</h1>
-          <h3>Growth</h3>
-        </div>
-        <h2>New Members</h2>
+  </div>
+  <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-content">
+      <div class="report-card-left">
+        <h1 class="text-success">+<span id="members-growth">0</span></h1>
+
+        <h3>Growth</h3>
       </div>
+      <h2>New Members</h2>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1 class="text-warning">$1k</h1>
-          <h3>Growth</h3>
-        </div>
-        <h2>Subscriptions</h2>
+  </div>
+  <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-content">
+      <div class="report-card-left">
+        <h1 class="text-warning" >$<span id="subscriptions">0</span></h1>
+        <h3>Growth</h3>
       </div>
+      <h2>Subscriptions</h2>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1>1</h1>
-          <h3>Total</h3>
-        </div>
-        <h2>Arrestable</h2>
+  </div>
+  <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-content">
+      <div class="report-card-left" >
+        <h1 id="arrestable-total">0</h1>
+        <h3>Total</h3>
       </div>
+      <h2>Arrestable</h2>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1 class="text-danger">-7</h1>
-          <h3>Attrition</h3>
-        </div>
-        <h2>Arrestable</h2>
+  </div>
+  <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-content">
+      <div class="report-card-left">
+        <h1 class="text-danger">-<span id="arrestable-attrition">0</span></h1>
+
+        <h3>Attrition</h3>
       </div>
+      <h2>Arrestable</h2>
     </div>
-    <div class="report-card-container col-lg-4  col-md-6 col-sm-1">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1 class="text-info">10</h1>
-          <h3>Total</h3>
-        </div>
-        <h2>Arrests</h2>
+  </div>
+  <div class="report-card-container col-lg-4  col-md-6 col-sm-1">
+    <div class="report-card-content">
+      <div class="report-card-left">
+        <h1 class="text-info" id="arrests">0</h1>
+        <h3>Total</h3>
       </div>
+      <h2>Arrests</h2>
     </div>
   </div>
 </div>
+
+<script>
+    $.ajax({
+        url: '<%= report_tiles_path %>',
+    }).done((data) => {
+        $('#members-total').html(data.members_total);
+        $('#members-growth').html(data.members_growth);
+        $('#subscriptions').html(data.subscriptions);
+        $('#arrestable-total').html(data.arrestable_total);
+        $('#arrestable-attrition').html(data.arrestable_attrition);
+        $('#arrests').html(data.arrests);
+    });
+</script>
