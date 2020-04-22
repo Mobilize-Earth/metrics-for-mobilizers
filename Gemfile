@@ -15,6 +15,7 @@ gem 'webpacker', '~> 4.0'
 gem 'tzinfo-data'
 gem 'devise'
 gem 'cancancan'
+gem 'city-state'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
