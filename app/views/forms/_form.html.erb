@@ -18,27 +18,43 @@
     </div>
   </div>
 </div>
+
 <script>
 (() => {
   const navLinks = document.getElementsByClassName('nav-link');
+  const type = '<%= params[:training_type] || params[:type] || '' %>';
+
+  const onclickHandler = (navLink, doClear, text) => {
+    document.getElementById('training-type-input').value = text;
+    document.getElementById('form-title').innerHTML = text;
+
+    if(doClear) {
+      for (const clearable of document.getElementsByClassName('clearable')) {
+        clearable.value = "";
+      }
+    }
+
+    for(const navLinkToModify of navLinks) {
+      navLinkToModify.classList.remove('active');
+      navLink.setAttribute('aria-selected', false);
+    }
+
+    navLink.classList.add('active');
+    navLink.setAttribute('aria-selected', true);
+
+    document.getElementById('hide-until-type-selected').style.display = 'block';
+    document.getElementById('tab-container').style.display = 'block';
+    document.getElementById('hide-when-type-selected').style.display = 'none';
+  };
 
   for(const navLink of navLinks) {
     navLink.addEventListener('click', e => {
-      document.getElementById('training-type-input').value = e.target.textContent;
-
-      for(const navLinkToModify of navLinks) {
-        navLinkToModify.classList.remove('active');
-        navLink.setAttribute('aria-selected', false);
-      }
-
-      navLink.classList.add('active');
-      navLink.setAttribute('aria-selected', true);
-
-      document.getElementById('hide-until-type-selected').style.display = 'block';
-      document.getElementById('tab-container').style.display = 'block';
-      document.getElementById('hide-when-type-selected').style.display = 'none';
+      onclickHandler(navLink, true, e.target.textContent);
     });
+
+    if(navLink.textContent === type) {
+      onclickHandler(navLink, false, navLink.textContent);
+    }
   }
-  
 })();
 </script>

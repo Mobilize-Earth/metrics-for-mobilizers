@@ -33,6 +33,11 @@
     display: flex;
   }
 
+  #form-title {
+    color: #333;
+    font-size: 1.6rem;
+  }
+
   .default-tab-text {
     color: #9b9b9b;
     font-weight: 600;
@@ -45,6 +50,7 @@
     border: solid 1px #f4f5f0;
     padding: 20px;
     z-index: 1;
+    min-height: 300px;
   }
 
   .action-submit-btn {
