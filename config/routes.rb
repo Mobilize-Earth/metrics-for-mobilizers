@@ -28,4 +28,7 @@ Rails.application.routes.draw do
   get 'admins/index' => 'admins#index'
 
   get  'new_user' => 'users#new'
+
+  #location
+  get '/location/show' => 'location#show'
 end
