@@ -15,7 +15,9 @@ class ReportsController < ApplicationController
   end
 
   def table
-    @countries = ["USA"]
-    render json: @countries
+    countries = [{ country: "USA", members: 13 },
+                  { country: "Mexico", members: 12 },
+                  { country: "Ecuador", members: 543 }]
+    render json: countries
   end
 end
