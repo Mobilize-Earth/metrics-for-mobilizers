@@ -4,9 +4,10 @@
       <p class="write-to">
         Location Spike
       </p>
-      <p class="email-to">
-        <%= @countries %>
-      </p>
-    </div>
+      <div class="form-row chapter-row">
+        <%= label_tag 'country', 'Country' %>
+        <%= select_tag :country_code, options_for_select(@countries.collect{ |c| [c.second, c.first] }), {class: "form-control", include_blank: "Countries"} %>
+      </div>
+      </div>
   </div>
 </div>
