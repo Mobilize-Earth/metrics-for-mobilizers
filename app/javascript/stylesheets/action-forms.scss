@@ -14,12 +14,12 @@
     white-space: nowrap;
 
     &:hover {
-      background-color: #ccc;
+      background-color: #ededed;
     }
   }
 
   .nav-pills .nav-link.active {
-    background-color: #03ad6f;
+    background-color: #b8b8b8;
   }
 
   #hide-until-type-selected {
@@ -48,9 +48,7 @@
   }
 
   .action-submit-btn {
-    padding: 10px 40px;
-    border: solid 2px #03ad6f;
-    background-color: #ffffff;
+    background-color: #03ad6f;
     font-family: Poppins;
     font-size: 15px;
     font-weight: 600;
@@ -59,7 +57,7 @@
     line-height: normal;
     letter-spacing: 1.35px;
     text-align: center;
-    color: #000000;
+    color: white;
   }
   .warning {
     color: red;

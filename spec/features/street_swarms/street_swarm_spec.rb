@@ -47,13 +47,14 @@ feature 'navigation' do
   end
 
   scenario 'should navigate to forms index when user clicks finish street swarm' do
-    find('.test-finish-street-swarm').click
+    click_on 'Back to forms'
     expect(page).to have_current_path forms_index_path, ignore_query: true
   end
 
   scenario 'should navigate to forms index when user clicks cancel street swarm' do
-    find('.test-cancel-street-swarm').click
-    expect(page).to have_current_path forms_index_path, ignore_query: true
+    click_on 'Street Swarms'
+    click_on 'Cancel'
+    expect(page).to have_current_path street_swarms_path, ignore_query: true
   end
 
 end

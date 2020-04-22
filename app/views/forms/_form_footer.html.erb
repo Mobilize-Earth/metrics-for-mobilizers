@@ -1,10 +1,6 @@
 <img class="half-logo" src="/images/half_circle.png">
-  <div class="text-center col-md-8 action-form-finish-container">
-    <p>Finish when you want to return to submit the rest of this weeks activites </p>
+  <div class="text-left col-md-8 action-form-finish-container">
     <%= link_to forms_index_path, :action => 'go', :class => "btn btn-outline-danger test-cancel-street-swarm" do %>
-      Cancel
-    <% end %>
-    <%= link_to forms_index_path, :action => 'go', :class => "btn submit-btn test-finish-street-swarm" do %>
-      Finish <%= title %>
+      Back to forms
     <% end %>
   </div>
