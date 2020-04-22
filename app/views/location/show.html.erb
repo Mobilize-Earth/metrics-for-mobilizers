@@ -43,6 +43,8 @@
             console.log(states);
             $("#state_code").empty();
             $("#state_code").append('<option>Select</option>');
+            $("#city_code").empty();
+            $("#city_code").append('<option>Select</option>');
             for(var i=0; i< states.length; i++){
               $("#state_code").append('<option value="' + states[i][0] + '">' + states[i][1] + '</option>');
             }
