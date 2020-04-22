@@ -7,6 +7,6 @@ class LocationController < ApplicationController
   def state
     country_code = params[:country_code]
     @states = CS.states(country_code)
-    render json: {states: @states}
+    render json: {states: @states.to_a}
   end
 end
