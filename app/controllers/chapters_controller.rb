@@ -8,6 +8,7 @@ class ChaptersController < ApplicationController
   def new
     @chapter = Chapter.new
     @current_coordinators = User.none
+    authorize! :new, ChaptersController
   end
 
   def create
@@ -38,6 +39,7 @@ class ChaptersController < ApplicationController
   def edit
     @chapter = Chapter.find(params[:id])
     @current_coordinators = User.where(role: "external", chapter: @chapter)
+    authorize! :edit, ChaptersController
   end
 
   def update

@@ -1,5 +1,7 @@
 class FormsController < ApplicationController
-  protect_from_forgery with: :exception
-
   before_action :authenticate_user!
+
+  def index
+    authorize! :index, FormsController
+  end
 end

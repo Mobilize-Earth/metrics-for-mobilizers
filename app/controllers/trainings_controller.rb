@@ -6,6 +6,7 @@ class TrainingsController < ApplicationController
   def new
     @types = Training.training_type_options
     @training = Training.new
+    authorize! :new, TrainingsController
   end
 
   def create

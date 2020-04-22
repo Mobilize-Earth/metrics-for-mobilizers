@@ -3,6 +3,7 @@ class StreetSwarmsController < ApplicationController
   def new
     @street_swarm = StreetSwarm.new
     @types = StreetSwarm.options
+    authorize! :new, StreetSwarmsController
   end
 
   def create

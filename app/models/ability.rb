@@ -37,10 +37,16 @@ class Ability
       can :index, AdminsController
       can :new, UsersController
       can :edit, UsersController
+      can :new, ChaptersController
+      can :edit, ChaptersController
     end
 
     if user.role == 'external' then
       can :show, ChaptersController
+      can :index, FormsController
+      can :new, ArrestableActionsController
+      can :new, StreetSwarmsController
+      can :new, TrainingsController
     end
   end
 end

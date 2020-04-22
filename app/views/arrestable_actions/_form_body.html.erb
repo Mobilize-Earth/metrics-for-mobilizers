@@ -1,0 +1,47 @@
+<%= form_for @arrestable_action do |f| %>
+    <h2 id="form-title">&nbsp;</h2>
+    <%= hidden_field_tag :type_arrestable_action , "", id: "training-type-input" %>
+    <div class="form-group">
+        <div>
+            <%= f.label :xra_members, "# of XRA members", class: "action-form-label" %>
+            <%= f.text_field :xra_members, class: "form-control action-form-input clearable", :maxlength => 10%>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <%= f.label :xra_not_members, "# of not XRA members (Friends)", class: "action-form-label" %>
+            <%= f.text_field :xra_not_members, class: "form-control action-form-input clearable", :maxlength => 10%>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <%= f.label :trained_arrestable_present, "# of trained arrestable present", class: "action-form-label" %>
+            <%= f.text_field :trained_arrestable_present, class: "form-control action-form-input clearable", :maxlength => 10%>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <%= f.label :arrested, "# of arrested", class: "action-form-label" %>
+            <%= f.text_field :arrested, class: "form-control action-form-input clearable", :maxlength => 10%>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <%= f.label :days_event_lasted, "# of days the event lasted", class: "action-form-label" %>
+            <%= f.text_field :days_event_lasted, class: "form-control action-form-input clearable", :maxlength => 10%>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <%= f.label :report_comment, "Report comment", class: "action-form-label" %>
+            <%= f.text_area :report_comment, class: "form-control" , :maxlength => 2500%>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <%= f.submit "Submit Section", class: "btn action-submit-btn"%>
+            <%= link_to 'Cancel', arrestable_actions_path, class: "btn btn-danger"%>
+        </div>
+        <p class="warning">Cannot undo this action</p>
+    </div>
+<% end %>
