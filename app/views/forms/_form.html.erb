@@ -24,24 +24,38 @@
   const navLinks = document.getElementsByClassName('nav-link');
   const type = '<%= params[:training_type] || params[:type] || '' %>';
 
-  const onclickHandler = (navLink, doClear, text) => {
-    document.getElementById('training-type-input').value = text;
-    document.getElementById('form-title').innerHTML = text;
+  const startFormWithType = (navLink, shouldClearForm) => {
+    setFormType(navLink.textContent);
+    shouldClearForm && clearFormFields();
+    unselectAllNavLinks();
+    selectNavLink(navLink);
+    showForm();
+  };
 
-    if(doClear) {
-      for (const clearable of document.getElementsByClassName('clearable')) {
-        clearable.value = "";
-      }
+  const setFormType = type => {
+    document.getElementById('training-type-input').value = type;
+    document.getElementById('form-title').innerHTML = type;
+  };
+
+  const clearFormFields = () => {
+    for (const clearable of document.getElementsByClassName('clearable')) {
+      clearable.value = "";
     }
+  };
 
+  const unselectAllNavLinks = () => {
     for(const navLinkToModify of navLinks) {
       navLinkToModify.classList.remove('active');
-      navLink.setAttribute('aria-selected', false);
+      navLinkToModify.setAttribute('aria-selected', false);
     }
+  };
 
+  const selectNavLink = navLink => {
     navLink.classList.add('active');
     navLink.setAttribute('aria-selected', true);
+  };
 
+  const showForm = () => {
     document.getElementById('hide-until-type-selected').style.display = 'block';
     document.getElementById('tab-container').style.display = 'block';
     document.getElementById('hide-when-type-selected').style.display = 'none';
@@ -49,11 +63,11 @@
 
   for(const navLink of navLinks) {
     navLink.addEventListener('click', e => {
-      onclickHandler(navLink, true, e.target.textContent);
+      startFormWithType(navLink, true);
     });
 
     if(navLink.textContent === type) {
-      onclickHandler(navLink, false, navLink.textContent);
+      startFormWithType(navLink, false);
     }
   }
 })();
