@@ -10,8 +10,11 @@
       </div>
       <div class="form-row chapter-row">
         <%= label_tag 'state', 'State/Province' %>
-        <%= select_tag :state_code, options_for_select(@states.collect{ |c| [c.second, c.first] }), {class: "form-control", include_blank: "States/Provinces/"} %>
+        <%= select_tag :state_code, options_for_select(@states.collect{ |s| [s.second, s.first] }), {class: "form-control", include_blank: "States/Provinces/"} %>
       </div>
+      <div class="form-row chapter-row">
+        <%= label_tag 'city', 'City' %>
+        <%= select_tag :city_code, options_for_select(@cities.collect{ |c| [c.second, c.first] }), {class: "form-control", include_blank: "Cities"} %>
       </div>
   </div>
 </div>

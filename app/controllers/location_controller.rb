@@ -1,7 +1,7 @@
 class LocationController < ApplicationController
   def show
     @countries = CS.get
-    @states = []
+    @states = @cities = []
   end
 
   def state
