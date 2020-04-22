@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'reports/index'
   devise_for :users, controllers: {
     sessions: 'users/sessions',
     passwords: 'users/passwords'
@@ -28,4 +29,8 @@ Rails.application.routes.draw do
   get 'admins/index' => 'admins#index'
 
   get  'new_user' => 'users#new'
+
+  get '/reports', to: 'reports#index', as: 'reports'
+  get '/reports/tiles', to: 'reports#tiles', as: 'report_tiles'
+  get '/reports/table', to: 'reports#table', as: 'report_table'
 end
