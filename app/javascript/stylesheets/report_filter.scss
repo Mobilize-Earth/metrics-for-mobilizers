@@ -1,0 +1,36 @@
+.report-filter-container {
+  margin-bottom: 20px;
+  .nav {
+    justify-content: flex-end;
+    padding-right: 10px;
+  }
+  .nav-link {
+    margin-left:5px;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.5);
+  }
+  .nav-link.active {
+    background-color: #a6a6a6;
+  }
+  .date-range-container {
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.5);
+    margin-left: 5px;
+    .date-range-container-left {
+      background-color: #9b9b9b;
+      border-radius: 3px 0px 0px 3px;
+      padding: 10px;
+      color: white;
+      padding: 10px 20px;
+    }
+    .date-range-container-right {
+      background-color: white;
+      border-radius: 0px 3px 3px 0px;
+      padding: 10px 20px;
+      font-weight: bold;
+    }
+  }
+}
