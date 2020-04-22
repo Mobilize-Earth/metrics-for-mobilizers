@@ -8,6 +8,39 @@
         <%= label_tag 'country', 'Country' %>
         <%= select_tag :country_code, options_for_select(@countries.collect{ |c| [c.second, c.first] }), {class: "form-control", include_blank: "Countries"} %>
       </div>
+      <div class="form-row chapter-row">
+        <%= label_tag 'state', 'State/Province' %>
+        <%= select_tag :state_code, options_for_select(@states.collect{ |c| [c.second, c.first] }), {class: "form-control", include_blank: "Countries"} %>
+      </div>
       </div>
   </div>
 </div>
+
+<script>
+  (()=>{
+
+    $('#country_code').change(country_changed);
+
+    function country_changed(){
+      let country_code = $('#country_code').val();
+      if(country_code != '') {
+        $.ajax({
+          url: "/location/state",
+          method: "GET",
+          dataType: "json",
+          data: {country_code: country_code},
+          error: function (xhr, status, error) {
+            console.error('AJAX Error: ' + status + error);
+          },
+          success: function (response) {
+            var states = response["states"];
+            console.log("states");
+            console.log(states);
+          }
+        });
+      }
+
+    }
+
+  })();
+</script>

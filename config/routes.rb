@@ -31,4 +31,5 @@ Rails.application.routes.draw do
 
   #location
   get '/location/show' => 'location#show'
+  get '/location/state' => 'location#state'
 end
