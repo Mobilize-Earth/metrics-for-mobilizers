@@ -43,12 +43,19 @@ RSpec.describe Training, type: :model do
       Training.training_type_options.each do |type|
         @training.training_type = type
         @training.valid?
-        expect(@training.errors[:training_type]).to be_empty  
+        expect(@training.errors[:training_type]).to be_empty
       end
 
       @training.training_type = 'Garbage'
       @training.valid?
       expect(@training.errors[:training_type]).to include('must be a valid training type')
+    end
+
+    it 'should not take number_attendees greater than 1 billion' do
+      @training.number_attendees = 1000000000 + 1
+      @training.valid?
+      expect(@training.errors[:number_attendees])
+        .to include('must be less than or equal to 1000000000')
     end
   end
 end

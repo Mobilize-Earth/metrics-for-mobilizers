@@ -30,5 +30,12 @@ RSpec.describe StreetSwarm, type: :model do
       expect(@street_swarm.errors[:user]).to include('can\'t be blank')
       expect(@street_swarm.errors[:chapter]).to include('can\'t be blank')
     end
+
+    it 'should not take xr_members_attended greater than 1 billion' do
+      @street_swarm.xr_members_attended = 1000000000+1
+      @street_swarm.valid?
+      expect(@street_swarm.errors[:xr_members_attended])
+        .to include('must be less than or equal to 1000000000')
+    end
   end
 end
