@@ -35,6 +35,30 @@ en:
   activerecord:
     errors:
       models:
+        chapter:
+          attributes:
+            name:
+              blank: "Chapter %{attribute} is required"
+              taken: "Chapter %{attribute} is already taken"
+              too_long: "Chapter %{attribute} is too long"
+            active_members:
+              blank: "# of Members total is required"
+              not_a_number: "# of Members total must be a number"
+              not_an_integer: "# of Members total must be an integer"
+              less_than_or_equal_to: "# of Members total is too long"
+            total_subscription_amount:
+              blank: "$ Total of Subscriptions is required"
+              not_a_number: "$ Total of Subscriptions must be a number"
+              less_than_or_equal_to: "$ Total of Subscriptions is too long"
+        address:
+          attributes:
+            country:
+              blank: "%{attribute} is required"
+            zip_code:
+              blank: "Zip Code is required"
+              not_a_number: "Zip Code must be a number"
+              not_an_integer: "Zip Code must be an integer"
+              too_long: "Zip Code is too long"
         street_swarm:
           attributes:
             xr_members_attended:

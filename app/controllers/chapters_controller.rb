@@ -20,7 +20,7 @@ class ChaptersController < ApplicationController
       flash[:success] = "#{@chapter.name} was successfully created!"
       redirect_to admins_index_path
     else
-      flash[:errors] = @chapter.errors.full_messages
+      flash[:errors] = @chapter.errors.messages.values.flatten
       redirect_to new_chapter_path
     end
   end
@@ -48,7 +48,7 @@ class ChaptersController < ApplicationController
       flash[:success] = "#{@chapter.name} was successfully updated!"
       redirect_to admins_index_path
     else
-      flash[:errors] = @chapter.errors.full_messages
+      flash[:errors] = @chapter.errors.messages.values.flatten
       redirect_to edit_chapter_path(@chapter.id)
     end
   end

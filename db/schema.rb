@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 2020_04_23_182021) do
     t.integer "arrested", default: 0
     t.integer "days_event_lasted", default: 0
     t.text "report_comment"
-    t.bigint "chapter_id", null: false
-    t.bigint "user_id", null: false
+    t.integer "chapter_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chapter_id"], name: "index_arrestable_actions_on_chapter_id"
@@ -55,8 +55,8 @@ ActiveRecord::Schema.define(version: 2020_04_23_182021) do
     t.integer "xra_donation_suscriptions", default: 0
     t.integer "arrestable_pledges", default: 0
     t.integer "xra_newsletter_sign_ups", default: 0
-    t.bigint "chapter_id", null: false
-    t.bigint "user_id", null: false
+    t.integer "chapter_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chapter_id"], name: "index_mobilizations_on_chapter_id"
@@ -65,8 +65,8 @@ ActiveRecord::Schema.define(version: 2020_04_23_182021) do
 
   create_table "street_swarms", force: :cascade do |t|
     t.integer "xr_members_attended", default: 0
-    t.bigint "chapter_id", null: false
-    t.bigint "user_id", null: false
+    t.integer "chapter_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chapter_id"], name: "index_street_swarms_on_chapter_id"
@@ -75,8 +75,8 @@ ActiveRecord::Schema.define(version: 2020_04_23_182021) do
 
   create_table "trainings", force: :cascade do |t|
     t.integer "number_attendees", default: 0
-    t.bigint "chapter_id", null: false
-    t.bigint "user_id", null: false
+    t.integer "chapter_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "training_type"
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(version: 2020_04_23_182021) do
     t.string "first_name"
     t.string "last_name"
     t.string "phone_number"
-    t.bigint "chapter_id"
+    t.integer "chapter_id"
     t.index ["chapter_id"], name: "index_users_on_chapter_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

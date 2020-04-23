@@ -58,13 +58,13 @@
           <%= address.select(:country, @countries.collect { |c| c.second }, { prompt: true }, { class: "form-control" }) %>
         </div>
         <div class="col-md-4 offset-md-1">
-          <%= address.label :state_province, "State/Province *" %>
+          <%= address.label :state_province, "State/Province" %>
           <%= address.select(:state_province, @states.collect { |s| s.second }, { prompt: true }, { class: "form-control" }) %>
         </div>
       </div>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-1">
-          <%= address.label :city, "City *" %>
+          <%= address.label :city, "City" %>
           <%= address.select(:city, @cities, { prompt: true }, { class: "form-control" }) %>
         </div>
         <div class="col-md-4 offset-md-1">
@@ -100,8 +100,6 @@
           },
           success: function (response) {
             var states = response["states"];
-            console.log("states");
-            console.log(states);
             $("#chapter_address_attributes_state_province").empty();
             $("#chapter_address_attributes_state_province").append('<option>Select</option>');
             for(var i=0; i< states.length; i++){
@@ -126,8 +124,6 @@
           },
           success: function (response) {
             var cities = response["cities"];
-            console.log("cities......");
-            console.log(cities);
             $("#chapter_address_attributes_city").empty();
             $("#chapter_address_attributes_city").append('<option>Select</option>');
             for(var i=0; i< cities.length; i++){

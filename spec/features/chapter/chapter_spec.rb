@@ -19,7 +19,7 @@ feature 'create/edit chapter' do
     fill_in 'chapter_address_attributes_zip_code', with: 12345
 
     find('input[name="commit"]').click
-    expect(page).to have_text('Active members must be less than or equal to 1000000000')
+    expect(page).to have_text('# of Members total is too long')
   end
 
   scenario 'should throw error if user tries to create chapter with subscription value greater than 1000000000' do
@@ -32,7 +32,7 @@ feature 'create/edit chapter' do
     fill_in 'chapter_address_attributes_zip_code', with: 12345
 
     find('input[name="commit"]').click
-    expect(page).to have_text('Total subscription amount must be less than or equal to 1000000000')
+    expect(page).to have_text('$ Total of Subscriptions is too long')
   end
 
   scenario 'should throw error if user tries to create chapter with a name that\'s too long' do
@@ -45,6 +45,6 @@ feature 'create/edit chapter' do
     fill_in 'chapter_address_attributes_zip_code', with: 12345
 
     find('input[name="commit"]').click
-    expect(page).to have_text('is too long (maximum is 100 characters)')
+    expect(page).to have_text('Chapter Name is too long')
   end
 end
