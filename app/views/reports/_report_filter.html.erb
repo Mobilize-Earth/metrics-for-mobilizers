@@ -10,39 +10,60 @@
   <div class="report-page-header-right col-md-6 col-sm-12">
     <div>Last <span id="filter-day-count">0</span> days</div>
     <nav class="nav nav-pills nav-justified">
-      <a id="filter-week" class="nav-link" onclick="clickFilterLink(this, 'week', 7)">1W</a>
-      <a id="filter-month" class="nav-link" onclick="clickFilterLink(this, 'month', 30)">1M</a>
-      <a id="filter-quarter" class="nav-link" onclick="clickFilterLink(this, 'quarter', 90)">3M</a>
-      <a id="filter-half-year" class="nav-link" onclick="clickFilterLink(this, 'half-year', 180)">6M</a>
+      <a id="filter-week" class="nav-link">1W</a>
+      <a id="filter-month" class="nav-link">1M</a>
+      <a id="filter-quarter" class="nav-link">3M</a>
+      <a id="filter-half-year" class="nav-link">6M</a>
     </nav>
   </div>
 </div>
-
 <script>
-    const setFilterDayCount = num => document.getElementById('filter-day-count').textContent = num;
-    const setActiveFilter = ele => {
-        for(const filterLink of document.getElementsByClassName('nav-link')) {
-            filterLink.classList.remove('active');
+    (() => {
+        const stripHash = hash => hash ? hash.substring(1) : '';
+        const setFilterDayCount = num => document.getElementById('filter-day-count').textContent = num;
+        const setActiveFilter = ele => {
+            for(const filterLink of document.getElementsByClassName('nav-link')) {
+                filterLink.classList.remove('active');
+            }
+
+            ele.classList.add('active');
         }
 
-        ele.classList.add('active');
-    }
+        window.addEventListener("hashchange", () => {
+            const hash = location.hash ? stripHash(location.hash) : 'week';
+            setActiveFilter(document.getElementById(`filter-${hash}`));
+            switch (hash) {
+                case "week":
+                    setFilterDayCount(7);
+                    break;
+                case "month":
+                    setFilterDayCount(30);
+                    break;
+                case "quarter":
+                    setFilterDayCount(90);
+                    break;
+                case "half-year":
+                    setFilterDayCount(180);
+                    break;
+            }
+        }, false);
 
-    const clickFilterLink = (element, hash, dayCount) => {
-        setActiveFilter(element);
-        setFilterDayCount(dayCount);
+        const clickFilterLink = (hash) => {
+            location.hash = hash;
+        };
 
-        location.hash = hash;
-    };
+        document.getElementById('filter-week').addEventListener('click', (e) => clickFilterLink('week'));
+        document.getElementById('filter-month').addEventListener('click', (e) => clickFilterLink('month'));
+        document.getElementById('filter-quarter').addEventListener('click', (e) => clickFilterLink('quarter'));
+        document.getElementById('filter-half-year').addEventListener('click', (e) => clickFilterLink('half-year'));
 
-    (() => {
         if (location.hash === '#month') {
             setActiveFilter(document.getElementById('filter-month'));
             setFilterDayCount(30);
         } else if (location.hash === '#quarter') {
             setActiveFilter(document.getElementById('filter-quarter'));
             setFilterDayCount(90);
-        } else if (location.hash === '#year') {
+        } else if (location.hash === '#half-year') {
             setActiveFilter(document.getElementById('filter-half-year'));
             setFilterDayCount(180);
         } else {

@@ -40,31 +40,37 @@
 </div>
 
 <script>
-    const stripHash = hash => hash ? hash.substring(1) : '';
-    const setDateRange = (start, end) => {
-        document.getElementById('report-page-start-date').textContent = start;
-        document.getElementById('report-page-end-date').textContent = end;
-    }
+    (()=>{
+        const stripHash = hash => hash ? hash.substring(1) : '';
+        const setDateRange = (start, end) => {
+            document.getElementById('report-page-start-date').textContent = start;
+            document.getElementById('report-page-end-date').textContent = end;
+        }
 
-    const getData = (hash) => {
-        $.ajax({
-            url: '<%= report_tiles_path %>',
-            type: 'get',
-            data: {dateRange: stripHash(hash)}
-        }).done((data) => {
-            $('#members').html(data.members);
-            $('#chapters').html(data.chapters);
-            $('#actions').html(data.actions);
-            $('#trainings').html(data.trainings);
-            setDateRange(data.start_date, data.end_date);
-        });
-    }
+        const getData = (hash) => {
+            $.ajax({
+                url: '<%= report_tiles_path %>',
+                type: 'get',
+                data: {dateRange: stripHash(hash)}
+            }).done(data => {
+                $('#members').html(data.members);
+                $('#chapters').html(data.chapters);
+                $('#actions').html(data.actions);
+                $('#trainings').html(data.trainings);
+                setDateRange(data.start_date, data.end_date);
+            });
+        }
 
-    window.addEventListener("hashchange", () => getData(location.hash), false);
+        const callGetData = () => {
+            if(location.hash === '#month' || location.hash === '#quarter' || location.hash === '#half-year') {
+                getData(location.hash);
+            } else {
+                getData('#week');
+            }
+        };
 
-    if(location.hash === '#month' || location.hash === '#quarter' || location.hash === '#year' || location.hash === '#week') {
-        getData(location.hash);
-    } else {
-        location.hash = 'week';
-    }
+        window.addEventListener("hashchange", callGetData, false);
+
+        callGetData();
+    })();
 </script>
