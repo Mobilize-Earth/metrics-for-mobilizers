@@ -1,5 +1,8 @@
 class Chapter < ApplicationRecord
   has_many :users
+  has_one :address, inverse_of: :chapter, dependent: :destroy
+
+  accepts_nested_attributes_for :address
 
   validates :name, :active_members, :total_subscription_amount, presence: true
   validates :name, uniqueness: { message: "of this chapter has already been taken", case_sensitive: false }

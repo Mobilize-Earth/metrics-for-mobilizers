@@ -10,7 +10,7 @@ Chapter.destroy_all
 chapter = Chapter.create!(
   name: "Chapter 1", active_members: 10, total_subscription_amount: 100
 )
-
+chapter.create_address(country: "US", state: "NY", city: "Flushing", zip_code: "11040")
 #Admin and Consumer without chapters
 User.create!([
   { password: 'admin1', password_confirmation: 'admin1', email: 'admin@test.com', role: 'admin', first_name: "Admin", last_name: "Istrator", phone_number: "2"  },

@@ -12,6 +12,17 @@
 
 ActiveRecord::Schema.define(version: 2020_04_21_222125) do
 
+  create_table "addresses", force: :cascade do |t|
+    t.string "country"
+    t.string "state_province"
+    t.string "city"
+    t.string "zip_code"
+    t.integer "chapter_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chapter_id"], name: "index_addresses_on_chapter_id"
+  end
+
   create_table "arrestable_actions", force: :cascade do |t|
     t.string "type_arrestable_action"
     t.integer "xra_members", default: 0
@@ -75,6 +86,7 @@ ActiveRecord::Schema.define(version: 2020_04_21_222125) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "addresses", "chapters"
   add_foreign_key "arrestable_actions", "chapters"
   add_foreign_key "arrestable_actions", "users"
   add_foreign_key "street_swarms", "chapters"

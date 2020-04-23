@@ -7,27 +7,16 @@ class ChaptersController < ApplicationController
 
   def new
     @chapter = Chapter.new
+    @chapter.build_address
     @current_coordinators = User.none
     authorize! :new, ChaptersController
+    @countries = CS.get.to_a
+    @states = @cities = []
   end
 
   def create
-    chapter_params = params[:chapter]
-
-    @chapter = Chapter.new(
-      name: chapter_params[:name],
-      active_members: chapter_params[:active_members],
-      total_subscription_amount: chapter_params[:total_subscription_amount]
-    )
+    @chapter = Chapter.new(chapter_params)
     if @chapter.save
-      coordinator_ids = chapter_params[:users]
-
-      if coordinator_ids
-        coordinator_ids.each do |id|
-          user = User.find(id)
-          user.update!(chapter: @chapter)
-        end
-      end
       flash[:success] = "#{@chapter.name} was successfully created!"
       redirect_to admins_index_path
     else
@@ -38,30 +27,19 @@ class ChaptersController < ApplicationController
 
   def edit
     @chapter = Chapter.find(params[:id])
+    @chapter.build_address
     @current_coordinators = User.where(role: "external", chapter: @chapter)
     authorize! :edit, ChaptersController
+    @countries = CS.get if @chapter.address.country.nil?
+    @states = [] if @chapter.address.state_province.nil?
+    @cities = [] if @chapter.address.city.nil?
   end
 
   def update
-    chapter_params = params[:chapter]
-
     @chapter = Chapter.find(params[:id])
-    @chapter.update(
-      name: chapter_params[:name],
-      active_members: chapter_params[:active_members],
-      total_subscription_amount: chapter_params[:total_subscription_amount]
-    )
+    @chapter.update(chapter_params)
 
     if @chapter.valid?
-      coordinator_ids = chapter_params[:users]
-
-      if coordinator_ids
-        coordinator_ids.each do |id|
-          user = User.find(id)
-          user.update!(chapter: @chapter)
-        end
-      end
-
       flash[:success] = "#{@chapter.name} was successfully updated!"
       redirect_to admins_index_path
     else
@@ -78,5 +56,9 @@ class ChaptersController < ApplicationController
 
   def current_user_chapter
     redirect_to chapter_path(current_user.chapter)
+  end
+
+  def chapter_params
+    params.require(:chapter).permit(:name, :active_members, :total_subscription_amount, address_attributes: [:id, :country, :state_province, :city, :zip_code])
   end
 end

@@ -45,10 +45,94 @@
           </div>
         </div>
       <% end %>
+
+      <%= f.fields_for :address do |address| %>
+      <div class="form-row chapter-row">
+        <div class="col-md-4 offset-md-1">
+          Address
+        </div>
+      </div>
+      <div class="form-row chapter-row">
+        <div class="col-md-4 offset-md-1">
+          <%= address.label :country, "Country *" %>
+          <%= address.select(:country, @countries.collect { |c| [c.second, c.first] }, { prompt: true }, { class: "form-control" }) %>
+        </div>
+        <div class="col-md-4 offset-md-1">
+          <%= address.label :state_province, "State/Province *" %>
+          <%= address.select(:state_province, @states.collect { |s| [s.second, s.first] }, { prompt: true }, { class: "form-control" }) %>
+        </div>
+      </div>
+      <div class="form-row chapter-row">
+        <div class="col-md-4 offset-md-1">
+          <%= address.label :city, "City *" %>
+          <%= address.select(:city, @cities.collect { |city| [city.second, city.first] }, { prompt: true }, { class: "form-control" }) %>
+        </div>
+        <div class="col-md-4 offset-md-1">
+          <%= address.label :zip_code, "Zip Code *" %>
+          <%= address.text_field :zip_code, class: "form-control" %>
+        </div>
+      </div>
+      <% end %>
       <div class="form-row chapter-form-btn">
-          <%= link_to "Cancel", admins_index_path, class: "btn col-md-2 offset-md-6 col-lg-1 offset-lg-6 btn-outline-danger" %>
-          <%= f.submit "Submit", class: "col-md-2 col-lg-1 btn btn-success chapter-submit-btn"%>
+          <%= link_to "Cancel", admins_index_path, class: "btn col-5 col-sm-5 col-md-2 offset-md-6 col-lg-1 offset-lg-6 btn-outline-danger" %>
+          <%= f.submit "Submit", class: "col-5 col-sm-5 col-md-2 col-lg-1 btn btn-success chapter-submit-btn" %>
       </div>
     <% end %>
   </div>
 </div>
+
+<script>
+  (()=>{
+
+    $('#chapter_address_attributes_country').change(country_changed);
+    $('#chapter_address_attributes_state_province').change(state_changed);
+
+    function country_changed(){
+      let country_code = $('#chapter_address_attributes_country').val();
+      if(country_code != '') {
+        $.ajax({
+          url: "/locations/states",
+          method: "GET",
+          dataType: "json",
+          data: {country_code: country_code},
+          error: function (xhr, status, error) {
+            console.error('AJAX Error: ' + status + error);
+          },
+          success: function (response) {
+            var states = response["states"];
+            $("#chapter_address_attributes_state_province").empty();
+            $("#chapter_address_attributes_state_province").append('<option>Select</option>');
+            for(var i=0; i< states.length; i++){
+              $("#chapter_address_attributes_state_province").append('<option value="' + states[i][0] + '">' + states[i][1] + '</option>');
+            }
+          }
+        });
+      }
+    };
+
+    function state_changed(){
+      let country_code = $('#chapter_address_attributes_country').val();
+      let state_code = $('#chapter_address_attributes_state_province').val();
+      if(state_code != '') {
+        $.ajax({
+          url: "/locations/cities",
+          method: "GET",
+          dataType: "json",
+          data: {country_code: country_code, state_code: state_code},
+          error: function (xhr, status, error) {
+            console.error('AJAX Error: ' + status + error);
+          },
+          success: function (response) {
+            var cities = response["cities"];
+            $("#chapter_address_attributes_city").empty();
+            $("#chapter_address_attributes_city").append('<option>Select</option>');
+            for(var i=0; i< cities.length; i++){
+              $("#chapter_address_attributes_city").append('<option value="' + cities[i] + '">' + cities[i] + '</option>');
+            }
+          }
+        });
+      }
+    };
+
+  })();
+</script>
