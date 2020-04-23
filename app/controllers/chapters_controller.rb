@@ -27,12 +27,14 @@ class ChaptersController < ApplicationController
 
   def edit
     @chapter = Chapter.find(params[:id])
-    @chapter.build_address
+    @chapter.build_address if @chapter.address.blank?
     @current_coordinators = User.where(role: "external", chapter: @chapter)
     authorize! :edit, ChaptersController
-    @countries = CS.get if @chapter.address.country.nil?
-    @states = [] if @chapter.address.state_province.nil?
-    @cities = [] if @chapter.address.city.nil?
+    @countries = CS.get.to_a #if @chapter.address.country.nil?
+    @states = CS.states(@chapter.address.country)
+    @cities = CS.cities(@chapter.address.state_province, @chapter.address.country)
+    @states = [] if @states.blank?
+    @cities = [] if @cities.blank?
   end
 
   def update
