@@ -10,7 +10,7 @@ feature 'report tiles' do
   scenario 'should contain corresponding data from the tiles api' do
     expect(find('#members-total')).to have_content 1
     expect(find('#members-growth')).to have_content 7
-    expect(find('#subscriptions')).to have_content 1000
+    expect(find('#subscriptions')).to have_content "1K"
     expect(find('#arrestable-total')).to have_content 1
     expect(find('#arrestable-attrition')).to have_content 7
     expect(find('#arrests')).to have_content 10

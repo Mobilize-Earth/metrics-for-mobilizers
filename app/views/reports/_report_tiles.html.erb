@@ -1,7 +1,7 @@
 <%= render 'report_filter' %>
 <div class="report-tiles-container">
   <div class="row">
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
           <h1 id="members-total">0</h1>
@@ -10,7 +10,7 @@
         <h2>Members</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
           <h1 class="text-success">+<span id="members-growth">0</span></h1>
@@ -20,7 +20,7 @@
         <h2>New Members</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
           <h1 class="text-warning" >$<span id="subscriptions">0</span></h1>
@@ -29,7 +29,7 @@
         <h2>Subscriptions</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left" >
           <h1 id="arrestable-total">0</h1>
@@ -38,7 +38,7 @@
         <h2>Arrestable</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-1">
+    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
           <h1 class="text-danger">-<span id="arrestable-attrition">0</span></h1>
@@ -48,7 +48,7 @@
         <h2>Arrestable</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4  col-md-6 col-sm-1">
+    <div class="report-card-container col-lg-4  col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
           <h1 class="text-info" id="arrests">0</h1>
@@ -61,14 +61,34 @@
 </div>
 
 <script>
-    $.ajax({
-        url: '<%= report_tiles_path %>',
-    }).done((data) => {
-        $('#members-total').html(data.members_total);
-        $('#members-growth').html(data.members_growth);
-        $('#subscriptions').html(data.subscriptions);
-        $('#arrestable-total').html(data.arrestable_total);
-        $('#arrestable-attrition').html(data.arrestable_attrition);
-        $('#arrests').html(data.arrests);
-    });
+    const stripHash = hash => hash ? hash.substring(1) : '';
+    const moneyFormat = amount => {
+        if(amount >= 1000000) return `${Math.floor(amount / 1000000)}M`
+        if(amount >= 1000) return `${Math.floor(amount / 1000)}K`
+
+        return amount;
+    };
+
+    const getData = (hash) => {
+        $.ajax({
+            url: '<%= report_tiles_path %>',
+            type: 'get',
+            data: {dateRange: stripHash(hash)}
+        }).done((data) => {
+            $('#members-total').html(data.members_total);
+            $('#members-growth').html(data.members_growth);
+            $('#subscriptions').html(moneyFormat(data.subscriptions));
+            $('#arrestable-total').html(data.arrestable_total);
+            $('#arrestable-attrition').html(data.arrestable_attrition);
+            $('#arrests').html(data.arrests);
+        });
+    }
+
+    window.addEventListener("hashchange", () => getData(location.hash), false);
+
+    if(location.hash === '#month' || location.hash === '#quarter' || location.hash === '#year' || location.hash === '#week') {
+        getData(location.hash);
+    } else {
+        location.hash = 'week';
+    }
 </script>

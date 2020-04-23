@@ -1,12 +1,35 @@
 <div class="report-filter-container">
   <nav class="nav nav-pills nav-justified">
-    <a class="nav-link active" href="#">1W</a>
-    <a class="nav-link" href="#">1M</a>
-    <a class="nav-link" href="#">3M</a>
-    <a class="nav-link" href="#">1Y</a>
+    <a id="filter-week" class="nav-link" onclick="clickFilterLink(this, 'week')">1W</a>
+    <a id="filter-month" class="nav-link" onclick="clickFilterLink(this, 'month')">1M</a>
+    <a id="filter-quarter" class="nav-link" onclick="clickFilterLink(this, 'quarter')">3M</a>
+    <a id="filter-year" class="nav-link" onclick="clickFilterLink(this, 'year')">1YR</a>
     <div class="date-range-container">
       <div class="date-range-container-left">Date Range</div>
       <div class="date-range-container-right">4/18/20 - 5/18/20</div>
     </div>
   </nav>
 </div>
+
+<script>
+    const clickFilterLink = (element, hash) => {
+        for(const filterLink of document.getElementsByClassName('nav-link')) {
+            filterLink.classList.remove('active');
+        }
+        element.classList.add('active');
+
+        location.hash = hash;
+    };
+
+    (() => {
+        if (location.hash === '#month') {
+            document.getElementById('filter-month').classList.add('active');
+        } else if (location.hash === '#quarter') {
+            document.getElementById('filter-quarter').classList.add('active');
+        } else if (location.hash === '#year') {
+            document.getElementById('filter-year').classList.add('active');
+        } else {
+            document.getElementById('filter-week').classList.add('active');
+        }
+    })();
+</script>
