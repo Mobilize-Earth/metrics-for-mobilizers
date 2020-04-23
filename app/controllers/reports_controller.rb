@@ -3,46 +3,43 @@ class ReportsController < ApplicationController
   end
 
   def tiles
-
-
     case params[:dateRange]
-
-    when "week"
-      report_data = {
-          members_total: 1,
-          members_growth: 7,
-          subscriptions: 1000,
-          arrestable_total: 1,
-          arrestable_attrition: 7,
-          arrests: 10
-      }
-    when "month"
-      report_data = {
-          members_total: 4,
-          members_growth: 28,
-          subscriptions: 4000,
-          arrestable_total: 4,
-          arrestable_attrition: 28,
-          arrests: 40
-      }
-    when "quarter"
-      report_data = {
-          members_total: 12,
-          members_growth: 84,
-          subscriptions: 12000,
-          arrestable_total: 12,
-          arrestable_attrition: 84,
-          arrests: 120
-      }
-    when "year"
-      report_data = {
-          members_total: 52,
-          members_growth: 364,
-          subscriptions: 52345,
-          arrestable_total: 52,
-          arrestable_attrition: 364,
-          arrests: 520
-      }
+      when "week"
+        report_data = {
+          members: 50,
+          chapters: 7,
+          actions: 100,
+          trainings: 100,
+          start_date: (DateTime.now - 7.days).strftime("%d %B %Y"),
+          end_date: DateTime.now.strftime("%d %B %Y")
+        }
+      when "month"
+        report_data = {
+          members: 200,
+          chapters: 28,
+          actions: 400,
+          trainings: 400,
+          start_date: (DateTime.now - 30.days).strftime("%d %B %Y"),
+          end_date: DateTime.now.strftime("%d %B %Y")
+        }
+      when "quarter"
+        report_data = {
+          members: 600,
+          chapters: 84,
+          actions: 1200,
+          trainings: 1200,
+          start_date: (DateTime.now - 90.days).strftime("%d %B %Y"),
+          end_date: DateTime.now.strftime("%d %B %Y")
+        }
+      when "half-year"
+        report_data = {
+          members: 1200,
+          chapters: 168,
+          actions: 2400,
+          trainings: 2400,
+          start_date: (DateTime.now - 180.days).strftime("%d %B %Y"),
+          end_date: DateTime.now.strftime("%d %B %Y")
+        }
     end
 
     render json: report_data

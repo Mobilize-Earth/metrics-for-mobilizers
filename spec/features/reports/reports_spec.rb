@@ -8,12 +8,45 @@ feature 'report tiles' do
   end
 
   scenario 'should contain corresponding data from the tiles api' do
-    expect(find('#members-total')).to have_content 1
-    expect(find('#members-growth')).to have_content 7
-    expect(find('#subscriptions')).to have_content "1K"
-    expect(find('#arrestable-total')).to have_content 1
-    expect(find('#arrestable-attrition')).to have_content 7
-    expect(find('#arrests')).to have_content 10
+    expect(find('#members')).to have_content 50
+    expect(find('#chapters')).to have_content 7
+    expect(find('#actions')).to have_content 100
+    expect(find('#trainings')).to have_content 100
+    expect(find('#report-page-start-date')).to have_content (DateTime.now - 7.days).strftime("%d %B %Y")
+    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
+  end
+
+  scenario 'should filter data by month' do
+    find('#filter-month').click
+
+    expect(find('#members')).to have_content 200
+    expect(find('#chapters')).to have_content 28
+    expect(find('#actions')).to have_content 400
+    expect(find('#trainings')).to have_content 400
+    expect(find('#report-page-start-date')).to have_content (DateTime.now - 30.days).strftime("%d %B %Y")
+    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
+  end
+
+  scenario 'should filter data by quarter' do
+    find('#filter-quarter').click
+
+    expect(find('#members')).to have_content 600
+    expect(find('#chapters')).to have_content 84
+    expect(find('#actions')).to have_content 1200
+    expect(find('#trainings')).to have_content 1200
+    expect(find('#report-page-start-date')).to have_content (DateTime.now - 90.days).strftime("%d %B %Y")
+    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
+  end
+
+  scenario 'should filter data by half year' do
+    find('#filter-half-year').click
+
+    expect(find('#members')).to have_content 1200
+    expect(find('#chapters')).to have_content 168
+    expect(find('#actions')).to have_content 2400
+    expect(find('#trainings')).to have_content 2400
+    expect(find('#report-page-start-date')).to have_content (DateTime.now - 180.days).strftime("%d %B %Y")
+    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
 end
 

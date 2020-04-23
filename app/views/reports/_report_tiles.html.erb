@@ -1,60 +1,39 @@
-<%= render 'report_filter' %>
 <div class="report-tiles-container">
   <div class="row">
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
+    <div class="report-card-container col-xl-3 col-lg-6 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
-          <h1 id="members-total">0</h1>
+          <h1 id="members">0</h1>
           <h3>Total</h3>
         </div>
         <h2>Members</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
+    <div class="report-card-container col-xl-3 col-lg-6 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
-          <h1 class="text-success">+<span id="members-growth">0</span></h1>
-
+          <h1 id="chapters">0</h1>
           <h3>Growth</h3>
         </div>
-        <h2>New Members</h2>
+        <h2>Chapters</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
+    <div class="report-card-container col-xl-3 col-lg-6 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left">
-          <h1 class="text-warning" >$<span id="subscriptions">0</span></h1>
+          <h1 id="actions">0</h1>
           <h3>Growth</h3>
         </div>
-        <h2>Subscriptions</h2>
+        <h2>Actions</h2>
       </div>
     </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
+    <div class="report-card-container col-xl-3 col-lg-6 col-md-6 col-sm-12">
       <div class="report-card-content">
         <div class="report-card-left" >
-          <h1 id="arrestable-total">0</h1>
+          <h1 id="trainings">0</h1>
           <h3>Total</h3>
         </div>
-        <h2>Arrestable</h2>
-      </div>
-    </div>
-    <div class="report-card-container col-lg-4 col-md-6 col-sm-12">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1 class="text-danger">-<span id="arrestable-attrition">0</span></h1>
-
-          <h3>Attrition</h3>
-        </div>
-        <h2>Arrestable</h2>
-      </div>
-    </div>
-    <div class="report-card-container col-lg-4  col-md-6 col-sm-12">
-      <div class="report-card-content">
-        <div class="report-card-left">
-          <h1 class="text-info" id="arrests">0</h1>
-          <h3>Total</h3>
-        </div>
-        <h2>Arrests</h2>
+        <h2>Trainings</h2>
       </div>
     </div>
   </div>
@@ -62,12 +41,10 @@
 
 <script>
     const stripHash = hash => hash ? hash.substring(1) : '';
-    const moneyFormat = amount => {
-        if(amount >= 1000000) return `${Math.floor(amount / 1000000)}M`
-        if(amount >= 1000) return `${Math.floor(amount / 1000)}K`
-
-        return amount;
-    };
+    const setDateRange = (start, end) => {
+        document.getElementById('report-page-start-date').textContent = start;
+        document.getElementById('report-page-end-date').textContent = end;
+    }
 
     const getData = (hash) => {
         $.ajax({
@@ -75,12 +52,11 @@
             type: 'get',
             data: {dateRange: stripHash(hash)}
         }).done((data) => {
-            $('#members-total').html(data.members_total);
-            $('#members-growth').html(data.members_growth);
-            $('#subscriptions').html(moneyFormat(data.subscriptions));
-            $('#arrestable-total').html(data.arrestable_total);
-            $('#arrestable-attrition').html(data.arrestable_attrition);
-            $('#arrests').html(data.arrests);
+            $('#members').html(data.members);
+            $('#chapters').html(data.chapters);
+            $('#actions').html(data.actions);
+            $('#trainings').html(data.trainings);
+            setDateRange(data.start_date, data.end_date);
         });
     }
 
