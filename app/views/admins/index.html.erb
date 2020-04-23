@@ -35,9 +35,9 @@
                 <% @chapters.each do |chapter| %>
                   <div class="content-row row">
                     <div class="column col-4"><%= chapter.name %></div>
-                    <div class="column col-2">United States</div>
-                    <div class="column col-2">Oregon</div>
-                    <div class="column col-1">90210</div>
+                    <div class="column col-2"><%= !chapter.address.nil? ? chapter.address.country : "N/A" %></div>
+                    <div class="column col-2"><%= !chapter.address.nil? ? chapter.address.state_province : "N/A" %></div>
+                    <div class="column col-1"><%= !chapter.address.nil? ? chapter.address.zip_code : "N/A" %></div>
                     <div class="column col-2"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
                     <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>
