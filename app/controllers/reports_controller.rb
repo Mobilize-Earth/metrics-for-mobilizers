@@ -4,42 +4,42 @@ class ReportsController < ApplicationController
 
   def tiles
     case params[:dateRange]
-      when "week"
-        report_data = {
-          members: 50,
-          chapters: 7,
-          actions: 100,
-          trainings: 100,
-          start_date: (DateTime.now - 7.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-        }
-      when "month"
-        report_data = {
-          members: 200,
-          chapters: 28,
-          actions: 400,
-          trainings: 400,
-          start_date: (DateTime.now - 30.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-        }
-      when "quarter"
-        report_data = {
-          members: 600,
-          chapters: 84,
-          actions: 1200,
-          trainings: 1200,
-          start_date: (DateTime.now - 90.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-        }
-      when "half-year"
-        report_data = {
-          members: 1200,
-          chapters: 168,
-          actions: 2400,
-          trainings: 2400,
-          start_date: (DateTime.now - 180.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-        }
+    when "week"
+      report_data = {
+        members: 50,
+        chapters: 7,
+        actions: 100,
+        trainings: 100,
+        start_date: (DateTime.now - 7.days).strftime("%d %B %Y"),
+        end_date: DateTime.now.strftime("%d %B %Y")
+      }
+    when "month"
+      report_data = {
+        members: 200,
+        chapters: 28,
+        actions: 400,
+        trainings: 400,
+        start_date: (DateTime.now - 30.days).strftime("%d %B %Y"),
+        end_date: DateTime.now.strftime("%d %B %Y")
+      }
+    when "quarter"
+      report_data = {
+        members: 600,
+        chapters: 84,
+        actions: 1200,
+        trainings: 1200,
+        start_date: (DateTime.now - 90.days).strftime("%d %B %Y"),
+        end_date: DateTime.now.strftime("%d %B %Y")
+      }
+    when "half-year"
+      report_data = {
+        members: 1200,
+        chapters: 168,
+        actions: 2400,
+        trainings: 2400,
+        start_date: (DateTime.now - 180.days).strftime("%d %B %Y"),
+        end_date: DateTime.now.strftime("%d %B %Y")
+      }
     end
 
     render json: report_data
@@ -47,10 +47,13 @@ class ReportsController < ApplicationController
 
   def table
     country = params[:country]
+    state = params[:state]
     response = if country.nil?
                  all_countries
+               elsif state.nil?
+                 get_states(country)
                else
-                 by_country(country)
+                 get_chapters(state)
                end
     render json: response
   end
@@ -65,8 +68,16 @@ class ReportsController < ApplicationController
     countries
   end
 
-  def by_country(country)
+  def get_states(country)
     CS.states(country).map { |k, v| { id: k, state: v, members: 0 } }
+
+  end
+
+  def get_chapters(state)
+    [
+      { id: 1, chapter: 'Chapter 1', members: 3 },
+      { id: 2, chapter: 'Chapter 2', members: 40 }
+    ]
   end
 
 end

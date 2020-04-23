@@ -15,6 +15,7 @@
     (() => {
         const currentUrl = new URL(window.location.href);
         const country = currentUrl.pathname.split('/')[2]; //get country id from url
+        const state = currentUrl.pathname.split('/')[3]; //get state id from url
 
         let groupByProperty = 'country';
         let groupByLabel = 'Country';
@@ -23,6 +24,12 @@
             queryParams.country = country;
             groupByProperty = 'state';
             groupByLabel = 'State';
+        }
+
+        if (state) {
+            queryParams.state = state;
+            groupByProperty = 'chapter';
+            groupByLabel = 'Chapter';
         }
 
         setGroupByHeaderLabel();
@@ -63,8 +70,13 @@
         }
 
         const record = (obj) => {
+            let link = `/reports`;
+            if (country) link += `/${country}`;
+            if (state) link = `/chapters`;
+            link += `/${obj.id}`;
+
             return `<tr>
-                      <td scope="row"><a href="/reports/${obj.id}">${obj[groupByProperty]}</a></td>
+                      <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
                       <td>${obj.members}</td>
                     </tr>`
         };
