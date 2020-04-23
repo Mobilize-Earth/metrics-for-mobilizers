@@ -10,6 +10,7 @@ class CreateArrestableActions < ActiveRecord::Migration[6.0]
       t.text :report_comment
       t.references :chapter, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
+
       t.timestamps
     end
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_21_222125) do
+ActiveRecord::Schema.define(version: 2020_04_23_182021) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "country"
@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(version: 2020_04_21_222125) do
     t.integer "arrested", default: 0
     t.integer "days_event_lasted", default: 0
     t.text "report_comment"
-    t.integer "chapter_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chapter_id"], name: "index_arrestable_actions_on_chapter_id"
@@ -42,15 +42,31 @@ ActiveRecord::Schema.define(version: 2020_04_21_222125) do
   create_table "chapters", force: :cascade do |t|
     t.string "name"
     t.integer "active_members"
-    t.decimal "total_subscription_amount"
+    t.decimal "total_subscription_amount", precision: 10
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "mobilizations", force: :cascade do |t|
+    t.string "type_mobilization"
+    t.integer "participants", default: 0
+    t.integer "new_members_sign_ons", default: 0
+    t.integer "total_one_time_donations", default: 0
+    t.integer "xra_donation_suscriptions", default: 0
+    t.integer "arrestable_pledges", default: 0
+    t.integer "xra_newsletter_sign_ups", default: 0
+    t.bigint "chapter_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chapter_id"], name: "index_mobilizations_on_chapter_id"
+    t.index ["user_id"], name: "index_mobilizations_on_user_id"
+  end
+
   create_table "street_swarms", force: :cascade do |t|
     t.integer "xr_members_attended", default: 0
-    t.integer "chapter_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["chapter_id"], name: "index_street_swarms_on_chapter_id"
@@ -59,8 +75,8 @@ ActiveRecord::Schema.define(version: 2020_04_21_222125) do
 
   create_table "trainings", force: :cascade do |t|
     t.integer "number_attendees", default: 0
-    t.integer "chapter_id", null: false
-    t.integer "user_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "training_type"
@@ -80,7 +96,7 @@ ActiveRecord::Schema.define(version: 2020_04_21_222125) do
     t.string "first_name"
     t.string "last_name"
     t.string "phone_number"
-    t.integer "chapter_id"
+    t.bigint "chapter_id"
     t.index ["chapter_id"], name: "index_users_on_chapter_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -89,6 +105,8 @@ ActiveRecord::Schema.define(version: 2020_04_21_222125) do
   add_foreign_key "addresses", "chapters"
   add_foreign_key "arrestable_actions", "chapters"
   add_foreign_key "arrestable_actions", "users"
+  add_foreign_key "mobilizations", "chapters"
+  add_foreign_key "mobilizations", "users"
   add_foreign_key "street_swarms", "chapters"
   add_foreign_key "street_swarms", "users"
   add_foreign_key "trainings", "chapters"

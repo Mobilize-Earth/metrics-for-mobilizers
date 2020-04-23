@@ -48,13 +48,6 @@ RSpec.describe ArrestableAction, type: :model do
 			expect(@arrestable_action.errors[:days_event_lasted]).to include('must be an integer')
 		end
 
-		it 'should have user, chapter, type' do
-			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:type_arrestable_action]).to include('can\'t be blank')
-			expect(@arrestable_action.errors[:user]).to include('can\'t be blank')
-			expect(@arrestable_action.errors[:chapter]).to include('can\'t be blank')
-		end
-
 		it 'should not take numeric fields greater than 1 billion' do
 			@arrestable_action.xra_members = 1000000000+1
 			@arrestable_action.xra_not_members = 1000000000+1
@@ -67,6 +60,13 @@ RSpec.describe ArrestableAction, type: :model do
 			expect(@arrestable_action.errors[:trained_arrestable_present]).to include('must be less than or equal to 1000000000')
 			expect(@arrestable_action.errors[:arrested]).to include('must be less than or equal to 1000000000')
 			expect(@arrestable_action.errors[:days_event_lasted]).to include('must be less than or equal to 1000000000')
+		end
+
+		it 'should have user, chapter, type' do
+			@arrestable_action.valid?
+			expect(@arrestable_action.errors[:type_arrestable_action]).to include('can\'t be blank')
+			expect(@arrestable_action.errors[:user]).to include('can\'t be blank')
+			expect(@arrestable_action.errors[:chapter]).to include('can\'t be blank')
 		end
     end
 end
