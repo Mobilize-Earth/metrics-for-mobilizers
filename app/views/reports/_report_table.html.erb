@@ -1,13 +1,15 @@
-<table class="table table-bordered report-table ">
-  <thead>
-  <tr>
-    <th scope="col" xr-table-key=""></th>
-    <th scope="col" xr-table-key="members">Members</th>
-  </tr>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
+<div class="table-responsive report-table-container ">
+  <table class="table report-table">
+    <thead>
+    <tr>
+      <th scope="col" xr-table-key=""></th>
+      <th scope="col" xr-table-key="members">Members</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
 
 <script>
     (() => {
@@ -68,6 +70,7 @@
         };
 
         const tableBody = $("table.report-table tbody");
+
         function renderTableBody(data) {
             tableBody.empty();
             $.each(data, function (i, v) {
