@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   get  'new_user' => 'users#new'
 
   #location
-  get '/location/show' => 'location#show'
+  get '/location/new' => 'location#new'
   get '/location/states' => 'location#states'
   get '/location/cities' => 'location#cities'
 end

@@ -1,5 +1,5 @@
 class LocationController < ApplicationController
-  def show
+  def new
     @countries = CS.get
     @states = @cities = []
   end
