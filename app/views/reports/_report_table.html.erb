@@ -4,6 +4,11 @@
     <tr>
       <th scope="col" xr-table-key=""></th>
       <th scope="col" xr-table-key="members">Members</th>
+      <th scope="col" xr-table-key="chapters">Chapters</th>
+      <th scope="col" xr-table-key="sign_ons">Sign ons</th>
+      <th scope="col" xr-table-key="trainings">Trainings</th>
+      <th scope="col" xr-table-key="arrestable_pledges">Arrestable Pledges</th>
+      <th scope="col" xr-table-key="actions">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -78,6 +83,11 @@
             return `<tr>
                       <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
                       <td>${obj.members}</td>
+                      <td>${obj.chapters}</td>
+                      <td>${obj.sign_ons}</td>
+                      <td>${obj.trainings}</td>
+                      <td>${obj.arrestable_pledges}</td>
+                      <td>${obj.actions}</td>
                     </tr>`
         };
 

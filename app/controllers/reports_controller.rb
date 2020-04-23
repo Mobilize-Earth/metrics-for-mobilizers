@@ -61,7 +61,7 @@ class ReportsController < ApplicationController
   private
 
   def all_countries
-    countries = CS.countries.map { |k, v| { id: k, country: v, members: 0 } }
+    countries = CS.countries.map { |k, v| { id: k, country: v, members: 0, chapters: 0, sign_ons: 0, trainings: 0, arrestable_pledges: 0, actions: 0 } }
     countries.find { |v| v[:country] == 'Ecuador' }[:members] = 223
     countries.find { |v| v[:country] == 'Mexico' }[:members] = 12
     countries.find { |v| v[:country] == 'United States' }[:members] = 12323
@@ -69,14 +69,15 @@ class ReportsController < ApplicationController
   end
 
   def get_states(country)
-    CS.states(country).map { |k, v| { id: k, state: v, members: 0 } }
+    CS.states(country).map { |k, v| { id: k, state: v, members: 0, chapters: 0, sign_ons: 0, trainings: 0, arrestable_pledges: 0, actions: 0 } }
 
   end
 
   def get_chapters(state)
     [
-      { id: 1, chapter: 'Chapter 1', members: 3 },
-      { id: 2, chapter: 'Chapter 2', members: 40 }
+      { id: 1, chapter: 'Chapter 1', members: 20, chapters: 30, sign_ons: 10, trainings: 0, arrestable_pledges: 0, actions: 0 },
+      { id: 2, chapter: 'Chapter 2', members: 420, chapters: 2, sign_ons: 310, trainings: 0, arrestable_pledges: 0, actions: 0 },
+      { id: 3, chapter: 'Chapter 3', members: 43, chapters: 4, sign_ons: 233, trainings: 20, arrestable_pledges: 0, actions: 0 }
     ]
   end
 
