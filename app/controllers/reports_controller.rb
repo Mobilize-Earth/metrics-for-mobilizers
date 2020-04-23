@@ -15,11 +15,27 @@ class ReportsController < ApplicationController
   end
 
   def table
-    countries = CS.countries.map { |k, v| v }
-    countries = countries.map { |v| { country: v, members: 0 } }
+    country = params[:country]
+    response = if country.nil?
+                 all_countries
+               else
+                 by_country(country)
+               end
+    render json: response
+  end
+
+  private
+
+  def all_countries
+    countries = CS.countries.map { |k, v| { id: k, country: v, members: 0 } }
     countries.find { |v| v[:country] == 'Ecuador' }[:members] = 223
     countries.find { |v| v[:country] == 'Mexico' }[:members] = 12
     countries.find { |v| v[:country] == 'United States' }[:members] = 12323
-    render json: countries
+    countries
   end
+
+  def by_country(country)
+    CS.states(country).map { |k, v| { id: k, state: v, members: 0 } }
+  end
+
 end

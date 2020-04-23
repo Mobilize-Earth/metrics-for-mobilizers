@@ -1,56 +1,79 @@
 <table class="table table-bordered report-table ">
   <thead>
   <tr>
-    <th scope="col" xr-table-key="country">Country</th>
+    <th scope="col" xr-table-key=""></th>
     <th scope="col" xr-table-key="members">Members</th>
   </tr>
   </thead>
   <tbody>
-
   </tbody>
 </table>
 
 <script>
     (() => {
+        const currentUrl = new URL(window.location.href);
+        const country = currentUrl.pathname.split('/')[2]; //get country id from url
+
+        let groupByProperty = 'country';
+        let groupByLabel = 'Country';
+        let queryParams = {};
+        if (country) {
+            queryParams.country = country;
+            groupByProperty = 'state';
+            groupByLabel = 'State';
+        }
+
+        setGroupByHeaderLabel();
+        makeTableSortable();
+
         let data = {};
-        let tableHead = $("table.report-table thead");
-        tableHead.find("tr th").click(function () {
-            let orderAsc = $(this).attr("asc");
-            if (orderAsc) {
-                $(this).removeAttr("asc");
-                orderAsc = false;
-            }else{
-                $(this).attr("asc", "true");
-                orderAsc = true;
-            }
-            sortBy($(this).attr("xr-table-key"), orderAsc);
+        $.getJSON('<%= report_table_path %>', queryParams, function (result) {
+            data = result.sort((x, y) => x.members < y.members);
+            renderTableBody(result);
         });
+
+        function setGroupByHeaderLabel() {
+            let groupByColHeader = $("table.report-table thead tr th").first();
+            groupByColHeader.text(groupByLabel);
+            groupByColHeader.attr('xr-table-key', groupByProperty);
+        }
+
+        function makeTableSortable() {
+            let tableHead = $("table.report-table thead");
+            tableHead.find("tr th").click(function () {
+                let orderAsc = $(this).attr("asc");
+                if (orderAsc) {
+                    $(this).removeAttr("asc");
+                    orderAsc = false;
+                } else {
+                    $(this).attr("asc", "true");
+                    orderAsc = true;
+                }
+                sortBy($(this).attr("xr-table-key"), orderAsc);
+            });
+        }
 
         function sortBy(columnName, asc) {
             let order = (x, y) => x[columnName] < y[columnName];
             if (asc) order = (x, y) => x[columnName] > y[columnName];
             data = data.sort(order);
-            renderTable(data);
+            renderTableBody(data);
         }
 
-        const record = (country, members) => {
+        const record = (obj) => {
             return `<tr>
-                      <th scope="row">${country}</th>
-                      <td>${members}</td>
+                      <td scope="row"><a href="/reports/${obj.id}">${obj[groupByProperty]}</a></td>
+                      <td>${obj.members}</td>
                     </tr>`
         };
 
-        function renderTable(data) {
-            let tableBody = $("table.report-table tbody");
+        const tableBody = $("table.report-table tbody");
+        function renderTableBody(data) {
             tableBody.empty();
-            $.each(data, function (i, x) {
-                tableBody.append(record(x.country, x.members));
+            $.each(data, function (i, v) {
+                tableBody.append(record(v));
             });
         }
 
-        $.getJSON("reports/table", function (result) {
-            data = result.sort((x, y) => x.members < y.members);
-            renderTable(result);
-        });
     })();
 </script>

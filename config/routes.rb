@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :chapters
-    # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   authenticated :user, ->(u) { u.role == 'external' } do
     root to: "chapters#current_user_chapter", as: :external_root
   end
@@ -29,9 +29,11 @@ Rails.application.routes.draw do
 
   get 'admins/index' => 'admins#index'
 
-  get  'new_user' => 'users#new'
+  get 'new_user' => 'users#new'
 
   get '/reports', to: 'reports#index', as: 'reports'
   get '/reports/tiles', to: 'reports#tiles', as: 'report_tiles'
   get '/reports/table', to: 'reports#table', as: 'report_table'
+
+  get '/reports/:country', to: 'reports#index'
 end
