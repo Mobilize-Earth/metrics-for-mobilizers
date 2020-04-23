@@ -1,6 +1,3 @@
-$grey: #9b9b9b;
-$light-grey: #ddd;
-$blue: #33e;
 $box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 $border: 0.1rem solid $grey;
 $page-padding-top: 4rem;
@@ -34,7 +31,7 @@ $content-height: $page-height - $page-padding-top - $header-height -
   .content {
     box-shadow: $box-shadow;
     border: $border;
-    background: #fff;
+    background: $white;
     height: 100%;
     z-index: 1;
   }

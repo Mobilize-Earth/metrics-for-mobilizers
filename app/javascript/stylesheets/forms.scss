@@ -1,5 +1,5 @@
 .form-title {
-  color: #03ad6f;
+  color: $green;
   font-size: 24px;
   font-weight: 600;
   letter-spacing: 1.8px;
@@ -8,9 +8,9 @@
 
 .form-tile {
   height: 240px;
-  background-color: #ffffff;
+  background-color: $white;
   text-align: center;
-  color: #000000;
+  color: $black;
   font-size: 22px;
   font-weight: 600;
   margin-left: 50px;
@@ -20,20 +20,20 @@
 
   &.disabled {
     pointer-events: none;
-    background: #a6a6a6;
+    background: $mid-light-grey;
   }
 
   &:hover {
-    border: 1px solid #03ad6f;
+    border: 1px solid $green;
   }
 
   &.contrast {
-    background-color: #03ad6f;
-    color: #ffffff;
+    background-color: $green;
+    color: $white;
 
     &:hover {
-      border: 1px solid #ffffff;
-      color: #ffffff;
+      border: 1px solid $white;
+      color: $white;
     }
   }
 }
@@ -43,7 +43,7 @@ a:link.form-tile {
 }
 
 a:hover.form-tile {
-  color: black;
+  color: $black;
 }
 
 .tile-desc {

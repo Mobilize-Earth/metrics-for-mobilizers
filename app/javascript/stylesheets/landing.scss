@@ -1,5 +1,5 @@
 .default-background {
-  background-color: #f4f5f0;
+  background-color: $lighter-grey;
   min-height: calc(100vh - 100px);
   font-family: "Poppins", sans-serif;
   padding-top: 40px;
@@ -14,7 +14,7 @@
   text-align: center;
   margin-top: 25px;
   font-size: 36px;
-  color: #03ad6f;
+  color: $green;
 }
 
 .email-to {
