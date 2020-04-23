@@ -4,6 +4,12 @@ class LocationController < ApplicationController
     @states = @cities = []
   end
 
+  def edit
+    @chapter = Chapter.first
+    @countries = CS.get.collect{ |c| [c.second, c.first.to_s] }
+    @states = @cities = []
+  end
+
   def states
     country_code = params[:country_code]
     @states = CS.states(country_code)
