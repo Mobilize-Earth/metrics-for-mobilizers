@@ -41,8 +41,9 @@
         makeTableSortable();
 
         let data = {};
+
         $.getJSON('<%= report_table_path %>', queryParams, function (result) {
-            data = result.sort((x, y) => x.members < y.members);
+            data = result.sort((x, y) => y.members- x.members);
             renderTableBody(result);
         });
 
@@ -67,9 +68,14 @@
             });
         }
 
+        const sortString = (x, y, asc) => asc ? (""+x).localeCompare(y) : (""+y).localeCompare(x);
+        const sortNumber = (x, y, asc) => asc ? x - y : y - x;
+
         function sortBy(columnName, asc) {
-            let order = (x, y) => x[columnName] < y[columnName];
-            if (asc) order = (x, y) => x[columnName] > y[columnName];
+            let sort = isNaN(data[0][columnName])? sortString:sortNumber;
+            let order = (x, y) => {
+                return sort(x[columnName],y[columnName],asc);
+            };
             data = data.sort(order);
             renderTableBody(data);
         }
