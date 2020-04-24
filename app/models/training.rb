@@ -16,7 +16,7 @@ class Training < ApplicationRecord
   validates :user, :chapter, presence: true
   validates :number_attendees,
             numericality: { only_integer: true,
-                            :greater_than_or_equal_to => 0,
+                            :greater_than_or_equal_to => 1,
                             less_than_or_equal_to: 1_000_000_000 }
   validates :training_type, presence: true, :inclusion => { message: "must be a valid training type", in: Training.training_type_options }
 end

@@ -13,7 +13,7 @@ class TrainingsController < ApplicationController
     @training = Training.new(
       number_attendees: params[:training][:number_attendees],
       training_type: params[:training_type],
-      chapter: current_user.chapter, 
+      chapter: current_user.chapter,
       user: current_user
     )
 
@@ -21,7 +21,7 @@ class TrainingsController < ApplicationController
       flash[:success] = "#{@training.training_type} training was successfully created!"
       redirect_to trainings_path
     else
-      flash[:errors] = @training.errors.full_messages
+      flash[:errors] = @training.errors.messages.values.flatten
       @types = Training.training_type_options
       render "new"
     end

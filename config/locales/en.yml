@@ -63,3 +63,10 @@ en:
           attributes:
             xr_members_attended:
               format: "# of Participants %{message}"
+        training:
+          attributes:
+            number_attendees:
+              greater_than_or_equal_to: "# of Attendees must be greater than zero"
+              not_an_integer: "# of Attendees must be an integer"
+              less_than_or_equal_to: "# of Attendees is too long"
+              not_a_number: "# of Attendees must be a number"
