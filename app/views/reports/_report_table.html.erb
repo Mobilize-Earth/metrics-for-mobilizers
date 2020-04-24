@@ -3,12 +3,12 @@
     <thead>
     <tr>
       <th scope="col" xr-table-key=""></th>
-      <th scope="col" xr-table-key="members">Members</th>
-      <th scope="col" xr-table-key="chapters">Chapters</th>
-      <th scope="col" xr-table-key="sign_ons">Sign ons</th>
-      <th scope="col" xr-table-key="trainings">Trainings</th>
-      <th scope="col" xr-table-key="arrestable_pledges">Arrestable Pledges</th>
-      <th scope="col" xr-table-key="actions">Actions</th>
+      <th scope="col" xr-table-key="members">Members <i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="chapters">Chapters <i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="sign_ons">Sign ons <i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="trainings">Trainings <i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="arrestable_pledges">Arrestable Pledges <i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="actions">Actions <i class="fa fa-sort"></i></th>
     </tr>
     </thead>
     <tbody>
@@ -43,7 +43,7 @@
         let data = {};
 
         $.getJSON('<%= report_table_path %>', queryParams, function (result) {
-            data = result.sort((x, y) => y.members- x.members);
+            data = result.sort((x, y) => y.members - x.members);
             renderTableBody(result);
         });
 
@@ -51,6 +51,7 @@
             let groupByColHeader = $("table.report-table thead tr th").first();
             groupByColHeader.text(groupByLabel);
             groupByColHeader.attr('xr-table-key', groupByProperty);
+            groupByColHeader.append(' <i class="fa fa-sort"></i>')
         }
 
         function makeTableSortable() {
@@ -68,13 +69,13 @@
             });
         }
 
-        const sortString = (x, y, asc) => asc ? (""+x).localeCompare(y) : (""+y).localeCompare(x);
+        const sortString = (x, y, asc) => asc ? ("" + x).localeCompare(y) : ("" + y).localeCompare(x);
         const sortNumber = (x, y, asc) => asc ? x - y : y - x;
 
         function sortBy(columnName, asc) {
-            let sort = isNaN(data[0][columnName])? sortString:sortNumber;
+            let sort = isNaN(data[0][columnName]) ? sortString : sortNumber;
             let order = (x, y) => {
-                return sort(x[columnName],y[columnName],asc);
+                return sort(x[columnName], y[columnName], asc);
             };
             data = data.sort(order);
             renderTableBody(data);
