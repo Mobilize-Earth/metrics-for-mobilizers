@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 2020_04_23_182021) do
   create_table "chapters", force: :cascade do |t|
     t.string "name"
     t.integer "active_members"
-    t.decimal "total_subscription_amount", precision: 10
+    t.decimal "total_subscription_amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

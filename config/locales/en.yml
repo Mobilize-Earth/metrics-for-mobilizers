@@ -70,3 +70,7 @@ en:
               not_an_integer: "# of Attendees must be an integer"
               less_than_or_equal_to: "# of Attendees is too long"
               not_a_number: "# of Attendees must be a number"
+        user:
+          attributes:
+            chapter:
+              blank: "External coordinators must be assigned to a chapter"

@@ -41,6 +41,53 @@ feature 'create user' do
     scenario 'should have a chapter role disabled' do
         expect(page).to have_field('user_chapter_id', :type => 'select', :disabled => true)
     end
+
+    scenario 'should make chapter required when external role is selected' do
+        fill_in 'user_first_name', with: 'First Name'
+        fill_in 'user_last_name', with: 'Last Name'
+        fill_in 'user_email', with: 'test1@test.com'
+        fill_in 'user_password', with: '123456'
+        fill_in 'user_password_confirmation', with: '12345'
+        fill_in 'user_phone_number', with: '987654321'
+        select 'External Coordinator', from: 'user_role'
+        expect(page).to have_text('Chapter *')
+    end
+
+    scenario 'should not save external coordinator if chapter is not selected' do
+        fill_in 'user_first_name', with: 'First Name'
+        fill_in 'user_last_name', with: 'Last Name'
+        fill_in 'user_email', with: 'test1@test.com'
+        fill_in 'user_password', with: '123456'
+        fill_in 'user_password_confirmation', with: '123456'
+        fill_in 'user_phone_number', with: '987654321'
+        select 'External Coordinator', from: 'user_role'
+        click_button 'Submit'
+        expect(page).to have_css '.alert-danger'
+    end
+
+    scenario 'should save if user is not external and chapter is not specified' do
+        fill_in 'user_first_name', with: 'First Name'
+        fill_in 'user_last_name', with: 'Last Name'
+        fill_in 'user_email', with: 'test1@test.com'
+        fill_in 'user_password', with: '123456'
+        fill_in 'user_password_confirmation', with: '123456'
+        fill_in 'user_phone_number', with: '987654321'
+        select 'Administrator', from: 'user_role'
+        click_button 'Submit'
+        expect(page).to have_css '.alert-success'
+    end
+
+    scenario 'should not save if phone number has 9 or more zeros in it' do
+        fill_in 'user_first_name', with: 'First Name'
+        fill_in 'user_last_name', with: 'Last Name'
+        fill_in 'user_email', with: 'test1@test.com'
+        fill_in 'user_password', with: '123456'
+        fill_in 'user_password_confirmation', with: '123456'
+        fill_in 'user_phone_number', with: '000000000'
+        select 'Administrator', from: 'user_role'
+        click_button 'Submit'
+        expect(page).to have_css '.alert-danger'
+    end
 end
 
 feature 'edit user' do

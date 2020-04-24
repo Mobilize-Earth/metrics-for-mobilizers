@@ -59,7 +59,11 @@
                   <div class="content-row row">
                     <div class="column col-4"><%= user.first_name %> <%= user.last_name %></div>
                     <div class="column col-3"><%= user.chapter.nil? ? "N/A" : user.chapter.name  %></div>
-                    <div class="column col-2"><%= user.role.capitalize %></div>
+                    <% if user.external_coordinator? %>
+                      <div class="column col-2">Coordinator</div>
+                    <% else %>
+                      <div class="column col-2"><%= user.role.capitalize %></div>
+                    <% end %>
                     <div class="column col-2"><%= user.created_at.strftime("%m/%d/%Y") %></div>
                     <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>

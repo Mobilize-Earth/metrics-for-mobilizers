@@ -34,16 +34,13 @@
                   <%= f.select(:role, Role.roles.map {|k, v| [v, k]}, {}, {class: "select form-control"}) %>
               </div>
               <div class="form-row chapter-row">
-                  <%= f.label :chapter, "Chapter" %>
+
+                  <%= f.label :chapter, "Chapter", id: "chapter-label" %>
                   <%= f.collection_select :chapter_id, Chapter.order(:name),:id,:name, {include_blank: true}, {class: "form-control"} %>
               </div>
-              <div class="row options-form-div">
-                  <div style="padding-left: 5px; padding-right: 5px">
-                      <%= link_to "Cancel", admins_index_path, class: "btn btn-cancel" %>
-                  </div>
-                  <div style="padding-left: 5px; padding-right: 5px">
-                      <%= f.submit "Submit", class: "btn btn-submit"%>
-                  </div>
+              <div class="form-row options-form-div">
+                <%= link_to "Cancel", admins_index_path, class: "btn btn-outline-danger btn-padding-md" %>
+                <%= f.submit "Submit", class: "btn btn-success chapter-submit-btn btn-padding-md"%>
               </div>
           <% end %>
       </div>
@@ -65,8 +62,8 @@
             chapter_select.val('')
         } else {
             chapter_select.removeAttr('disabled')
+            document.getElementById('chapter-label').innerText = "Chapter *"
         }
     }
-
   })();
 </script>
