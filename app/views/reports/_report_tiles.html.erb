@@ -29,7 +29,7 @@
     </div>
     <div class="report-card-container col-xl-3 col-lg-6 col-md-6 col-sm-12">
       <div class="report-card-content">
-        <div class="report-card-left" >
+        <div class="report-card-left">
           <h1 id="trainings">0</h1>
           <h3>Total</h3>
         </div>
@@ -38,39 +38,3 @@
     </div>
   </div>
 </div>
-
-<script>
-    (()=>{
-        const stripHash = hash => hash ? hash.substring(1) : '';
-        const setDateRange = (start, end) => {
-            document.getElementById('report-page-start-date').textContent = start;
-            document.getElementById('report-page-end-date').textContent = end;
-        }
-
-        const getData = (hash) => {
-            $.ajax({
-                url: '<%= report_tiles_path %>',
-                type: 'get',
-                data: {dateRange: stripHash(hash)}
-            }).done(data => {
-                $('#members').html(data.members);
-                $('#chapters').html(data.chapters);
-                $('#actions').html(data.actions);
-                $('#trainings').html(data.trainings);
-                setDateRange(data.start_date, data.end_date);
-            });
-        }
-
-        const callGetData = () => {
-            if(location.hash === '#month' || location.hash === '#quarter' || location.hash === '#half-year') {
-                getData(location.hash);
-            } else {
-                getData('#week');
-            }
-        };
-
-        window.addEventListener("hashchange", callGetData, false);
-
-        callGetData();
-    })();
-</script>
