@@ -19,7 +19,7 @@ gem 'city-state'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 4-0-maintenance'
   gem 'capybara', '>= 2.15'
   gem 'factory_bot_rails'
 end
@@ -29,6 +29,7 @@ group :test do
   gem 'sqlite3', '1.4.2'
   gem 'webdrivers'
   gem 'capybara-selenium'
+  gem 'rails-controller-testing'
 end
 
 group :development do

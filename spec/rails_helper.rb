@@ -34,7 +34,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
   config.include Helpers::SessionHelpers, type: :feature
-
+  config.include Devise::Test::ControllerHelpers, type: :controller
 end
 
 Capybara.default_driver = :headless_chrome
