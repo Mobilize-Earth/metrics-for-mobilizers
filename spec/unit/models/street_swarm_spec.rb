@@ -16,7 +16,7 @@ RSpec.describe StreetSwarm, type: :model do
     it 'should only take positive numbers' do
       @street_swarm.xr_members_attended = -1
       @street_swarm.valid?
-      expect(@street_swarm.errors[:xr_members_attended]).to include('must be greater than or equal to 0')
+      expect(@street_swarm.errors[:xr_members_attended]).to include('must be greater than or equal to 1')
     end
 
     it 'should not take float numbers' do
