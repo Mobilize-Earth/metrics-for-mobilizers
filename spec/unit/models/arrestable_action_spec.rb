@@ -62,6 +62,12 @@ RSpec.describe ArrestableAction, type: :model do
 			expect(@arrestable_action.errors[:days_event_lasted]).to include('must be less than or equal to 1000000000')
 		end
 
+		it 'should not take values with length greater than permitted' do
+			@arrestable_action.report_comment = generate_random_string(2501)
+			@arrestable_action.valid?
+			expect(@arrestable_action.errors[:report_comment]).to include('is too long (maximum is 2500 characters)')
+		end
+
 		it 'should have user, chapter, type' do
 			@arrestable_action.valid?
 			expect(@arrestable_action.errors[:type_arrestable_action]).to include('can\'t be blank')
@@ -69,4 +75,9 @@ RSpec.describe ArrestableAction, type: :model do
 			expect(@arrestable_action.errors[:chapter]).to include('can\'t be blank')
 		end
     end
+end
+
+def generate_random_string(size=1)
+	characters = [('a'..'z'), ('A'..'Z')].map(&:to_a).flatten
+	string = (0...size).map { characters[rand(characters.size)] }.join
 end

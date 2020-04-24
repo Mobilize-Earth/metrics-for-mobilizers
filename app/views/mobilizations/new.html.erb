@@ -1,0 +1,8 @@
+<div class="default-background">
+    <%= render 'layouts/messages', lash: flash %>
+    <%= render 'forms/form_header', title: 'Mobilizations', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Mobilization.' %>
+    <%= render "forms/form", mobilization: @mobilization do |f| %>
+        <%= render 'mobilizations/form_body' %>
+    <% end %>
+    <%= render "forms/form_footer", title: 'Mobilizations' %>
+</div>

@@ -9,8 +9,8 @@ class ArrestableActionsController < ApplicationController
     def create
         @arrestable_action = ArrestableAction.new(
             user_id: current_user.id,
-            type_arrestable_action: params[:type_arrestable_action],
             chapter_id: current_user.chapter.id,
+            type_arrestable_action: params[:type_arrestable_action],
             xra_members: params[:arrestable_action][:xra_members],
             xra_not_members: params[:arrestable_action][:xra_not_members],
             trained_arrestable_present: params[:arrestable_action][:trained_arrestable_present],

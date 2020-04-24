@@ -85,7 +85,11 @@ feature 'navigation' do
         visit arrestable_actions_path
     end
 
-    scenario 'should navigate to forms index when user clicks cancel arrestable action' do
+    scenario 'should access with exterbal role' do
+        expect(page).to have_current_path arrestable_actions_path, ignore_query: true
+    end
+
+    scenario 'should navigate to forms index when user clicks back to action' do
         click_on 'Back to forms'
         expect(page).to have_current_path forms_index_path, ignore_query: true
     end
@@ -97,11 +101,27 @@ feature 'navigation' do
     end
 
     scenario 'should not access with admin role' do
-        @admin_user = FactoryBot.create(:user, role: 'admin', email: 'admin@test.com'  ,chapter: nil)
+        @admin_user = FactoryBot.create(:user, role: 'admin', email: 'admin@test.com', chapter: nil)
         find('.logout-button').click
         sign_in(@admin_user.email, @admin_user.password)
         visit_home_page
         visit arrestable_actions_path
         expect(page).to have_current_path admins_index_path, ignore_query: true
+        expect(page).to have_css '.alert-danger'
     end
-  end
+end
+
+feature 'content' do
+    before(:each) do
+        @user = FactoryBot.create(:user, role: 'external')
+        sign_in(@user.email, @user.password)
+        visit_home_page
+        visit arrestable_actions_path
+    end
+
+    scenario 'should have tabs' do
+        expect(page).to have_content "Local Action"
+        expect(page).to have_content "Regional Action"
+        expect(page).to have_content "National Action"
+    end
+end

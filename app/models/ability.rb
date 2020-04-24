@@ -47,6 +47,7 @@ class Ability
       can :new, ArrestableActionsController
       can :new, StreetSwarmsController
       can :new, TrainingsController
+      can :new, MobilizationsController
     end
   end
 end

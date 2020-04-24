@@ -19,13 +19,14 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   get '/forms/index' => 'forms#index'
-  get '/forms/mobilization' => 'forms#mobilization'
   get '/forms/training', to: 'trainings#new', as: 'trainings'
   post '/forms/training', to: 'trainings#create'
   get '/forms/street', to: 'street_swarms#new', as: 'street_swarms'
   post '/forms/street', to: 'street_swarms#create'
   get '/forms/arrestable', to: 'arrestable_actions#new', as: 'arrestable_actions'
   post '/forms/arrestable', to: 'arrestable_actions#create'
+  get '/forms/mobilization', to: 'mobilizations#new', as: 'mobilizations'
+  post '/forms/mobilization', to: 'mobilizations#create'
 
   get 'admins/index' => 'admins#index'
 

@@ -74,7 +74,8 @@ RSpec.describe Mobilization, type: :model do
             @mobilization.valid?
             expect(@mobilization.errors[:user]).to include('can\'t be blank')
             expect(@mobilization.errors[:chapter]).to include('can\'t be blank')
-            expect(@mobilization.errors[:type_mobilization]).to include('can\'t be blank')
+            expect(@mobilization.errors[:mobilization_type]).to include('can\'t be blank')
+            expect(@mobilization.errors[:event_type]).to include('can\'t be blank')
         end
     end
 end

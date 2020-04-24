@@ -3,8 +3,8 @@ class ArrestableAction < ApplicationRecord
     belongs_to :chapter
 
     def self.options
-        ['Local Action', 
-        'Regional Action', 
+        ['Local Action',
+        'Regional Action',
         'National Action']
     end
 
@@ -22,4 +22,5 @@ class ArrestableAction < ApplicationRecord
             :greater_than_or_equal_to => 0,
             less_than_or_equal_to: 1_000_000_000
         }
+    validates_length_of :report_comment, maximum: 2500
 end
