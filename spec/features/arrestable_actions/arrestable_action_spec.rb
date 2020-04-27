@@ -7,7 +7,7 @@ feature 'submitting arrestable action' do
         sign_in(@user.email, @user.password)
         visit_home_page
         visit arrestable_actions_path
-        click_on 'National Action'
+        click_on 'National (5000+)'
     end
 
     scenario 'should save in database with right values' do
@@ -24,7 +24,7 @@ feature 'submitting arrestable action' do
         expect(ArrestableAction.last.arrested).to eq(4)
         expect(ArrestableAction.last.days_event_lasted).to eq(5)
         expect(ArrestableAction.last.report_comment).to eq('Comment')
-        expect(ArrestableAction.last.type_arrestable_action).to eq('National Action')
+        expect(ArrestableAction.last.type_arrestable_action).to eq('National (5000+)')
     end
 
     scenario 'should save in database without comment' do
@@ -39,7 +39,7 @@ feature 'submitting arrestable action' do
         expect(ArrestableAction.last.trained_arrestable_present).to eq(3)
         expect(ArrestableAction.last.arrested).to eq(4)
         expect(ArrestableAction.last.days_event_lasted).to eq(5)
-        expect(ArrestableAction.last.type_arrestable_action).to eq('National Action')
+        expect(ArrestableAction.last.type_arrestable_action).to eq('National (5000+)')
     end
 
     scenario 'should show a success message' do
@@ -85,7 +85,7 @@ feature 'navigation' do
         visit arrestable_actions_path
     end
 
-    scenario 'should access with exterbal role' do
+    scenario 'should access with external role' do
         expect(page).to have_current_path arrestable_actions_path, ignore_query: true
     end
 
@@ -95,7 +95,7 @@ feature 'navigation' do
     end
 
     scenario 'should navigate to arrestable page when user clicks cancel' do
-        click_on 'National Action'
+        click_on 'National (5000+)'
         click_on 'Cancel'
         expect(page).to have_current_path arrestable_actions_path, ignore_query: true
     end
@@ -120,8 +120,8 @@ feature 'content' do
     end
 
     scenario 'should have tabs' do
-        expect(page).to have_content "Local Action"
-        expect(page).to have_content "Regional Action"
-        expect(page).to have_content "National Action"
+        expect(page).to have_content "Local (50+)"
+        expect(page).to have_content "Regional (500+)"
+        expect(page).to have_content "National (5000+)"
     end
 end

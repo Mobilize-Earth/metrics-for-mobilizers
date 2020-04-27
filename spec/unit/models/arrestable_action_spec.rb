@@ -13,11 +13,11 @@ RSpec.describe ArrestableAction, type: :model do
 			@arrestable_action.arrested = 'string'
 			@arrestable_action.days_event_lasted = 'string'
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members]).to include('is not a number')
-			expect(@arrestable_action.errors[:xra_not_members]).to include('is not a number')
-			expect(@arrestable_action.errors[:trained_arrestable_present]).to include('is not a number')
-			expect(@arrestable_action.errors[:arrested]).to include('is not a number')
-			expect(@arrestable_action.errors[:days_event_lasted]).to include('is not a number')
+			expect(@arrestable_action.errors[:xra_members][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:arrested][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be a number')
 		end
 
 		it 'should not take negative numbers in numeric fields' do
@@ -27,11 +27,11 @@ RSpec.describe ArrestableAction, type: :model do
 			@arrestable_action.arrested = -1
 			@arrestable_action.days_event_lasted = -1
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members]).to include('must be greater than or equal to 0')
-			expect(@arrestable_action.errors[:xra_not_members]).to include('must be greater than or equal to 0')
-			expect(@arrestable_action.errors[:trained_arrestable_present]).to include('must be greater than or equal to 0')
-			expect(@arrestable_action.errors[:arrested]).to include('must be greater than or equal to 0')
-			expect(@arrestable_action.errors[:days_event_lasted]).to include('must be greater than or equal to 0')
+			expect(@arrestable_action.errors[:xra_members][0]).to include('must be greater than or equal to zero')
+			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be greater than or equal to zero')
+			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be greater than or equal to zero')
+			expect(@arrestable_action.errors[:arrested][0]).to include('must be greater than or equal to zero')
+			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be greater than or equal to zero')
 		end
 
 		it 'should not take float in numeric fields' do
@@ -41,11 +41,11 @@ RSpec.describe ArrestableAction, type: :model do
 			@arrestable_action.arrested = 0.1
 			@arrestable_action.days_event_lasted = 0.1
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members]).to include('must be an integer')
-			expect(@arrestable_action.errors[:xra_not_members]).to include('must be an integer')
-			expect(@arrestable_action.errors[:trained_arrestable_present]).to include('must be an integer')
-			expect(@arrestable_action.errors[:arrested]).to include('must be an integer')
-			expect(@arrestable_action.errors[:days_event_lasted]).to include('must be an integer')
+			expect(@arrestable_action.errors[:xra_members][0]).to include("must be an integer")
+			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be an integer')
+			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be an integer')
+			expect(@arrestable_action.errors[:arrested][0]).to include('must be an integer')
+			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be an integer')
 		end
 
 		it 'should not take numeric fields greater than 1 billion' do
@@ -55,11 +55,11 @@ RSpec.describe ArrestableAction, type: :model do
 			@arrestable_action.arrested = 1000000000+1
 			@arrestable_action.days_event_lasted = 1000000000+1
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members]).to include('must be less than or equal to 1000000000')
-			expect(@arrestable_action.errors[:xra_not_members]).to include('must be less than or equal to 1000000000')
-			expect(@arrestable_action.errors[:trained_arrestable_present]).to include('must be less than or equal to 1000000000')
-			expect(@arrestable_action.errors[:arrested]).to include('must be less than or equal to 1000000000')
-			expect(@arrestable_action.errors[:days_event_lasted]).to include('must be less than or equal to 1000000000')
+			expect(@arrestable_action.errors[:xra_members][0]).to include('is too long')
+			expect(@arrestable_action.errors[:xra_not_members][0]).to include('is too long')
+			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('is too long')
+			expect(@arrestable_action.errors[:arrested][0]).to include('is too long')
+			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('is too long')
 		end
 
 		it 'should not take values with length greater than permitted' do

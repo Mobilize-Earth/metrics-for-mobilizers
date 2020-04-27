@@ -3,9 +3,9 @@ class ArrestableAction < ApplicationRecord
     belongs_to :chapter
 
     def self.options
-        ['Local Action',
-        'Regional Action',
-        'National Action']
+        ['Local (50+)',
+        'Regional (500+)',
+        'National (5000+)']
     end
 
     validates :user,

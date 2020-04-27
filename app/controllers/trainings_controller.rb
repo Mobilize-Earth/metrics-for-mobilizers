@@ -21,7 +21,7 @@ class TrainingsController < ApplicationController
       flash[:success] = "#{@training.training_type} training was successfully created!"
       redirect_to trainings_path
     else
-      flash[:errors] = @training.errors.messages.values.flatten
+      flash.now[:errors] = @training.errors.messages.values.flatten
       @types = Training.training_type_options
       render "new"
     end

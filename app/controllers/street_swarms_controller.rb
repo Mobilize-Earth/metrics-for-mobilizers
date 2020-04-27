@@ -16,7 +16,7 @@ class StreetSwarmsController < ApplicationController
       flash[:success] = "Street Swarm data successfully entered"
       redirect_to street_swarms_path
     else
-      flash[:errors] = @street_swarm.errors.full_messages
+      flash.now[:errors] = @street_swarm.errors.full_messages
       @types = StreetSwarm.options
       render "new"
     end

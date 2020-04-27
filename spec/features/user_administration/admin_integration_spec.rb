@@ -108,7 +108,7 @@ feature 'edit user' do
         fill_in 'user_password', with: '123456'
         fill_in 'user_password_confirmation', with: '12345'
         click_button 'Submit'
-        expect(page).to have_css '.alert-danger'
+        expect(page).to have_content('Password confirmation doesn\'t match Password')
     end
 end
 

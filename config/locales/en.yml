@@ -63,6 +63,35 @@ en:
           attributes:
             xr_members_attended:
               format: "# of Participants %{message}"
+        arrestable_action:
+          attributes:
+            xra_members:
+              greater_than_or_equal_to: "# of XRA members must be greater than or equal to zero"
+              not_an_integer: "# of XRA members must be an integer"
+              less_than_or_equal_to: "# of XRA members is too long"
+              not_a_number: "# of XRA members must be a number"
+            xra_not_members:
+              greater_than_or_equal_to: "# of not XRA members must be greater than or equal to zero"
+              not_an_integer: "# of not XRA members must be an integer"
+              less_than_or_equal_to: "# of not XRA members is too long"
+              not_a_number: "# of not XRA members must be a number"
+            trained_arrestable_present:
+              greater_than_or_equal_to: "# of not XRA members must be greater than or equal to zero"
+              not_an_integer: "# of trained arrestable present must be an integer"
+              less_than_or_equal_to: "# of trained arrestable present is too long"
+              not_a_number: "# of trained arrestable present must be a number"
+            arrested:
+              greater_than_or_equal_to: "# of arrested must be greater than or equal to zero"
+              not_an_integer: "# of arrested must be an integer"
+              less_than_or_equal_to: "# of arrested is too long"
+              not_a_number: "# of arrested must be a number"
+            days_event_lasted:
+              greater_than_or_equal_to: "# of days event lasted must be greater than or equal to zero"
+              not_an_integer: "# of days event lasted must be an integer"
+              less_than_or_equal_to: "# of days event lasted is too long"
+              not_a_number: "# of days event lasted must be a number"
+            report_comment:
+              format: "Report comment %{message}"
         training:
           attributes:
             number_attendees:

@@ -22,7 +22,7 @@ class ArrestableActionsController < ApplicationController
             flash[:success] = "Arrestable Action data successfully entered"
             redirect_to arrestable_actions_path
         else
-            flash[:errors] = @arrestable_action.errors.full_messages
+            flash.now[:errors] = @arrestable_action.errors.messages.values.flatten
             @types = ArrestableAction.options
             render "new"
         end
