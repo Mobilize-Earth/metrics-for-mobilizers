@@ -1,4 +1,3 @@
-$box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 $border: 0.1rem solid $grey;
 $page-padding-top: 4rem;
 $page-height: 50rem;
@@ -29,7 +28,7 @@ $content-height: $page-height - $page-padding-top - $header-height -
 
   .left-nav,
   .content {
-    box-shadow: $box-shadow;
+    box-shadow: $standard-box-shadow;
     border: $border;
     background: $white;
     height: 100%;

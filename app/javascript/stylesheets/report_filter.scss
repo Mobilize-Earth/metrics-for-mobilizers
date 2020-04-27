@@ -30,7 +30,7 @@
     border-radius: 3px;
     text-align: center;
     width: 60px;
-    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.5);
+    box-shadow: $standard-box-shadow;
     cursor: pointer;
 
     &:hover {

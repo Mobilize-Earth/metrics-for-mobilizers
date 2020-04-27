@@ -5,7 +5,8 @@ $table-padding: 1rem;
   max-height: 535px;
   overflow-y: auto;
   border-radius: 6px;
-  box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.02);
+  box-shadow: $standard-box-shadow;
+  margin-bottom: 2rem;
 
   table.report-table {
     background-color: white;
