@@ -3,12 +3,14 @@
     <thead>
     <tr>
       <th scope="col" xr-table-key=""></th>
-      <th scope="col" xr-table-key="members">Members <i class="fa fa-sort"></i></th>
-      <th scope="col" xr-table-key="chapters">Chapters <i class="fa fa-sort"></i></th>
-      <th scope="col" xr-table-key="sign_ons">Sign ons <i class="fa fa-sort"></i></th>
-      <th scope="col" xr-table-key="trainings">Trainings <i class="fa fa-sort"></i></th>
-      <th scope="col" xr-table-key="arrestable_pledges">Arrestable Pledges <i class="fa fa-sort"></i></th>
-      <th scope="col" xr-table-key="actions">Actions <i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="chapters">Chapters<i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="members">Members<i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="mobilizations">Mobilizations<i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="trainings">Trainings<i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="subscriptions">$ Subscriptions<i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="signups">Newsletter signups<i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="arrestable_pledges">Pledges<i class="fa fa-sort"></i></th>
+      <th scope="col" xr-table-key="actions">Actions<i class="fa fa-sort"></i></th>
     </tr>
     </thead>
     <tbody>
@@ -23,18 +25,18 @@
         const state = currentUrl.pathname.split('/')[3]; //get state id from url
 
         let groupByProperty = 'country';
-        let groupByLabel = 'Country';
+        let groupByLabel = 'Countries';
         let queryParams = {};
         if (country) {
             queryParams.country = country;
             groupByProperty = 'state';
-            groupByLabel = 'State';
+            groupByLabel = 'States';
         }
 
         if (state) {
             queryParams.state = state;
             groupByProperty = 'chapter';
-            groupByLabel = 'Chapter';
+            groupByLabel = 'Chapters';
         }
 
         setGroupByHeaderLabel();
@@ -51,7 +53,7 @@
             let groupByColHeader = $("table.report-table thead tr th").first();
             groupByColHeader.text(groupByLabel);
             groupByColHeader.attr('xr-table-key', groupByProperty);
-            groupByColHeader.append(' <i class="fa fa-sort"></i>')
+            groupByColHeader.append('<i class="fa fa-sort"></i>')
         }
 
         function makeTableSortable() {
@@ -89,10 +91,12 @@
 
             return `<tr>
                       <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
-                      <td>${obj.members}</td>
                       <td>${obj.chapters}</td>
-                      <td>${obj.sign_ons}</td>
+                      <td>${obj.members}</td>
+                      <td>${obj.mobilizations}</td>
                       <td>${obj.trainings}</td>
+                      <td>${obj.subscriptions}</td>
+                      <td>${obj.signups}</td>
                       <td>${obj.arrestable_pledges}</td>
                       <td>${obj.actions}</td>
                     </tr>`
