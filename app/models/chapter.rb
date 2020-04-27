@@ -13,4 +13,8 @@ class Chapter < ApplicationRecord
   def coordinators
     self.users
   end
+
+  def has_address?
+    self.address.nil? ? false : true
+  end
 end
