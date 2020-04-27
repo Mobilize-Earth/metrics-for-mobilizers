@@ -20,34 +20,48 @@
 
 <script>
     (() => {
-        const currentUrl = new URL(window.location.href);
-        const country = currentUrl.pathname.split('/')[2]; //get country id from url
-        const state = currentUrl.pathname.split('/')[3]; //get state id from url
-
-        let groupByProperty = 'country';
-        let groupByLabel = 'Countries';
-        let queryParams = {};
-        if (country) {
-            queryParams.country = country;
-            groupByProperty = 'state';
-            groupByLabel = 'States';
-        }
-
-        if (state) {
-            queryParams.state = state;
-            groupByProperty = 'chapter';
-            groupByLabel = 'Chapters';
-        }
+        let {country, state, groupByProperty, groupByLabel, queryParams} = getContext();
 
         setGroupByHeaderLabel();
         makeTableSortable();
 
         let data = {};
 
-        $.getJSON('<%= report_table_path %>', queryParams, function (result) {
-            data = result.sort((x, y) => y.members - x.members);
-            renderTableBody(result);
-        });
+        function updateTable() {
+            getContext();
+            $.getJSON('<%= report_table_path %>', queryParams, function (result) {
+                data = result.sort((x, y) => y.members - x.members);
+                renderTableBody(result);
+            });
+        }
+
+        updateTable();
+        window.addEventListener('hashchange', function () {
+            updateTable();
+        }, false);
+
+        function getContext() {
+            let currentUrl = new URL(window.location.href);
+            let country = currentUrl.pathname.split('/')[2]; //get country id from url
+            let state = currentUrl.pathname.split('/')[3]; //get state id from url
+
+            let groupByProperty = 'country';
+            let groupByLabel = 'Countries';
+            let queryParams = {};
+            if (country) {
+                queryParams.country = country;
+                groupByProperty = 'state';
+                groupByLabel = 'States';
+            }
+
+            if (state) {
+                queryParams.state = state;
+                groupByProperty = 'chapter';
+                groupByLabel = 'Chapters';
+            }
+            return {country, state, groupByProperty, groupByLabel, queryParams};
+        }
+
 
         function setGroupByHeaderLabel() {
             let groupByColHeader = $("table.report-table thead tr th").first();
@@ -87,7 +101,7 @@
             let link = `/reports`;
             if (country) link += `/${country}`;
             if (state) link = `/chapters`;
-            link += `/${obj.id}`;
+            link += `/${obj.id}${location.hash}`;
 
             return `<tr>
                       <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
