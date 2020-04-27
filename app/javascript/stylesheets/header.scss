@@ -21,10 +21,12 @@
 }
 
 .header-logo {
-  width: 200px;
-  height: 196px;
+  overflow: hidden;
+  width: 250px;
+  height: 150px;
   position: absolute;
-  top: 0px;
+  top: -50px;
+  left: -10px;
 }
 
 .logout-button {
