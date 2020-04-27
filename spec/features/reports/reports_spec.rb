@@ -12,8 +12,8 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 7
     expect(find('#actions')).to have_content 100
     expect(find('#trainings')).to have_content 100
-    expect(find('#report-page-start-date')).to have_content (DateTime.now - 7.days).strftime("%d %B %Y")
-    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 7.days).strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
 
   scenario 'should filter data by month' do
@@ -23,8 +23,8 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 28
     expect(find('#actions')).to have_content 400
     expect(find('#trainings')).to have_content 400
-    expect(find('#report-page-start-date')).to have_content (DateTime.now - 30.days).strftime("%d %B %Y")
-    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 30.days).strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
 
   scenario 'should filter data by quarter' do
@@ -34,8 +34,8 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 84
     expect(find('#actions')).to have_content 1200
     expect(find('#trainings')).to have_content 1200
-    expect(find('#report-page-start-date')).to have_content (DateTime.now - 90.days).strftime("%d %B %Y")
-    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 90.days).strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
 
   scenario 'should filter data by half year' do
@@ -45,8 +45,8 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 168
     expect(find('#actions')).to have_content 2400
     expect(find('#trainings')).to have_content 2400
-    expect(find('#report-page-start-date')).to have_content (DateTime.now - 180.days).strftime("%d %B %Y")
-    expect(find('#report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 180.days).strftime("%d %B %Y")
+    expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
 end
 

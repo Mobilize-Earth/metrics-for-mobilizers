@@ -1,7 +1,18 @@
 .chart-container {
-  #chart {
+  .chart {
     background-color: $white;
     box-shadow: $standard-box-shadow;
-    border-radius: 6px;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  h3 {
+    font-size: .9rem;
+    color: $grey;
+    margin-bottom: 1.5rem;
   }
 }
