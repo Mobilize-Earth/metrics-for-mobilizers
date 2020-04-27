@@ -102,4 +102,4 @@ en:
         user:
           attributes:
             chapter:
-              blank: "External coordinators must be assigned to a chapter"
+              blank: "must be assigned to External Coordinators"
