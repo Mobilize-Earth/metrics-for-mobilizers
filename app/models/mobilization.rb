@@ -1,6 +1,8 @@
 class Mobilization < ApplicationRecord
+    belongs_to :user
+    belongs_to :chapter
 
-    def self.options
+    def self.mobilization_type_options
         ['H4E Presentations',
         'Rebel Ringing',
         'House Meetings',
@@ -10,18 +12,12 @@ class Mobilization < ApplicationRecord
         'Leafleting','1:1 Recruiting / Other']
     end
 
-    belongs_to :user
-    belongs_to :chapter
-
     validates :user,
         :chapter,
-        :mobilization_type,
         :event_type,
         presence: true
-
     validates :participants,
         :new_members_sign_ons,
-        :total_one_time_donations,
         :xra_donation_suscriptions,
         :arrestable_pledges,
         :xra_newsletter_sign_ups,
@@ -30,4 +26,9 @@ class Mobilization < ApplicationRecord
             :greater_than_or_equal_to => 0,
             less_than_or_equal_to: 1_000_000_000
         }
+    validates :mobilization_type, presence: true, :inclusion => { message: "must be a valid mobilization type", in: Mobilization.mobilization_type_options }
+    validates :total_one_time_donations, numericality:{
+        :greater_than_or_equal_to => 0,
+        less_than_or_equal_to: 1_000_000_000
+    }
 end

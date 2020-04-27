@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_25_015307) do
+ActiveRecord::Schema.define(version: 2020_04_27_201732) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "country"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2020_04_25_015307) do
   create_table "mobilizations", force: :cascade do |t|
     t.integer "participants", default: 0
     t.integer "new_members_sign_ons", default: 0
-    t.integer "total_one_time_donations", default: 0
+    t.decimal "total_one_time_donations", precision: 10, scale: 2, default: "0.0"
     t.integer "xra_donation_suscriptions", default: 0
     t.integer "arrestable_pledges", default: 0
     t.integer "xra_newsletter_sign_ups", default: 0

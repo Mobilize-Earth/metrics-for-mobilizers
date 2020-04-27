@@ -41,14 +41,12 @@ RSpec.describe Mobilization, type: :model do
         it 'should not take float numbers in numeric fields' do
             @mobilization.participants = 0.1
             @mobilization.new_members_sign_ons = 0.1
-            @mobilization.total_one_time_donations = 0.1
             @mobilization.xra_donation_suscriptions = 0.1
             @mobilization.arrestable_pledges = 0.1
             @mobilization.xra_newsletter_sign_ups = 0.1
             @mobilization.valid?
             expect(@mobilization.errors[:participants]).to include('must be an integer')
             expect(@mobilization.errors[:new_members_sign_ons]).to include('must be an integer')
-            expect(@mobilization.errors[:total_one_time_donations]).to include('must be an integer')
             expect(@mobilization.errors[:xra_donation_suscriptions]).to include('must be an integer')
             expect(@mobilization.errors[:arrestable_pledges]).to include('must be an integer')
             expect(@mobilization.errors[:xra_newsletter_sign_ups]).to include('must be an integer')

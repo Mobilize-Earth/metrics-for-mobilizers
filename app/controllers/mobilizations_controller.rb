@@ -1,8 +1,8 @@
 class MobilizationsController < ApplicationController
 
     def new
+        @types = Mobilization.mobilization_type_options
         @mobilization = Mobilization.new
-        @types = Mobilization.options
         authorize! :new, MobilizationsController
     end
 
@@ -20,12 +20,19 @@ class MobilizationsController < ApplicationController
             xra_newsletter_sign_ups: params[:mobilization][:xra_newsletter_sign_ups]
         )
         if @mobilization.save
-            flash[:success] = "Mobilization data successfully entered"
+            flash[:success] = "#{@mobilization.mobilization_type} mobilization data was successfully reported!"
             redirect_to mobilizations_path
+            update_chapter_members(@mobilization.new_members_sign_ons)
         else
             flash[:errors] = @mobilization.errors.full_messages
-            @types = Mobilization.options
+            @types = Mobilization.mobilization_type_options
             render "new"
         end
+    end
+
+    def update_chapter_members(new_members_sign_ons)
+        chapter = Chapter.find(current_user.chapter.id)
+        new_active_members = chapter.active_members + new_members_sign_ons
+        chapter.update_attribute(:active_members, new_active_members)
     end
 end
