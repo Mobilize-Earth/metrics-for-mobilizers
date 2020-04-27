@@ -10,10 +10,12 @@ class UsersController < ApplicationController
 
         if @user.valid?
           flash[:success] = "The user #{@user.first_name} #{@user.last_name} was successfully created!"
+          # Mailer spike 
+          # UserMailer.welcome_email(@user).deliver_now
           redirect_to admins_index_path
         else
           flash[:errors] = @user.errors.full_messages
-          render new_user_path 
+          render new_user_path
         end
     end
 
