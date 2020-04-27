@@ -2,6 +2,10 @@ class Mobilization < ApplicationRecord
     belongs_to :user
     belongs_to :chapter
 
+    has_one :address, through: :chapter
+
+    scope :with_addresses, -> { includes(:address) }
+
     def self.mobilization_type_options
         ['H4E Presentations',
         'Rebel Ringing',

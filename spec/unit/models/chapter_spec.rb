@@ -69,4 +69,14 @@ describe Chapter, type: :model do
         expect(chapter.errors[:active_members]).to include("# of Members total must be a number")
       end
   end
+
+  describe "has address" do
+    it "should return true if chapter has an address" do
+      chapter = Chapter.create(name: 'New Chapter', active_members: 10, total_subscription_amount: 1000)
+      address = Address.create(country: 'United State', state_province: 'Kansas', zip_code: '12456')
+      chapter.address = address
+      chapter.save
+      expect(chapter.has_address?).to be(true)
+    end
+  end
 end

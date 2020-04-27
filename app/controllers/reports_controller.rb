@@ -130,24 +130,25 @@ class ReportsController < ApplicationController
   end
 
   def all_countries
-    countries = CS.countries.map do |k, v|
+    CS.countries.map do |k, v|
       {
         id: k,
         country: v,
-        members: 0,
-        chapters: 0,
-        signups: 0,
-        trainings: 0,
-        arrestable_pledges: 0,
-        actions: 0,
-        mobilizations: 0,
-        subscriptions: 0
+        members: Chapter.with_addresses.where(addresses: {country: v}).sum('active_members'),
+        chapters: Chapter.with_addresses.where(addresses: {country: v}).count,
+        signups: Mobilization.with_addresses.where(addresses: {country: v}).sum('new_members_sign_ons'),
+        trainings: Training.with_addresses.where(addresses: {country: v}).count,
+        arrestable_pledges: Mobilization.with_addresses.where(addresses: {country: v}).sum('arrestable_pledges'),
+        actions: calculate_actions(v),
+        mobilizations: Mobilization.with_addresses.where(addresses: {country: v}).count,
+        subscriptions: Mobilization.with_addresses.where(addresses: {country: v}).sum('xra_donation_suscriptions')
       }
     end
-    countries.find { |v| v[:country] == 'Ecuador' }[:members] = 223
-    countries.find { |v| v[:country] == 'Mexico' }[:members] = 12
-    # countries.find { |v| v[:country] == 'United States' }[:members] = 12323
-    countries
+  end
+
+  def calculate_actions(country)
+    StreetSwarm.with_addresses.where(addresses: {country: country}).count +
+        ArrestableAction.with_addresses.where(addresses: {country: country}).count
   end
 
   def mock_states(country)

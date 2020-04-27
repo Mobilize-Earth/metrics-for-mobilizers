@@ -10,11 +10,13 @@ class Chapter < ApplicationRecord
   validates :active_members, numericality: { only_integer: true, less_than_or_equal_to: 1_000_000_000 }
   validates :total_subscription_amount, numericality: { less_than_or_equal_to: 1_000_000_000 }
 
+  scope :with_addresses, -> { includes(:address) }
+
   def coordinators
     self.users
   end
 
   def has_address?
-    self.address.nil? ? false : true
+    true unless self.address.nil?
   end
 end
