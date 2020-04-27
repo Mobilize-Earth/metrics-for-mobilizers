@@ -1,9 +1,9 @@
 .chart-container {
-  .chart {
+  .chart-content {
     background-color: $white;
     box-shadow: $standard-box-shadow;
     border-radius: 0.5rem;
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   h2 {
@@ -14,5 +14,80 @@
     font-size: .9rem;
     color: $grey;
     margin-bottom: 1.5rem;
+  }
+
+  .chart-tabs {
+    border-bottom: 1px solid $light-grey;
+    margin-bottom: 2rem;
+    display: flex;
+
+    .chart-tab {
+      font-size: .9rem;
+      margin: 1rem 1rem 0 1rem;
+      padding: 0 0 1rem 0;
+    }
+
+    .selected {
+      border-bottom: 0.2rem solid $green;
+    }
+  }
+
+  .chart {
+    border-bottom: 1px solid $light-grey;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    height: 25rem;
+
+    #chart {
+      height: 25rem;
+    }
+  }
+
+  .chart-metrics {
+    .active-participants {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    h4 {
+      font-size: .9rem;
+      margin: 0 0.5rem 0 0;
+    }
+
+    #average-participants {
+      font-size: 1.2rem;
+    }
+
+    .metrics-container {
+      display: flex;
+      flex-wrap: wrap;
+
+      .metric {
+        width: 33%;
+
+        @include media-breakpoint-up(md) {
+          width: 24%;
+        }
+
+        @include media-breakpoint-up(lg) {
+          width: 14%;
+        }
+
+        .visual {
+          height: .5rem;
+          width: 8rem;
+          max-width: 80%;
+          background: linear-gradient(90deg, $grey 50%, #ff6db0 60%);
+          margin: .5rem 0 .5rem 0;
+          border-radius: 4px;
+        }
+
+        .subtitle {
+          font-size: .75rem;
+          color: $grey;
+        }
+      }
+    }
   }
 }

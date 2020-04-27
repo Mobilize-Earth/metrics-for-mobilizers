@@ -103,7 +103,7 @@ export default {
                 mode: 'index',
                 intersect: false
             },
-            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 xAxes: [{
                     stacked: true,
