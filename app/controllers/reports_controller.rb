@@ -60,19 +60,17 @@ class ReportsController < ApplicationController
   end
 
   def mobilizations
-    report_data = {
-        labels: ["Week ending " + DateTime.now.strftime("%d %B")],
-        data: [
-            {label: 'H4E Presentations', participants: [2], new: [1]},
-            {label: 'Rebel Ringing', participants: [4], new: [2]},
-            {label: 'Leafleting', participants: [3], new: [0]},
-            {label: 'Fly Posting / Chalking', participants: [11], new: [5]},
-            {label: 'Door Knocking', participants: [6], new: [1]},
-            {label: 'Street Stalls', participants: [5], new: [0]},
-            {label: 'Leafleting', participants: [3], new: [2]},
-            {label: '1:1 Recruiting / Other', participants: [7], new: [5]},
-        ]
-    }
+    report_data = { labels: [create_date_string(0)], data: [] }
+
+    Mobilization.mobilization_type_options.each do |type|
+      chart_data = {label: type, new: [], participants: []}
+      Mobilization.where("mobilization_type = ?", type).each do |mobilization|
+        chart_data[:new].push mobilization.new_members_sign_ons
+        chart_data[:participants].push mobilization.participants
+      end
+
+      report_data[:data].push(chart_data)
+    end
 
     render json: report_data
   end
@@ -195,7 +193,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def createDateString(numDaysInPast)
+  def create_date_string(numDaysInPast)
     "Week ending " + (DateTime.now - numDaysInPast.days).strftime("%d %B")
   end
 

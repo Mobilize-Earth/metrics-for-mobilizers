@@ -44,19 +44,29 @@
   }
 
   .chart-metrics {
-    .active-participants {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
+    .metric-highlights {
+      @include media-breakpoint-up(md) {
+        display: flex;
+      }
 
-    h4 {
-      font-size: .9rem;
-      margin: 0 0.5rem 0 0;
-    }
+      .metric-highlight {
+        display: flex;
+        align-items: center;
+        margin: 0 0 1rem 0;
 
-    #average-participants {
-      font-size: 1.2rem;
+        @include media-breakpoint-up(md) {
+          margin: 0 2rem 1rem 0;
+        }
+      }
+
+      h4 {
+        font-size: .9rem;
+        margin: 0 0.5rem 0 0;
+      }
+
+      #average-participants, #average-new-members {
+        font-size: 1.2rem;
+      }
     }
 
     .mobilization-metrics-container {
