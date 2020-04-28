@@ -49,9 +49,7 @@ const getReportsChartsData = (dateRange) => {
         type: 'get',
         data: {dateRange}
     }).done(data => {
-        console.log({data, e: 'loaded'});
-
-        Charts.initChart(data);
+        Charts.initMobilizationsChart(data);
     });
 }
 
