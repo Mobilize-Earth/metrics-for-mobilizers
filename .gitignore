@@ -33,6 +33,8 @@ sqlite3_test
 yarn-debug.log*
 .yarn-integrity
 
+# IDE related files
 .idea
-
+.generators
+.rakeTasks
 .vscode
