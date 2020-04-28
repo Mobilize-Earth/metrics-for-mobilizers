@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get '/reports', to: 'reports#index', as: 'reports'
   get '/reports/tiles', to: 'reports#tiles', as: 'report_tiles'
   get '/reports/table', to: 'reports#table', as: 'report_table'
+  get '/reports/charts/mobilizations', to: 'reports#mobilizations', as: 'report_charts_mobilizations'
   get '/reports/:country', to: 'reports#index'
   get '/reports/:country/:state', to: 'reports#index'
 

@@ -40,9 +40,22 @@ const getReportsTilesData = (dateRange) => {
     });
 }
 
+const getReportsChartsData = (dateRange) => {
+    $.ajax({
+        url: '/reports/charts/mobilizations',
+        type: 'get',
+        data: {dateRange}
+    }).done(data => {
+        console.log({data, e: 'loaded'});
+
+        Charts.initChart(data);
+    });
+}
+
 const onHashChange = () => {
     const hash = location.hash ? stripHash(location.hash) : 'week';
     getReportsTilesData(hash);
+    getReportsChartsData(hash);
 
     setActiveFilter(document.getElementById(`filter-${hash}`));
 
@@ -81,6 +94,4 @@ export default () => {
     reportTable.updateTable();
 
     registerFilterClickHandlers();
-
-    Charts.initChart();
 };

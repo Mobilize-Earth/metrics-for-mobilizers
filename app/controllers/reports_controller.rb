@@ -47,6 +47,34 @@ class ReportsController < ApplicationController
     render json: report_data
   end
 
+  def mobilizations
+    report_data = {
+        labels: ["Week of " + DateTime.now.strftime("%d %B")],
+        data: [
+            {label: 'H4E Presentations', participants: [2], new: [1]},
+            {label: 'Rebel Ringing', participants: [4], new: [2]},
+            {label: 'House Meetings', participants: [3], new: [2]},
+            {label: 'Fly Posting / Chalking', participants: [11], new: [5]},
+            {label: 'Door Knocking', participants: [6], new: [1]},
+            {label: 'Street Stalls', participants: [5], new: [0]},
+            {label: 'Leafleting', participants: [3], new: [0]},
+            {label: '1:1 Recruiting / Other', participants: [7], new: [5]},
+        ],
+        metrics: [
+            {label: '#metric-h4e', value: 90, visualLabel: '#visual-h4e'},
+            {label: '#metric-rebel-ringing', value: 75, visualLabel: '#visual-rebel-ringing'},
+            {label: '#metric-leafletting', value: 100, visualLabel: '#visual-leafletting'},
+            {label: '#metric-chalking', value: 110, visualLabel: '#visual-chalking'},
+            {label: '#metric-door-knocking', value: 85, visualLabel: '#visual-door-knocking'},
+            {label: '#metric-1-1-recruiter', value: 120, visualLabel: '#visual-1-1-recruiter'},
+            {label: '#metric-street-stalls', value: 115, visualLabel: '#visual-street-stalls'},
+            {label: '#metric-house-meetings', value: 95, visualLabel: '#visual-house-meetings'},
+        ]
+    }
+
+    render json: report_data
+  end
+
   def table
     country = params[:country]
     state = params[:state]
@@ -169,6 +197,10 @@ class ReportsController < ApplicationController
         mobilizations: 0,
         subscriptions: 0 }
     ]
+  end
+
+  def nowMinusDays(numDays)
+    (DateTime.now - numDays.days).strftime("%d %B")
   end
 
 end
