@@ -1,4 +1,5 @@
 import Charts from './charts';
+import reportTable from './table';
 
 const stripHash = hash => hash ? hash.substring(1) : '';
 
@@ -74,7 +75,10 @@ const registerFilterClickHandlers = () => {
 
 export default () => {
     window.addEventListener("hashchange", onHashChange, false);
+    window.addEventListener("hashchange", reportTable.updateTable, false);
     onHashChange();
+    reportTable.init();
+    reportTable.updateTable();
 
     registerFilterClickHandlers();
 

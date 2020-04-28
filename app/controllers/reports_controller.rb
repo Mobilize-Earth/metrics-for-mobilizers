@@ -1,4 +1,6 @@
 class ReportsController < ApplicationController
+  include Regions
+
   def index
   end
 
@@ -48,17 +50,56 @@ class ReportsController < ApplicationController
   def table
     country = params[:country]
     state = params[:state]
+    region = params[:region]
     response = if country.nil?
                  all_countries
+               elsif country.upcase == 'US' && region.nil?
+                 mock_us_regions
+               elsif country.upcase == 'US' && !region.nil? && state.nil?
+                 mock_us_states(region)
                elsif state.nil?
-                 get_states(country)
+                 mock_states(country)
                else
-                 get_chapters(state)
+                 mock_chapters(state)
                end
     render json: response
   end
 
   private
+
+  def mock_us_regions
+    Regions.us_regions.map do |k, v|
+      {
+        id: k,
+        region: v[:name],
+        members: 0,
+        chapters: 0,
+        signups: 0,
+        trainings: 0,
+        arrestable_pledges: 0,
+        actions: 0,
+        mobilizations: 0,
+        subscriptions: 0
+      }
+    end
+  end
+
+  def mock_us_states(region)
+    Regions.us_regions[region.to_sym][:states].map do |v|
+      {
+        id: v,
+        state: v,
+        members: 0,
+        chapters: 0,
+        signups: 0,
+        trainings: 0,
+        arrestable_pledges: 0,
+        actions: 0,
+        mobilizations: 0,
+        subscriptions: 0
+      }
+    end
+  end
 
   def all_countries
     countries = CS.countries.map do |k, v|
@@ -81,7 +122,7 @@ class ReportsController < ApplicationController
     countries
   end
 
-  def get_states(country)
+  def mock_states(country)
     CS.states(country).map do |k, v|
       {
         id: k,
@@ -98,7 +139,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def get_chapters(state)
+  def mock_chapters(state)
     [
       { id: 1, chapter: 'Chapter 1',
         members: 20,
