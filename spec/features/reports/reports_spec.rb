@@ -12,6 +12,9 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
+    expect(find('#mobilizations')).to have_content 0
+    expect(find('#subscriptions')).to have_content 0
+    expect(find('#pledges-arrestable')).to have_content 0
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 7.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
@@ -23,6 +26,9 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
+    expect(find('#mobilizations')).to have_content 0
+    expect(find('#subscriptions')).to have_content 0
+    expect(find('#pledges-arrestable')).to have_content 0
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 30.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
@@ -34,6 +40,9 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
+    expect(find('#mobilizations')).to have_content 0
+    expect(find('#subscriptions')).to have_content 0
+    expect(find('#pledges-arrestable')).to have_content 0
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 90.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
@@ -45,6 +54,9 @@ feature 'report tiles' do
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
+    expect(find('#mobilizations')).to have_content 0
+    expect(find('#subscriptions')).to have_content 0
+    expect(find('#pledges-arrestable')).to have_content 0
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 180.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end

@@ -36,6 +36,9 @@ const getReportsTilesData = (dateRange) => {
         $('#chapters').html(data.chapters);
         $('#actions').html(data.actions);
         $('#trainings').html(data.trainings);
+        $('#mobilizations').html(data.mobilizations);
+        $('#pledges-arrestable').html(data.pledges_arrestable);
+        $('#subscriptions').html(data.subscriptions);
         setDateRange(data.start_date, data.end_date);
     });
 }

@@ -12,6 +12,9 @@ class ReportsController < ApplicationController
           chapters: Chapter.count,
           actions: StreetSwarm.count + ArrestableAction.count,
           trainings: Training.count,
+          mobilizations: Mobilization.count,
+          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
+          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
           start_date: (DateTime.now - 7.days).strftime("%d %B %Y"),
           end_date: DateTime.now.strftime("%d %B %Y")
       }
@@ -21,6 +24,9 @@ class ReportsController < ApplicationController
           chapters: Chapter.count,
           actions: StreetSwarm.count + ArrestableAction.count,
           trainings: Training.count,
+          mobilizations: Mobilization.count,
+          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
+          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
           start_date: (DateTime.now - 30.days).strftime("%d %B %Y"),
           end_date: DateTime.now.strftime("%d %B %Y")
       }
@@ -30,6 +36,9 @@ class ReportsController < ApplicationController
           chapters: Chapter.count,
           actions: StreetSwarm.count + ArrestableAction.count,
           trainings: Training.count,
+          mobilizations: Mobilization.count,
+          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
+          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
           start_date: (DateTime.now - 90.days).strftime("%d %B %Y"),
           end_date: DateTime.now.strftime("%d %B %Y")
       }
@@ -39,6 +48,9 @@ class ReportsController < ApplicationController
           chapters: Chapter.count,
           actions: StreetSwarm.count + ArrestableAction.count,
           trainings: Training.count,
+          mobilizations: Mobilization.count,
+          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
+          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
           start_date: (DateTime.now - 180.days).strftime("%d %B %Y"),
           end_date: DateTime.now.strftime("%d %B %Y")
       }
