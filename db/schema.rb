@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_201732) do
+ActiveRecord::Schema.define(version: 2020_04_27_234510) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "country"
@@ -64,6 +64,16 @@ ActiveRecord::Schema.define(version: 2020_04_27_201732) do
     t.index ["user_id"], name: "index_mobilizations_on_user_id"
   end
 
+  create_table "social_media_blitzings", force: :cascade do |t|
+    t.integer "social_media_campaigns"
+    t.integer "chapter_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chapter_id"], name: "index_social_media_blitzings_on_chapter_id"
+    t.index ["user_id"], name: "index_social_media_blitzings_on_user_id"
+  end
+
   create_table "street_swarms", force: :cascade do |t|
     t.integer "xr_members_attended", default: 0
     t.integer "chapter_id", null: false
@@ -108,6 +118,8 @@ ActiveRecord::Schema.define(version: 2020_04_27_201732) do
   add_foreign_key "arrestable_actions", "users"
   add_foreign_key "mobilizations", "chapters"
   add_foreign_key "mobilizations", "users"
+  add_foreign_key "social_media_blitzings", "chapters"
+  add_foreign_key "social_media_blitzings", "users"
   add_foreign_key "street_swarms", "chapters"
   add_foreign_key "street_swarms", "users"
   add_foreign_key "trainings", "chapters"
