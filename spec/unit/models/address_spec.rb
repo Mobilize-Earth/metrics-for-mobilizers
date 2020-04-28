@@ -11,20 +11,6 @@ describe Address, type: :model do
       expect(address.errors[:zip_code]).to include("Zip Code is required")
     end
 
-    it "should have a number for zip code" do
-      address = Address.new
-      address.zip_code = 'abcd'
-      address.valid?
-      expect(address.errors[:zip_code]).to include("Zip Code must be a number")
-    end
-
-    it "should be an integer for zip code" do
-      address = Address.new
-      address.zip_code = 0.0
-      address.valid?
-      expect(address.errors[:zip_code]).to include("Zip Code must be an integer")
-    end
-
     it "should have a maximum of 15 characters for zip code" do
       address = Address.new
       address.zip_code = "1234567891234567"
