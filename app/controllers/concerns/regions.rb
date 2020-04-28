@@ -19,7 +19,7 @@ module Regions
         name: 'Region 2',
         states: [
           'Delaware',
-          'District o fColumbia',
+          'District of Columbia',
           'Maryland',
           'North Carolina',
           'South Carolina',

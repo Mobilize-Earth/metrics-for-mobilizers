@@ -5,6 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require 'faker'
+
+NUMBER_OF_CHAPTERS = 5
+
 User.destroy_all
 Chapter.destroy_all
 chapter = Chapter.create!(
@@ -22,3 +26,21 @@ chapter.users.create!([
   { password: 'external', password_confirmation: 'external', email: 'external@test.com', role: 'external', first_name: "External", last_name: "User", phone_number: "3" },
   { password: 'external', password_confirmation: 'external', email: 'john@test.com', role: 'external', first_name: "John", last_name: "Smith", phone_number: "1" }
 ])
+
+NUMBER_OF_CHAPTERS.times do |i|
+    state = Faker::Address.state
+
+    chapter = Chapter.create!(
+        name: "#{state} Chapter #{i}",
+        active_members: Faker::Number.number(digits: 3),
+        total_subscription_amount: Faker::Number.decimal(l_digits: 3, r_digits: 2)
+    )
+
+    Address.create!(
+        country: 'United States',
+        state_province: state,
+        city: Faker::Address.city,
+        zip_code: Faker::Address.zip,
+        chapter: chapter
+    )
+end
