@@ -2,7 +2,6 @@ module Helpers
     module SessionHelpers
         def sign_in(email, password)
             visit_sign_in_page
-            page.should have_content("Your Email")
             fill_in "user_email", with: email
             fill_in "user_password", with: password
             click_button "Log In"
