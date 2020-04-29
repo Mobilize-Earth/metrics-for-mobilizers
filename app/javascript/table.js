@@ -1,5 +1,6 @@
 let country, state, region, groupByProperty, groupByLabel, queryParams;
 let data = {};
+const stripHash = hash => hash ? hash.substring(1) : '';
 
 function init() {
     getContext();
