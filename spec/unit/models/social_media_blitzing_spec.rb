@@ -34,6 +34,7 @@ RSpec.describe SocialMediaBlitzing, type: :model do
       @social_media_blitzing.valid?
       expect(@social_media_blitzing.errors[:user]).to include('can\'t be blank')
       expect(@social_media_blitzing.errors[:chapter]).to include('can\'t be blank')
+      expect(@social_media_blitzing.errors[:did_social_media_blitzing]).to include('can\'t be blank')
     end
   end
 end

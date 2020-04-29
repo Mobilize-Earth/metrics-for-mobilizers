@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'admin user', :devise do
 
     before(:each) do
-        @user = FactoryBot.create(:user, role: 'admin', chapter: nil)
+        @user = FactoryBot.create(:administrator)
     end
 
     scenario 'should redirect to admin dashboard with valid credentials' do

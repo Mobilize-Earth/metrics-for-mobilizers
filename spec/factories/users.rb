@@ -6,18 +6,20 @@ FactoryBot.define do
     password { "password123" }
     password_confirmation { "password123" }
     phone_number {"123456789"}
-    role { "external" }
-    chapter
 
     factory :coordinator do
-      first_name {"External"}
-      last_name {"Coordinator"}
-      email { "external@test.com" }
-      password { "password123" }
-      password_confirmation { "password123" }
-      phone_number {"123456789"}
       role { "external" }
       chapter
+    end
+
+    factory :administrator do
+      email { "admin@admin.com" }
+      role { "admin" }
+    end
+
+    factory :reviewer do
+      email { "admin@admin.com" }
+      role { "reviewer" }
     end
   end
 end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'navigation' do
     before(:each) do
-        @user = FactoryBot.create(:user, role: 'external')
+        @user = FactoryBot.create(:coordinator)
         sign_in(@user.email, @user.password)
         visit_home_page
         visit mobilizations_path
@@ -24,7 +24,7 @@ feature 'navigation' do
     end
 
     scenario 'should not access with admin role' do
-        @admin_user = FactoryBot.create(:user, role: 'admin', email: 'admin@test.com', chapter: nil)
+        @admin_user = FactoryBot.create(:administrator)
         find('.logout-button').click
         sign_in(@admin_user.email, @admin_user.password)
         visit_home_page
@@ -36,7 +36,7 @@ end
 
 feature 'content' do
     before(:each) do
-        @user = FactoryBot.create(:user, role: 'external')
+        @user = FactoryBot.create(:coordinator)
         sign_in(@user.email, @user.password)
         visit_home_page
         visit mobilizations_path

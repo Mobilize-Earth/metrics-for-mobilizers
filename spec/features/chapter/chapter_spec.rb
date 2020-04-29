@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'create/edit chapter' do
   before(:each) do
-    @user = FactoryBot.create(:user, role: 'admin', chapter: nil)
+    @user = FactoryBot.create(:administrator)
     sign_in(@user.email, @user.password)
     visit_home_page
     find('#chapters-nav-link').click

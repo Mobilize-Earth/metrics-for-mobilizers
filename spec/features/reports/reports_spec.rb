@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'report tiles' do
   before(:each) do
-    @user = FactoryBot.create(:user, role: 'external')
+    @user = FactoryBot.create(:coordinator)
     sign_in(@user.email, @user.password)
     visit reports_path
   end
@@ -64,21 +64,21 @@ end
 
 feature 'reports page authorization' do
   scenario 'should be accessible by external users' do
-    @user = FactoryBot.create(:user, role: 'external')
+    @user = FactoryBot.create(:coordinator)
     sign_in(@user.email, @user.password)
     visit reports_path
     expect(page).to have_css('.report-tiles-container')
   end
 
   scenario 'should be accessible by admin users' do
-    @user = FactoryBot.create(:user, role: 'admin', chapter: nil)
+    @user = FactoryBot.create(:administrator)
     sign_in(@user.email, @user.password)
     visit reports_path
     expect(page).to have_css('.report-tiles-container')
   end
 
   # scenario 'should be accessible by reviewer users' do
-  #   @user = FactoryBot.create(:user, role: 'reviewer', chapter: nil)
+  #   @user = FactoryBot.create(:reviewer)
   #   sign_in(@user.email, @user.password)
   #   visit reports_path
   #   expect(page).to have_css('.report-tiles-container')

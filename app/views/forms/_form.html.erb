@@ -22,7 +22,7 @@
 <script>
 (() => {
   const navLinks = document.getElementsByClassName('nav-link');
-  const type = '<%= params[:training_type] || params[:type] || params[:type_arrestable_action] || params[:mobilization_type] ||'' %>';
+  const type = '<%= params[:training_type] || params[:type] || params[:type_arrestable_action] || params[:mobilization_type] || params[:social_media_blitzing_type] ||'' %>';
 
   const startFormWithType = (navLink, shouldClearForm) => {
     setFormType(navLink.textContent);

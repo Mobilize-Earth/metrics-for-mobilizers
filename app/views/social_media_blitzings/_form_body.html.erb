@@ -1,0 +1,46 @@
+<%= form_for @social_media_blitzing do |f| %>
+    <h2 id="form-title">&nbsp;</h2>
+    <%= hidden_field_tag :social_media_blitzing_type , "", id: "training-type-input" %>
+    <div class="form-group">
+        <div>
+            <%= f.label :did_social_media_blitzing, "Did you do Social Media Blitzing this week? *", class: "action-form-label" %><br/>
+            <%= f.collection_radio_buttons :did_social_media_blitzing, [[true, 'Yes'] ,[false, 'No']], :first, :last do |b| %>
+                <%- b.label(class: "radio-inline action-form-option-button") {b.radio_button + " "+ b.label } %>
+            <% end %>
+        </div>
+</div>
+    <div class="form-group">
+        <div>
+            <%= f.label :social_media_campaigns, "# Social Media Campaigns", class: "action-form-label" %>
+            <%= f.text_field :social_media_campaigns, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <%= f.submit "Submit Section", class: "btn action-submit-btn"%>
+            <%= link_to 'Cancel', social_media_blitzings_path, class: "btn btn-danger"%>
+        </div>
+        <p class="warning">Cannot undo this action</p>
+    </div>
+<% end %>
+
+<script>
+  (()=>{
+        let yes_option = $('#social_media_blitzing_did_social_media_blitzing_true')
+        let no_option = $('#social_media_blitzing_did_social_media_blitzing_false')
+        let campaigns = $('#social_media_blitzing_social_media_campaigns')
+
+        $(yes_option).change(change_option)
+        $(no_option).change(change_option)
+
+        function change_option(){
+            if ($(yes_option).is(':checked')){
+                campaigns.removeAttr('disabled')
+                campaigns.val('')
+            } else if ($(no_option).is(':checked')){
+                campaigns.attr('disabled', '')
+                campaigns.val(0)
+            }
+        }
+  })();
+</script>

@@ -36,18 +36,10 @@
         <p class="tile-title">Arrestable Actions</p>
         <p class="tile-desc">Insert definition of this activity here</p>
       <% end %>
-      <div class="col-9 col-sm-4 col-md-3 form-tile contrast no-data-tile">
-        <p class="tile-title">No New Data This Week</p>
-        <p class="tile-desc">Only when there is no activity for your chapter this week</p>
-      </div>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-9 col-sm-4 col-md-3">
-        <%= link_to chapter_path(current_user.chapter), class: "btn btn-lg", :action => 'go' do %>
-          I'm done
-        <% end %>
-      </div>
+      <%= link_to social_media_blitzings_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
+        <p class="tile-title">Social Media Blitzing</p>
+        <p class="tile-desc">Insert definition of this activity here</p>
+      <% end %>
     </div>
   </div>
 
@@ -60,15 +52,6 @@
         let from = getLastSaturday();
         let to = getNextFriday();
         set_week(from, to);
-
-        const isReportCompleted = document.cookie.split(';').some((item) => item.trim().startsWith('report_completed='));
-        if (isReportCompleted) {
-            disableTiles();
-        } else {
-            $('.reporting .no-data-tile').click(function () {
-                setReportCompletedCookie(to);
-            });
-        }
 
         function set_week(fromDate, toDate) {
             let from = `${String(fromDate.getMonth()).padStart(2, '0')}/${String(fromDate.getDate()).padStart(2, '0')}/${fromDate.getFullYear()}`;
@@ -91,17 +74,5 @@
             previousSaturday.setHours(0, 0, 0);
             return previousSaturday;
         }
-
-        function disableTiles() {
-            $('.reporting .form-tile').addClass('disabled');
-        }
-
-        function setReportCompletedCookie(expirationDate) {
-            let expiration = `;expires=${expirationDate.toUTCString()}`;
-            document.cookie = "report_completed=true" + expiration;
-            disableTiles();
-        }
-
-
     })();
 </script>

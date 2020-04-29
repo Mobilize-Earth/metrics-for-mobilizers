@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   post '/forms/arrestable', to: 'arrestable_actions#create'
   get '/forms/mobilization', to: 'mobilizations#new', as: 'mobilizations'
   post '/forms/mobilization', to: 'mobilizations#create'
+  get '/forms/blitzing', to: 'social_media_blitzings#new', as: 'social_media_blitzings'
+  post '/forms/blitzing', to: 'social_media_blitzings#create'
 
   get 'admins/index' => 'admins#index'
 

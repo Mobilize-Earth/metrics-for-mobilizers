@@ -48,6 +48,7 @@ class Ability
       can :new, StreetSwarmsController
       can :new, TrainingsController
       can :new, MobilizationsController
+      can :new, SocialMediaBlitzingsController
     end
   end
 end

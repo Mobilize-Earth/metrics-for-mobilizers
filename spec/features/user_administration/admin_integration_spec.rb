@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'create user' do
 
     before(:each) do
-        @admin_user = FactoryBot.create(:user, role: 'admin', chapter: nil)
+        @admin_user = FactoryBot.create(:administrator)
         sign_in(@admin_user.email, @admin_user.password)
         find_link('link-users').click
     end
@@ -93,7 +93,7 @@ end
 feature 'edit user' do
 
     before(:each) do
-        @admin_user = FactoryBot.create(:user, role: 'admin', chapter: nil)
+        @admin_user = FactoryBot.create(:administrator)
         sign_in(@admin_user.email, @admin_user.password)
         visit edit_user_path(@admin_user)
     end
@@ -115,7 +115,7 @@ end
 feature 'navigation' do
 
     before(:each) do
-        @admin_user = FactoryBot.create(:user, role: 'admin', chapter: nil)
+        @admin_user = FactoryBot.create(:administrator)
     end
 
     scenario 'should be redirect to sign in page when access user administration page' do

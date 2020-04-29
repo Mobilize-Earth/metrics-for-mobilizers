@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'external coordinator', :devise do
 
     before(:each) do
-      @user = FactoryBot.create(:user, role: 'external')
+      @user = FactoryBot.create(:coordinator)
     end
 
     scenario 'should login and redirect to external coordinator dashboard' do

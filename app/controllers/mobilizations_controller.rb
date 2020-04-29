@@ -30,6 +30,7 @@ class MobilizationsController < ApplicationController
         end
     end
 
+    private
     def update_chapter_members(new_members_sign_ons)
         chapter = Chapter.find(current_user.chapter.id)
         new_active_members = chapter.active_members + new_members_sign_ons

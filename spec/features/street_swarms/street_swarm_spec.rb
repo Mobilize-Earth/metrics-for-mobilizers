@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'submitting street swarm' do
 
   before(:each) do
-    @user = FactoryBot.create(:user, role: 'external')
+    @user = FactoryBot.create(:coordinator)
     sign_in(@user.email, @user.password)
     visit_home_page
     visit street_swarms_path
@@ -40,7 +40,7 @@ end
 feature 'navigation' do
 
   before(:each) do
-    @user = FactoryBot.create(:user, role: 'external')
+    @user = FactoryBot.create(:coordinator)
     sign_in(@user.email, @user.password)
     visit_home_page
     visit street_swarms_path
