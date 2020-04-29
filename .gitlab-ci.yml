@@ -25,6 +25,7 @@ Intergration Tests:
     - gem install bundler --no-document
     - bundle install
     - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
+    - export RUBYOPT='-W:no-deprecated -W:no-experimental'
   tags:
     - docker
   script:
