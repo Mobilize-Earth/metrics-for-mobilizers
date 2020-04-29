@@ -13,9 +13,9 @@ RSpec.describe SocialMediaBlitzing, type: :model do
     end
 
     it 'should not take negative numbers in numeric field' do
-      @social_media_blitzing.social_media_campaigns = -1
+      @social_media_blitzing.social_media_campaigns = 0
       @social_media_blitzing.valid?
-      expect(@social_media_blitzing.errors[:social_media_campaigns]).to include('must be greater than or equal to 0')
+      expect(@social_media_blitzing.errors[:social_media_campaigns]).to include('must be greater than 0')
     end
 
     it 'should not take float numbers in numeric fields' do
@@ -34,7 +34,6 @@ RSpec.describe SocialMediaBlitzing, type: :model do
       @social_media_blitzing.valid?
       expect(@social_media_blitzing.errors[:user]).to include('can\'t be blank')
       expect(@social_media_blitzing.errors[:chapter]).to include('can\'t be blank')
-      expect(@social_media_blitzing.errors[:did_social_media_blitzing]).to include('can\'t be blank')
     end
   end
 end

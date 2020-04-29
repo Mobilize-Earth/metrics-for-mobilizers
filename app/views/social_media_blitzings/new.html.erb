@@ -1,6 +1,6 @@
 <div class="default-background">
     <%= render 'layouts/messages', flash: flash %>
-    <%= render 'forms/form_header', title: 'Social Media Blitzing', subtitle: 'Repeat if you did more than one Social Media Blitzing' %>
+    <%= render 'forms/form_header', title: 'Social Media Blitzing', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Social Media Blitzing.' %>
     <%= render "forms/form", mobilization: @mobilization do |f| %>
         <%= render "social_media_blitzings/form_body", blitzing: @blitzing %>
     <% end %>

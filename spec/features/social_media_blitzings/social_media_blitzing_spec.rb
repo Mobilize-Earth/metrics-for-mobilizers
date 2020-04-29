@@ -48,7 +48,7 @@ feature 'content' do
     end
 end
 
-feature 'submitting arrestable action' do
+feature 'submitting social media blitzing' do
     before(:each) do
         @user = FactoryBot.create(:coordinator)
         sign_in(@user.email, @user.password)
@@ -57,46 +57,25 @@ feature 'submitting arrestable action' do
         click_on 'Social Media Blitzing'
     end
 
-    scenario 'should save in database with right yes option and values on campaing' do
-        choose('social_media_blitzing_did_social_media_blitzing_true')
+    scenario 'should save in database with campaigns greater than 0' do
         fill_in 'social_media_blitzing_social_media_campaigns', with: '5'
         find('input[name="commit"]').click
         expect(SocialMediaBlitzing.last.social_media_campaigns).to eq(5)
     end
 
-    scenario 'should save in database with no option and no values in campaing' do
-        choose('social_media_blitzing_did_social_media_blitzing_false')
-        find('input[name="commit"]').click
-        expect(SocialMediaBlitzing.last.social_media_campaigns).to eq(0)
-    end
-
-    scenario 'should show a success message with yes option' do
-        choose('social_media_blitzing_did_social_media_blitzing_true')
+    scenario 'should show a success message with campaigns greater tnah 0' do
         fill_in 'social_media_blitzing_social_media_campaigns', with: '5'
         find('input[name="commit"]').click
         expect(page).to have_css '.alert-success'
     end
 
-    scenario 'should show a success message with no option' do
-        choose('social_media_blitzing_did_social_media_blitzing_false')
-        find('input[name="commit"]').click
-        expect(page).to have_css '.alert-success'
-    end
-
-    scenario 'should show a error message without selection' do
-        find('input[name="commit"]').click
-        expect(page).to have_css '.alert-danger'
-    end
-
-    scenario 'should show a error message without yes option and no data' do
-        choose('social_media_blitzing_did_social_media_blitzing_true')
+    scenario 'should show a error message without campaigns' do
         find('input[name="commit"]').click
         expect(page).to have_css '.alert-danger'
     end
 
     scenario 'should not save in database if have errors' do
         expected_records = SocialMediaBlitzing.count
-        choose('social_media_blitzing_did_social_media_blitzing_true')
         find('input[name="commit"]').click
         actual_records = SocialMediaBlitzing.count
         expect(actual_records).to eq(expected_records)
