@@ -1,7 +1,7 @@
 let country, state, region, groupByProperty, groupByLabel, queryParams;
 let data = {};
 
-function init(){
+function init() {
     getContext();
     setGroupByHeaderLabel();
     makeTableSortable();
@@ -26,10 +26,10 @@ function getContext() {
     queryParams = {};
     if (country) {
         queryParams.country = country;
-        if(country.toUpperCase()==='US'){
+        if (country.toUpperCase() === 'US') {
             groupByProperty = 'region';
             groupByLabel = 'Regions';
-        } else{
+        } else {
             groupByProperty = 'state';
             groupByLabel = 'States';
         }
@@ -47,6 +47,8 @@ function getContext() {
         groupByLabel = 'Chapters';
 
     }
+
+    queryParams.period = location.hash ? stripHash(location.hash) : 'week';
 }
 
 
@@ -119,6 +121,6 @@ function renderTableBody(data) {
 
 
 export default {
-    init:init,
+    init: init,
     updateTable: updateTable
 };
