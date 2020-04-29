@@ -30,6 +30,7 @@ Intergration Tests:
   script:
     - yarn
     - rails db:migrate RAILS_ENV=test
+    - rails webpacker:compile
     - bundle exec rspec spec/features
 
 Build and Push Image:
