@@ -28,7 +28,6 @@ Intergration Tests:
   tags:
     - docker
   script:
-    - yarn add @rails/webpacker
     - rails db:migrate RAILS_ENV=test
     - bundle exec rspec spec/features
 
