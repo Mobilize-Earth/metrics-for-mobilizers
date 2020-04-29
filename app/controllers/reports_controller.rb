@@ -189,7 +189,7 @@ class ReportsController < ApplicationController
   end
 
   def create_monthly_chart_label(months_ago)
-    "Month of #{(DateTime.now- months_ago.months).month}"
+    "Month of #{(DateTime.now- months_ago.months).strftime("%B %Y")}"
   end
 
   def get_chart_labels_for_period(period)
@@ -210,21 +210,57 @@ class ReportsController < ApplicationController
   end
 
   def get_chart_data_for_period(period)
-    result = []
+    result = Mobilization.mobilization_type_options.map { |type| {
+      label: type,
+      new: get_array_of_empty_values(period),
+      participants: get_array_of_empty_values(period)
+    }}
 
-    Mobilization.mobilization_type_options.map do |type|
-        result.push({label: type, new: [0], participants: [0]})
-    end
-
-    Mobilization.where('created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).each do |mobilization|
-      result.each do |chart_line|
-        if chart_line[:label] == mobilization.mobilization_type
-          chart_line[:new] = [chart_line[:new][0] + mobilization.new_members_sign_ons]
-          chart_line[:participants] = [chart_line[:participants][0] + mobilization.participants]
-        end
-      end
+    case period
+    when "month"
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day, result, 0)
+      get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 1)
+      get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 3)
+    when "quarter"
+      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 0)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_day, (DateTime.now - 1.months).end_of_day, result, 1)
+      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 2)
+    when "half-year"
+      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 0)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_day, (DateTime.now - 1.months).end_of_day, result, 1)
+      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 4.months).beginning_of_day, (DateTime.now - 3.months).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 5.months).beginning_of_day, (DateTime.now - 4.months).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 6.months).beginning_of_day, (DateTime.now - 5.months).end_of_day, result, 2)
+    else
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day, result, 0)
     end
 
     result.sort! { |a,b| a[:label] <=> b[:label] }
+  end
+
+  def get_mobilizations(start_date, end_date, output, index)
+    Mobilization.where('created_at BETWEEN ? AND ?', start_date, end_date).each do |mobilization|
+      output.each do |chart_line|
+        if chart_line[:label] == mobilization.mobilization_type
+          chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons
+          chart_line[:participants][index] = chart_line[:participants][index] + mobilization.participants
+        end
+      end
+    end
+  end
+
+  def get_array_of_empty_values(period)
+    case period
+    when "month"
+      [0,0,0,0]
+    when "quarter"
+      [0,0,0]
+    when "half-year"
+      [0,0,0,0,0,0]
+    else
+      [0]
+    end
   end
 end
