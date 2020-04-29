@@ -70,6 +70,7 @@ class ReportsController < ApplicationController
     country = params[:country]
     state = params[:state]
     region = params[:region]
+    chapter = params[:chapter]
     response = if country.nil?
                  all_countries
                elsif country.upcase == 'US' && region.nil?
@@ -78,8 +79,10 @@ class ReportsController < ApplicationController
                  us_states(region)
                elsif state.nil?
                  states(country)
-               else
+               elsif chapter.nil?
                  chapters(state)
+               else
+                 chapter_report(chapter)
                end
     render json: response
   end
@@ -186,6 +189,22 @@ class ReportsController < ApplicationController
 
   def create_weekly_chart_label(days_ago)
     "Week ending #{(DateTime.now - days_ago.days).strftime("%d %B")}"
+  end
+
+  def chapter_report(id)
+    chapter = Chapter.find(id)
+    { result: { id: chapter.id,
+        chapter: chapter.name,
+        members: chapter.active_members,
+        chapters: 1,
+        signups: Mobilization.where(chapter: chapter).sum('new_members_sign_ons'),
+        trainings: Training.where(chapter: chapter).count,
+        arrestable_pledges: Mobilization.where(chapter: chapter).sum('arrestable_pledges'),
+        actions: calculate_actions(chapter, :chapter),
+        mobilizations: Mobilization.where(chapter: chapter).count,
+        subscriptions: Mobilization.where(chapter: chapter).sum('xra_donation_suscriptions')
+      }
+    }
   end
 
   def create_monthly_chart_label(months_ago)

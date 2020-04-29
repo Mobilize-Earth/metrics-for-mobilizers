@@ -1,4 +1,4 @@
-let country, state, region, groupByProperty, groupByLabel, queryParams;
+let country, state, region, chapter, groupByProperty, groupByLabel, queryParams;
 let data = {};
 const stripHash = hash => hash ? hash.substring(1) : '';
 
@@ -10,8 +10,12 @@ function init() {
 
 function updateTable() {
     $.getJSON('/reports/table', queryParams, function (result) {
-        data = result.sort((x, y) => y.members - x.members);
-        renderTableBody(result);
+        if(Object.keys(result).length > 1) {
+            data = result.sort((x, y) => y.members - x.members);
+            renderTableBody(result);
+        } else {
+            renderTableBody(result);
+        }
     });
 }
 
@@ -21,6 +25,7 @@ function getContext() {
     country = params.get('country');
     state = params.get('state');
     region = params.get('region');
+    chapter = params.get('chapter');
 
     groupByProperty = 'country';
     groupByLabel = 'Countries';
@@ -47,6 +52,11 @@ function getContext() {
         groupByProperty = 'chapter';
         groupByLabel = 'Chapters';
 
+    }
+    if (chapter) {
+        queryParams.chapter = chapter;
+        groupByProperty = 'chapter';
+        groupByLabel = 'Chapter';
     }
 
     queryParams.period = location.hash ? stripHash(location.hash) : 'week';
@@ -93,11 +103,11 @@ const record = (obj) => {
 
     if (country) queryParams.push(`country=${country}`);
     if (region) queryParams.push(`region=${region}`);
+    if (state) queryParams.push(`state=${state}`);
+    if (chapter) queryParams.push(`chapter=${chapter}`);
     queryParams.push(`${groupByProperty}=${obj.id}`)
 
     link += queryParams.join('&') + location.hash;
-
-    if (state) link = `/chapters/${obj.id}`;
 
     return `<tr>
               <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
