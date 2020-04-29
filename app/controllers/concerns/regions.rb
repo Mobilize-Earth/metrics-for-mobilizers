@@ -3,7 +3,7 @@ module Regions
   def self.us_regions
     {
       region_1: {
-        name: 'Region 1',
+        name: 'Upper East',
         states: [
           'Connecticut',
           'Maine',
@@ -16,7 +16,7 @@ module Regions
         ]
       },
       region_2: {
-        name: 'Region 2',
+        name: 'Middle Atlantic',
         states: [
           'Delaware',
           'District of Columbia',
@@ -29,7 +29,7 @@ module Regions
         ]
       },
       region_3: {
-        name: 'Region 3',
+        name: 'South Atlantic & Gulf Coast',
         states: [
           'Alabama',
           'Florida',
@@ -41,15 +41,15 @@ module Regions
         ]
       },
       region_4: {
-        name: 'Region 4',
+        name: 'Big Heartland',
         states: %w[Illinois Indiana Iowa Kentucky Michigan Minnesota Ohio Wisconsin]
       },
       region_5: {
-        name: 'Region 5',
+        name: 'Central Keystone',
         states: %w[Arkansas Kansas Louisiana Missouri Oklahoma Texas]
       },
       region_6: {
-        name: 'Region 6',
+        name: 'InnerMountain',
         states: [
           'Arizona',
           'Colorado',
@@ -65,7 +65,7 @@ module Regions
         ]
       },
       region_7: {
-        name: 'Region 7',
+        name: 'Pacific',
         states: [
           'Alaska',
           'American Samoa',
