@@ -195,15 +195,15 @@ class ReportsController < ApplicationController
   def get_chart_labels_for_period(period)
     case period
     when "month"
-      [create_weekly_chart_label(0), create_weekly_chart_label(7),
-       create_weekly_chart_label(14), create_weekly_chart_label(21)]
+      [create_weekly_chart_label(21), create_weekly_chart_label(14),
+       create_weekly_chart_label(7), create_weekly_chart_label(0)]
     when "quarter"
-      [create_monthly_chart_label(0), create_monthly_chart_label(1),
-       create_monthly_chart_label(2)]
+      [create_monthly_chart_label(2), create_monthly_chart_label(1),
+       create_monthly_chart_label(0)]
     when "half-year"
-      [create_monthly_chart_label(0), create_monthly_chart_label(1),
-       create_monthly_chart_label(2), create_monthly_chart_label(3),
-       create_monthly_chart_label(4), create_monthly_chart_label(5)]
+      [create_monthly_chart_label(5), create_monthly_chart_label(4),
+       create_monthly_chart_label(3), create_monthly_chart_label(2),
+       create_monthly_chart_label(1), create_monthly_chart_label(0)]
     else
       [create_weekly_chart_label(0)]
     end
@@ -218,21 +218,21 @@ class ReportsController < ApplicationController
 
     case period
     when "month"
-      get_mobilizations((DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day, result, 0)
-      get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 1)
-      get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 2)
-      get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 3)
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day, result, 3)
+      get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 1)
+      get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 0)
     when "quarter"
-      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 0)
+      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 2)
       get_mobilizations((DateTime.now - 2.months).beginning_of_day, (DateTime.now - 1.months).end_of_day, result, 1)
-      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 0)
     when "half-year"
-      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 0)
-      get_mobilizations((DateTime.now - 2.months).beginning_of_day, (DateTime.now - 1.months).end_of_day, result, 1)
-      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 5)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_day, (DateTime.now - 1.months).end_of_day, result, 4)
+      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 3)
       get_mobilizations((DateTime.now - 4.months).beginning_of_day, (DateTime.now - 3.months).end_of_day, result, 2)
-      get_mobilizations((DateTime.now - 5.months).beginning_of_day, (DateTime.now - 4.months).end_of_day, result, 2)
-      get_mobilizations((DateTime.now - 6.months).beginning_of_day, (DateTime.now - 5.months).end_of_day, result, 2)
+      get_mobilizations((DateTime.now - 5.months).beginning_of_day, (DateTime.now - 4.months).end_of_day, result, 1)
+      get_mobilizations((DateTime.now - 6.months).beginning_of_day, (DateTime.now - 5.months).end_of_day, result, 0)
     else
       get_mobilizations((DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day, result, 0)
     end
