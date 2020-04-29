@@ -60,19 +60,10 @@ class ReportsController < ApplicationController
   end
 
   def mobilizations
-    report_data = { labels: [create_date_string(0)], data: [] }
-
-    Mobilization.mobilization_type_options.each do |type|
-      chart_data = {label: type, new: [], participants: []}
-      Mobilization.where("mobilization_type = ?", type).each do |mobilization|
-        chart_data[:new].push mobilization.new_members_sign_ons
-        chart_data[:participants].push mobilization.participants
-      end
-
-      report_data[:data].push(chart_data)
-    end
-
-    render json: report_data
+    render json: {
+        labels: get_chart_labels_for_period(params[:dateRange]),
+        data: get_chart_data_for_period(params[:dateRange])
+    }
   end
 
   def table
@@ -193,8 +184,47 @@ class ReportsController < ApplicationController
     end
   end
 
-  def create_date_string(numDaysInPast)
-    "Week ending " + (DateTime.now - numDaysInPast.days).strftime("%d %B")
+  def create_weekly_chart_label(days_ago)
+    "Week ending #{(DateTime.now - days_ago.days).strftime("%d %B")}"
   end
 
+  def create_monthly_chart_label(months_ago)
+    "Month of #{(DateTime.now- months_ago.months).month}"
+  end
+
+  def get_chart_labels_for_period(period)
+    case period
+    when "month"
+      [create_weekly_chart_label(0), create_weekly_chart_label(7),
+       create_weekly_chart_label(14), create_weekly_chart_label(21)]
+    when "quarter"
+      [create_monthly_chart_label(0), create_monthly_chart_label(1),
+       create_monthly_chart_label(2)]
+    when "half-year"
+      [create_monthly_chart_label(0), create_monthly_chart_label(1),
+       create_monthly_chart_label(2), create_monthly_chart_label(3),
+       create_monthly_chart_label(4), create_monthly_chart_label(5)]
+    else
+      [create_weekly_chart_label(0)]
+    end
+  end
+
+  def get_chart_data_for_period(period)
+    result = []
+
+    Mobilization.mobilization_type_options.map do |type|
+        result.push({label: type, new: [0], participants: [0]})
+    end
+
+    Mobilization.where('created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).each do |mobilization|
+      result.each do |chart_line|
+        if chart_line[:label] == mobilization.mobilization_type
+          chart_line[:new] = [chart_line[:new][0] + mobilization.new_members_sign_ons]
+          chart_line[:participants] = [chart_line[:participants][0] + mobilization.participants]
+        end
+      end
+    end
+
+    result.sort! { |a,b| a[:label] <=> b[:label] }
+  end
 end
