@@ -9,6 +9,7 @@
 
 # Ignore the default SQLite database.
 sqlite3_test
+sqlite3_test-journal
 
 # Ignore all logfiles and tempfiles.
 /log/*
