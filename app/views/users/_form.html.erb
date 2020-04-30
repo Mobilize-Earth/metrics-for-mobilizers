@@ -38,20 +38,23 @@
 
 <script>
   (()=>{
-    let role_select = $('#user_role')
-    let chapter_select = $('#user_chapter_id')
-    role_changed()
+    let role_select = $('#user_role');
+    let chapter_select = $('#user_chapter_id');
+    let chapter_label = $('#chapter-label');
+
+    role_changed();
 
     $('select').change(role_changed);
 
     function role_changed(){
         let selected = role_select.find('option:selected').first()
         if(selected.val() !== 'external'){
-            chapter_select.attr('disabled', '')
-            chapter_select.val('')
+            chapter_select.attr('disabled', '');
+            chapter_select.val('');
+            chapter_label.text("Chapter");
         } else {
-            chapter_select.removeAttr('disabled')
-            document.getElementById('chapter-label').innerText = "Chapter *"
+            chapter_select.removeAttr('disabled');
+            chapter_label.text("Chapter *");
         }
     }
   })();
