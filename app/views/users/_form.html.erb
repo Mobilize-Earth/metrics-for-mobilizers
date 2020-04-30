@@ -11,17 +11,6 @@
                   <%= f.text_field :last_name, class: "form-control", :maxlength => 50 %>
               </div>
               <div class="form-row chapter-row">
-                  <%= f.label :password, "Password *" %>
-                  <% if @minimum_password_length %>
-                      <em>(<%= @minimum_password_length %> characters minimum)</em>
-                  <% end %>
-                  <%= f.password_field :password, class: "form-control", :maxlength => 50 %>
-              </div>
-              <div class="form-row chapter-row">
-                  <%= f.label :password_confirmation, "Confirm your password *" %>
-                  <%= f.password_field :password_confirmation, class: "form-control", :maxlength => 50 %>
-              </div>
-              <div class="form-row chapter-row">
                   <%= f.label :email, "Email *"%>
                   <%= f.email_field :email, class: "form-control", :maxlength => 50 %>
               </div>

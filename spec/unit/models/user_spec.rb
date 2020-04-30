@@ -2,9 +2,70 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
 
-  it 'should render full name for user with first and last name' do
-    @user = User.create({ password: 'admin1', email: 'admin@test.com', role: 'admin', first_name: "Admin", last_name: "Istrator" })
+  before :each do
+    @user = User.new
+  end
 
-    expect(@user.full_name).to include "Admin Istrator"
+  describe 'when user is saved' do
+
+    it 'should not take string in phone number' do
+      @user.phone_number = 'string'
+      @user.valid?
+      expect(@user.errors[:phone_number]).to include('is not a number')
+    end
+
+    it 'should not take number smaller than 0 in phone number' do
+      @user.phone_number = 0
+      @user.valid?
+      expect(@user.errors[:phone_number]).to include('must be greater than 0')
+    end
+
+    it 'should not take float in phone number' do
+      @user.phone_number = 0.1
+      @user.valid?
+      expect(@user.errors[:phone_number]).to include('must be an integer')
+    end
+
+    it 'should have first_name last name phone number password and email' do
+      @user.valid?
+      expect(@user.errors[:first_name]).to include('can\'t be blank')
+      expect(@user.errors[:last_name]).to include('can\'t be blank')
+      expect(@user.errors[:phone_number]).to include('can\'t be blank')
+      expect(@user.errors[:password]).to include('can\'t be blank')
+      expect(@user.errors[:email]).to include('can\'t be blank')
+    end
+
+    it 'should not validate password when skip password validation is true' do
+      @user.skip_password_validation = true
+      @user.valid?
+      expect(@user.errors[:password]).to_not include('can\'t be blank')
+    end
+
+    it 'should validate chapter when role is external' do
+      @user.role = 'external'
+      @user.valid?
+      expect(@user.errors[:chapter]).to include('must be assigned to External Coordinators')
+    end
+
+    it 'should validate phone number 000000000' do
+      @user.phone_number = '000000000'
+      @user.valid?
+      expect(@user.errors[:phone_number]).to include('invalid')
+    end
+
+    it 'should validate only external role have chapter' do
+      @user.role = 'admin'
+      @user.chapter_id = 1
+      @user.valid?
+      expect(@user.errors[:role]).to include('should be external')
+    end
+  end
+
+  describe 'user aditional functions' do
+    it 'should render full name for user with first and last name' do
+      @user = User.create({ password: 'admin1', email: 'admin@test.com', role: 'admin', first_name: "Admin", last_name: "Istrator" })
+
+      expect(@user.full_name).to include "Admin Istrator"
+    end
   end
 end

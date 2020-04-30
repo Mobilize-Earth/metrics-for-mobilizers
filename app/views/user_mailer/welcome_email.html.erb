@@ -2,4 +2,10 @@
 
 <p> You have successfully signed up to reporting.organise.earth </p>
 
-<p> You belong to the <%= @user.chapter.name %> chapter, with an <%= @user.role %> role </p>
+<p> Your role assigned is: <%= Role.roles[@user.role] %></p>
+
+<% if @user.role == "external" %>
+    <p> You belong to the chapter: <%= @user.chapter.name %></p>
+<% end %>
+
+<p><%= link_to t("devise.mailer.invitation_instructions.accept"), @user.invitation_link %></p>
