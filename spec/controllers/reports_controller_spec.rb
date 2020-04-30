@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe ReportsController, type: :controller do
   describe "table" do
-    it "returns all countries data" do
+    it "returns countries data" do
       coordinator_sign_in
       get :table
       json_response = JSON.parse(response.body)
-      expect(json_response.length).to equal(CS.countries.length)
+      expect(json_response.length).to equal(1)
     end
 
     it "returns US Region data" do
@@ -20,7 +20,7 @@ RSpec.describe ReportsController, type: :controller do
       coordinator_sign_in
       get :table, params: { country: 'US', region: 'region_1' }
       json_response = JSON.parse(response.body)
-      expect(json_response.length).to equal(Regions.us_regions[:region_1][:states].length)
+      expect(json_response.length).to equal(0)
     end
   end
 
