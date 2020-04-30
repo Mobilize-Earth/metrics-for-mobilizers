@@ -25,7 +25,8 @@ feature 'navigation' do
 
     scenario 'should not access with admin role' do
         @admin_user = FactoryBot.create(:administrator)
-        find('.logout-button').click
+        find('#dropdown-menu-link').click
+        find('#log-out-link').click
         sign_in(@admin_user.email, @admin_user.password)
         visit_home_page
         visit social_media_blitzings_path

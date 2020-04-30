@@ -137,7 +137,9 @@ function renderTableBody(data) {
 }
 
 
-export default {
+const table = {
     init: init,
     updateTable: updateTable
 };
+
+export default table;

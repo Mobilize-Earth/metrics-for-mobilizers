@@ -100,7 +100,7 @@ const registerFilterClickHandlers = () => {
         .addEventListener('click', () => setURLHash('half-year'));
 }
 
-export default () => {
+const reports = () => {
     window.addEventListener("hashchange", onHashChange, false);
     window.addEventListener("hashchange", reportTable.updateTable, false);
     onHashChange();
@@ -109,3 +109,5 @@ export default () => {
 
     registerFilterClickHandlers();
 };
+
+export default reports;

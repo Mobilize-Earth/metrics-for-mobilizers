@@ -47,8 +47,66 @@
     }
   }
 
-  .log-in-out {
+  .header-right {
     margin-right: 1.5rem;
     margin-left: auto;
+
+    span {
+      margin: 0;
+      padding: 0;
+    }
+
+    .name {
+      margin: 0 0.5rem;
+    }
+
+    &:hover {
+      background-color: $light-grey;
+      cursor: pointer;
+    }
+
+    .dropdown {
+      .dropdown-toggle {
+        color: $black;
+        line-height: $header-height / 2;
+        display: block;
+        padding: 0 1rem;
+
+        .fa {
+          margin-top: -3px;
+        }
+
+        &:hover {
+          text-decoration: none;
+          background-color: $light-grey;
+          cursor: pointer;
+        }
+      }
+
+      .dropdown-menu {
+        color: green;
+        padding: 0;
+
+        a {
+          display: block;
+          color: $black;
+          padding: 1rem;
+          background-color: $white;
+          border: 2px solid $green;
+          border-bottom: 0;
+          text-align: center;
+
+          &:hover {
+            text-decoration: none;
+            background-color: $light-grey;
+            cursor: pointer;
+          }
+
+          &:last-child {
+            border-bottom: 2px solid $green;
+          }
+        }
+      }
+    }
   }
 }

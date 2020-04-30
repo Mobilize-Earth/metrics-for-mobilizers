@@ -1,17 +1,27 @@
-<div class="container-fluid">
-  <div class="row header">
-    <div class="header-logo">
-      <%= link_to image_tag("/images/mob_earth_circle.svg"), root_path %>
-    </div>
-    <%= render 'layouts/role_based_nav' %>
-    <div class="log-in-out">
-      <% if current_user.nil? %>
-        <% unless current_page?(new_user_session_url) %>
-          <%= link_to new_user_session_path, id: "login_button", class: "btn btn-lg login-button" do %>Log In<% end %>
-        <% end %>
-      <% else %>
-        <%= link_to destroy_user_session_path, class: "btn btn-lg logout-button", method: :delete do %>Log out<% end %>
+<div class="header">
+  <div class="header-logo">
+    <%= link_to image_tag("/images/mob_earth_circle.svg"), root_path %>
+  </div>
+  <%= render 'layouts/role_based_nav' %>
+  <div class="header-right" id="header-right">
+    <% if current_user.nil? %>
+      <% unless current_page?(new_user_session_url) %>
+        <%= link_to new_user_session_path, id: "login_button", class: "btn btn-lg login-button" do %>Log In<% end %>
       <% end %>
-    </div>
+    <% else %>
+      <div class="dropdown show">
+        <a class="dropdown-toggle" href="#" role="button" id="dropdown-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="btn fa fa-user" title="user"></span>
+          <span class="name"><%= current_user.full_name %></span>
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdown-menu-link">
+          <% unless current_user.nil? %>
+            <%= link_to "Reset Password", '', id: "reset-password-link" %>
+            <%= link_to "Log out", destroy_user_session_path, method: :delete, id: "log-out-link" %>
+          <%  end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

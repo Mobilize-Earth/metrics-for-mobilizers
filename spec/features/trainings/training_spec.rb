@@ -47,7 +47,6 @@ feature 'submitting training' do
 end
 
 feature 'navigation' do
-
   before(:each) do
     @user = FactoryBot.create(:coordinator)
     sign_in(@user.email, @user.password)

@@ -1,4 +1,4 @@
-export default () => {
+const admin = () => {
     document.getElementById('users-nav-link').addEventListener('click', () => {
         document.getElementById('content-users').style.display = 'block';
         document.getElementById('link-users').style.display = 'block';
@@ -17,3 +17,4 @@ export default () => {
         document.getElementById('chapters-nav-link').classList.add('selected');
     });
 }
+export default admin;

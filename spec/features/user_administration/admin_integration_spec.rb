@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 feature 'create user' do
-
     before(:each) do
         @admin_user = FactoryBot.create(:administrator)
         sign_in(@admin_user.email, @admin_user.password)
@@ -113,7 +112,6 @@ feature 'edit user' do
 end
 
 feature 'navigation' do
-
     before(:each) do
         @admin_user = FactoryBot.create(:administrator)
     end
