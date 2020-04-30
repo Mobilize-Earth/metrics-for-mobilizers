@@ -1,43 +1,54 @@
-.login-button {
-  font-family: "Poppins", sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  border: 2px solid $green;
-  height: 50px;
-  width: 152px;
-}
-
 .header {
-  min-height: 100px;
-}
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-.regular-button {
-  font-family: "Poppins", sans-serif;
-  border: 2px solid black;
-  width: 90px;
-  padding: 5px;
-  margin-top: 6px;
-  margin-bottom: 6px;
-}
+  .header-logo {
+    overflow: hidden;
+    width: $header-height * 2.5;
+    height: $header-height * 1.5;
+    margin-top: -($header-height / 2);
+    margin-left: -0.5rem;
+  }
 
-.header-logo {
-  overflow: hidden;
-  width: 250px;
-  height: 150px;
-  position: absolute;
-  top: -50px;
-  left: -10px;
-}
+  nav {
+    height: 100%;
 
-.logout-button {
-  font-family: "Poppins", sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  border: 2px solid $green;
-  height: 50px;
-  width: 152px;
-}
+    a {
+      display: inline-block;
+      padding: 0 1rem;
+      line-height: $header-height / 2;
+      margin-top: $header-height / 4;
+      color: $black;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
 
-.header .fa {
-  font-size: 40px;
+      &:hover {
+        background-color: $light-grey;
+        cursor: pointer;
+        color: $black;
+        text-decoration: none;
+      }
+    }
+
+    .selected {
+      border-bottom: 2px solid $green;
+    }
+  }
+
+  .login-button, .logout-button {
+    border: 2px solid $green;
+    padding: 0.5rem 2rem;
+
+    &:hover {
+      background-color: $light-grey;
+      cursor: pointer;
+    }
+  }
+
+  .log-in-out {
+    margin-right: 1.5rem;
+    margin-left: auto;
+  }
 }

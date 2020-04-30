@@ -1,19 +1,17 @@
 <div class="container-fluid">
   <div class="row header">
-    <div class="col-12 text-center my-auto d-flex justify-content-end">
+    <div class="header-logo">
+      <%= link_to image_tag("/images/mob_earth_circle.svg"), root_path %>
+    </div>
+    <%= render 'layouts/role_based_nav' %>
+    <div class="log-in-out">
       <% if current_user.nil? %>
         <% unless current_page?(new_user_session_url) %>
           <%= link_to new_user_session_path, id: "login_button", class: "btn btn-lg login-button" do %>Log In<% end %>
         <% end %>
       <% else %>
-        <%= link_to '/', class:"test-home" do %><span class="btn fa fa-home" title="Home"></span><% end %>
         <%= link_to destroy_user_session_path, class: "btn btn-lg logout-button", method: :delete do %>Log out<% end %>
       <% end %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="header-logo">
-      <%= link_to image_tag("/images/mob_earth_circle.svg"), root_path %>
     </div>
   </div>
 </div>
