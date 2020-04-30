@@ -49,7 +49,7 @@ module Regions
         states: %w[Arkansas Kansas Louisiana Missouri Oklahoma Texas]
       },
       region_6: {
-        name: 'InnerMountain',
+        name: 'Inner Mountain',
         states: [
           'Arizona',
           'Colorado',

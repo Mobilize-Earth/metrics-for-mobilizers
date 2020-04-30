@@ -1,60 +1,52 @@
 class ReportsController < ApplicationController
   include Regions
 
+  DATE_RANGE_MAPPING = {
+      :week => 7,
+      :month => 30,
+      :quarter => 90,
+      :'half-year' => 180
+  }
+
   def index
   end
 
   def tiles
-    case params[:dateRange]
-    when "week"
-      report_data = {
-          members: Chapter.sum('active_members'),
-          chapters: Chapter.count,
-          actions: StreetSwarm.count + ArrestableAction.count,
-          trainings: Training.count,
-          mobilizations: Mobilization.count,
-          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
-          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
-          start_date: (DateTime.now - 7.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-      }
-    when "month"
-      report_data = {
-          members: Chapter.sum('active_members'),
-          chapters: Chapter.count,
-          actions: StreetSwarm.count + ArrestableAction.count,
-          trainings: Training.count,
-          mobilizations: Mobilization.count,
-          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
-          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
-          start_date: (DateTime.now - 30.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-      }
-    when "quarter"
-      report_data = {
-          members: Chapter.sum('active_members'),
-          chapters: Chapter.count,
-          actions: StreetSwarm.count + ArrestableAction.count,
-          trainings: Training.count,
-          mobilizations: Mobilization.count,
-          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
-          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
-          start_date: (DateTime.now - 90.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-      }
-    when "half-year"
-      report_data = {
-          members: Chapter.sum('active_members'),
-          chapters: Chapter.count,
-          actions: StreetSwarm.count + ArrestableAction.count,
-          trainings: Training.count,
-          mobilizations: Mobilization.count,
-          pledges_arrestable: Mobilization.sum('arrestable_pledges'),
-          subscriptions: Mobilization.sum('xra_donation_suscriptions'),
-          start_date: (DateTime.now - 180.days).strftime("%d %B %Y"),
-          end_date: DateTime.now.strftime("%d %B %Y")
-      }
-    end
+    country = params[:country]
+    state = params[:state]
+    region = params[:region]
+    chapter_id = params[:chapter]
+
+    query_string = if country.nil?
+                     build_query_string("SELECT ", "")
+                   elsif country.upcase == 'US' && !region.nil? && state.nil?
+                     states = Regions.us_regions[region.to_sym][:states].map { |s| "'#{s}'" }.join(', ')
+                     build_query_string("SELECT ", "WHERE addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)})")
+                   elsif state.nil?
+                     country = CS.countries[country.to_sym]
+                     build_query_string("SELECT ", "WHERE addresses.country = '#{ActiveRecord::Base.sanitize_sql(country)}'")
+                   elsif chapter_id.nil?
+                     state = validate_state(country, state)
+                     build_query_string("SELECT ", "WHERE addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}'")
+                   else
+                     chapter = Chapter.find(chapter_id)
+                     build_query_string("SELECT ", "WHERE chapters.id = '#{ActiveRecord::Base.sanitize_sql(chapter.id)}'")
+                   end
+
+    results = ActiveRecord::Base.connection.select_rows(query_string).flatten
+    start_date_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
+
+    report_data = {
+        members: results[0],
+        chapters: results[1],
+        trainings: results[3],
+        pledges_arrestable: results[4],
+        actions: results[5],
+        mobilizations: results[6],
+        subscriptions: results[7],
+        start_date: (DateTime.now - start_date_days.days).strftime("%d %B %Y"),
+        end_date: DateTime.now.strftime("%d %B %Y")
+    }
 
     render json: report_data
   end
@@ -179,7 +171,7 @@ class ReportsController < ApplicationController
   end
 
   def chapters(country, state)
-    state = CS.states(country.to_sym)[CS.states(country.to_sym).key(state)]
+    state = validate_state(country, state)
     query_string = build_query_string("SELECT chapters.id, chapters.name as chapter, ",
                                       "WHERE addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}' GROUP BY id")
 
@@ -201,13 +193,17 @@ class ReportsController < ApplicationController
     end
   end
 
+  def validate_state(country, state)
+    CS.states(country.to_sym)[CS.states(country.to_sym).key(state)]
+  end
+
   def build_query_string(prepend_string, append_string)
     # Use Active Record prepared statements
     base_query = "SUM(DISTINCT(chapters.active_members)) as members,
                   COUNT(DISTINCT(chapters.id)) as chapters,
                   SUM(DISTINCT(mobilizations.new_members_sign_ons)) as signups,
                   COUNT(DISTINCT(trainings.id)) as trainings,
-                  SUM(DISTINCT(mobilizations.new_members_sign_ons)) as arrestable_pledges,
+                  SUM(DISTINCT(mobilizations.arrestable_pledges)) as arrestable_pledges,
                   COUNT(DISTINCT(street_swarms.id)) + COUNT(DISTINCT(arrestable_actions.id)) as actions,
                   COUNT(DISTINCT(mobilizations.id)) as mobilizations,
                   SUM(DISTINCT(mobilizations.xra_donation_suscriptions)) as subscriptions
