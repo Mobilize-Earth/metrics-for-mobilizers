@@ -26,12 +26,13 @@ Intergration Tests:
     - bundle install
     - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
     - export RUBYOPT='-W:no-deprecated -W:no-experimental'
+    - export RAILS_ENV=test
   tags:
     - docker
   script:
     - yarn
-    - rails db:migrate RAILS_ENV=test
-    - rails webpacker:compile
+    - rails db:migrate
+    - rake assets:precompile
     - bundle exec rspec spec/features
 
 Build and Push Image:
