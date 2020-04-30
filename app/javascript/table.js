@@ -1,4 +1,5 @@
 let country, state, region, chapter, groupByProperty, groupByLabel, queryParams;
+let xhr;
 let data = {};
 const stripHash = hash => hash ? hash.substring(1) : '';
 
@@ -9,13 +10,18 @@ function init() {
 }
 
 function updateTable() {
-    $.getJSON('/reports/table', queryParams, function (result) {
-        if(Object.keys(result).length > 1) {
+    if (xhr) xhr.abort(); //abort outstanding requests
+    xhr = $.getJSON('/reports/table', queryParams);
+    xhr.done((result) => {
+        if (Object.keys(result).length > 1) {
             data = result.sort((x, y) => y.members - x.members);
             renderTableBody(result);
         } else {
             renderTableBody(result);
         }
+    });
+    xhr.always(() => {
+        xhr = undefined;//clear request
     });
 }
 
