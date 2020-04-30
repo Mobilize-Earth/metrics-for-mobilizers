@@ -2,16 +2,17 @@ import Chart from 'chart.js';
 
 const colors = ['#fc577a', '#ffd04c', '#66a4fb', '#62dcde', '#f2b8ff', '#ff6db0', '#a5d7fd', '#f15946'];
 const calculateTotal = arrayData => arrayData.reduce((a, b) => a + b, 0);
-const calculateExistingMemberPercentage = (newParticipants, totalParticipants) =>  100 - ((newParticipants / totalParticipants) * 100)
 const removeNewMembersFromCount = (newParticipants, totalParticipants) => totalParticipants.map((count, index) => count - newParticipants[index]);
-const createMetricsDiv = (label, color, newParticipants, totalParticipants) => {
-    const percentOfNonNewMembers = calculateExistingMemberPercentage(newParticipants, totalParticipants);
-    return `<div class="metric">
-        <div class="title">${totalParticipants}</div>
-        <div class="visual" style="background: linear-gradient(90deg, #a6a6a6 ${percentOfNonNewMembers - 1}%, ${color} ${percentOfNonNewMembers}%);"></div>
-        <div class="subtitle">${label}</div>
-    </div>`;
-}
+const createMetricsDiv = (label, color, totalParticipants) => `<div class="metric">
+    <div class="visual" style="background-color: ${color};"></div>
+    <div class="subtitle">${label}</div>
+    <div class="title">${totalParticipants}</div>
+</div>`;
+const totalParticipantsDiv = () => `<div class="metric total-metric">
+    <div class="visual" style="background-color: #a6a6a6;"></div>
+    <div class="subtitle">Total Participants</div>
+    <div class="description">Represents total grouped activity</div>
+</div>`;
 
 const chartOptions = {
     title: {
@@ -34,9 +35,6 @@ const chartOptions = {
 
 const Charts = {
     initMobilizationsChart: chartData => {
-        const newMemberCount = calculateTotal(chartData.data.map(data => calculateTotal(data.new)));
-        const participantCount = calculateTotal(chartData.data.map(data => calculateTotal(data.participants)));
-
         const datasets = [];
         const metrics = [];
         let count = 0;
@@ -55,13 +53,12 @@ const Charts = {
                 data: removeNewMembersFromCount(data.new, data.participants),
                 stack: count });
 
-            metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.new), calculateTotal(data.participants)));
-
+            metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.new)));
             count++;
         }
 
-        $('#average-new-members').html(newMemberCount);
-        $('#average-participants').html(participantCount);
+        metrics.push(totalParticipantsDiv());
+
         $('.mobilization-metrics-container').html(metrics);
         $('.mobilizations-chart').html('<canvas id="mobilizations-chart"></canvas>');
 
