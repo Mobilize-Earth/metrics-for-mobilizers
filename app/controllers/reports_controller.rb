@@ -281,25 +281,27 @@ class ReportsController < ApplicationController
       participants: get_array_of_empty_values(period)
     }}
 
+    today = DateTime.now.end_of_day
+
     case period
     when "month"
-      get_mobilizations((DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day, result, 3)
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 3)
       get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 2)
       get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 1)
       get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 0)
     when "quarter"
-      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 2)
-      get_mobilizations((DateTime.now - 2.months).beginning_of_day, (DateTime.now - 1.months).end_of_day, result, 1)
-      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 0)
+      get_mobilizations(today.beginning_of_month, today, result, 2)
+      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 1)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 0)
     when "half-year"
-      get_mobilizations((DateTime.now - 1.months).end_of_day, DateTime.now.end_of_day, result, 5)
-      get_mobilizations((DateTime.now - 2.months).beginning_of_day, (DateTime.now - 1.months).end_of_day, result, 4)
-      get_mobilizations((DateTime.now - 3.months).beginning_of_day, (DateTime.now - 2.months).end_of_day, result, 3)
-      get_mobilizations((DateTime.now - 4.months).beginning_of_day, (DateTime.now - 3.months).end_of_day, result, 2)
-      get_mobilizations((DateTime.now - 5.months).beginning_of_day, (DateTime.now - 4.months).end_of_day, result, 1)
-      get_mobilizations((DateTime.now - 6.months).beginning_of_day, (DateTime.now - 5.months).end_of_day, result, 0)
+      get_mobilizations(today.beginning_of_month, today, result, 5)
+      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 4)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 3)
+      get_mobilizations((DateTime.now - 3.months).beginning_of_month, (DateTime.now - 3.months).end_of_month, result, 2)
+      get_mobilizations((DateTime.now - 4.months).beginning_of_month, (DateTime.now - 4.months).end_of_month, result, 1)
+      get_mobilizations((DateTime.now - 5.months).beginning_of_month, (DateTime.now - 5.months).end_of_month, result, 0)
     else
-      get_mobilizations((DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day, result, 0)
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 0)
     end
 
     result.sort! { |a,b| a[:label] <=> b[:label] }

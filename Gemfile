@@ -22,6 +22,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4-0-maintenance'
   gem 'capybara', '>= 2.15'
   gem 'factory_bot_rails'
+  gem 'faker'
 end
 
 group :test do
@@ -30,7 +31,6 @@ group :test do
   gem 'webdrivers'
   gem 'capybara-selenium'
   gem 'rails-controller-testing'
-  gem 'faker'
 end
 
 group :development do
@@ -38,5 +38,4 @@ group :development do
   gem 'web-console', '>= 3.3.0'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'faker'
 end

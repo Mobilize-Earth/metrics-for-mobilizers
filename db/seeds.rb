@@ -51,7 +51,7 @@ def create_chapters(chapter_id, type)
       role: 'external',
       first_name: Faker::Name.first_name ,
       last_name: Faker::Name.last_name ,
-      phone_number: "1",
+      phone_number: "8675309",
       chapter: chapter
   )
 
@@ -74,22 +74,26 @@ def create_chapters(chapter_id, type)
         user: user
     )
 
+    participants = Faker::Number.number(digits: 2)
     Mobilization.create!(
-        participants: Faker::Number.number(digits: 2),
-        new_members_sign_ons: Faker::Number.number(digits: 2),
+        participants: participants,
+        new_members_sign_ons: participants / 2,
         xra_donation_suscriptions: Faker::Number.number(digits: 2),
         arrestable_pledges: Faker::Number.number(digits: 2),
-        mobilization_type: 'Rebel Ringing',
-        event_type: 'Virtual',
+        mobilization_type: Mobilization.mobilization_type_options.sample,
+        event_type: ['Virtual', 'In Person'].sample,
+        total_one_time_donations: Faker::Number.decimal(l_digits: 2, r_digits: 2),
+        xra_newsletter_sign_ups: participants / 2,
         chapter: chapter,
-        user: user
+        user: user,
+        created_at: Faker::Date.between(from: 5.months.ago, to: Date.today).strftime("%Y-%m-%d 07:00:00.00000")
     )
 
     Training.create!(
         number_attendees: Faker::Number.number(digits: 2),
         chapter: chapter,
         user: user,
-        training_type: 'NVDA'
+        training_type: Training.training_type_options.sample
     )
 
     StreetSwarm.create!(
@@ -108,4 +112,3 @@ end
 NUMBER_OF_GLOBAL_CHAPTERS.times do |i|
   self.create_chapters(i, 'Global')
 end
-
