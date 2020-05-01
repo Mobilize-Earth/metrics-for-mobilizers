@@ -90,117 +90,106 @@ class ReportsController < ApplicationController
   private
 
   def all_countries(date_range_days)
-    query_string = build_query_string("SELECT addresses.country as country, ", "GROUP BY country", date_range_days)
+    addresses_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).group_by { |c| c.address.country }
 
-    results = ActiveRecord::Base.connection.select_rows(query_string)
-    results.map do |result|
-      country_name = result[0]
+    addresses_with_chapters.map do |country|
+      chapters = country[1]
       {
-          id: CS.countries.key(country_name),
-          country: country_name,
-          members: result[1],
-          chapters: result[2],
-          signups: result[3],
-          trainings: result[4],
-          arrestable_pledges: result[5],
-          actions: result[6],
-          mobilizations: result[7],
-          subscriptions: result[8]
+          id: CS.countries.key(country[0]),
+          country: country[0],
+          members: chapters.sum(&:active_members),
+          chapters: chapters.count,
+          signups: (chapters.map {|chapter| chapter.mobilizations.sum(&:new_members_sign_ons)}).sum,
+          trainings: (chapters.map {|chapter| chapter.trainings.length}).sum,
+          arrestable_pledges: (chapters.map {|chapter| chapter.mobilizations.sum(&:arrestable_pledges)}).sum,
+          actions: (chapters.map {|chapter| chapter.street_swarms.length + chapter.arrestable_actions.length}).sum,
+          mobilizations: (chapters.map {|chapter| chapter.mobilizations.length}).sum,
+          subscriptions: (chapters.map {|chapter| chapter.mobilizations.sum(&:xra_donation_suscriptions)}).sum
       }
     end
   end
 
   def us_regions(date_range_days)
     Regions.us_regions.map do |k, v|
-      states = v[:states].map { |s| "'#{s}'" }.join(', ')
-      query_string = build_query_string("SELECT '#{k}' as region, ",
-                                 "AND addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)}) GROUP BY region",
-                                        date_range_days)
-      results = ActiveRecord::Base.connection.select_rows(query_string).flatten
-      {
-        id: k,
-        region: v[:name],
-        members: results[1],
-        chapters: results[2],
-        signups: results[3],
-        trainings: results[4],
-        arrestable_pledges: results[5],
-        actions: results[6],
-        mobilizations: results[7],
-        subscriptions: results[8]
+      result = {
+          id: k,
+          region: v[:name],
       }
+
+      region_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: v[:states]}).group_by { |c| c.address.country }
+      region_chapters.map do |country|
+        chapters = country[1]
+        result[:members] = chapters.sum(&:active_members)
+        result[:chapters] = chapters.count
+        result[:signups] = (chapters.map {|chapter| chapter.mobilizations.sum(&:new_members_sign_ons)}).sum
+        result[:trainings] = (chapters.map {|chapter| chapter.trainings.length}).sum
+        result[:arrestable_pledges] = (chapters.map {|chapter| chapter.mobilizations.sum(&:arrestable_pledges)}).sum
+        result[:actions] = (chapters.map {|chapter| chapter.street_swarms.length + chapter.arrestable_actions.length}).sum
+        result[:mobilizations] = (chapters.map {|chapter| chapter.mobilizations.length}).sum
+        result[:subscriptions] =  (chapters.map {|chapter| chapter.mobilizations.sum(&:xra_donation_suscriptions)}).sum
+      end
+      result
     end
   end
 
   def us_states(region, date_range_days)
-    states = Regions.us_regions[region.to_sym][:states].map { |s| "'#{s}'" }.join(', ')
-    query_string = build_query_string("SELECT addresses.state_province as state, ",
-                                      "AND addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)}) GROUP BY state",
-                                      date_range_days)
-    results = ActiveRecord::Base.connection.select_rows(query_string)
+    states_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: 'United States'}).group_by { |c| c.address.state_province }
 
-    results.map do |result|
-      state_name = result[0]
+    states_with_chapters.map do |state|
+      chapters = state[1]
       {
-          id: state_name,
-          state: state_name,
-          members: result[1],
-          chapters: result[2],
-          signups: result[3],
-          trainings: result[4],
-          arrestable_pledges: result[5],
-          actions: result[6],
-          mobilizations: result[7],
-          subscriptions: result[8]
+          id: state[0],
+          state: state[0],
+          members: chapters.sum(&:active_members),
+          chapters: chapters.count,
+          signups: (chapters.map {|chapter| chapter.mobilizations.sum(&:new_members_sign_ons)}).sum,
+          trainings: (chapters.map {|chapter| chapter.trainings.length}).sum,
+          arrestable_pledges: (chapters.map {|chapter| chapter.mobilizations.sum(&:arrestable_pledges)}).sum,
+          actions: (chapters.map {|chapter| chapter.street_swarms.length + chapter.arrestable_actions.length}).sum,
+          mobilizations: (chapters.map {|chapter| chapter.mobilizations.length}).sum,
+          subscriptions: (chapters.map {|chapter| chapter.mobilizations.sum(&:xra_donation_suscriptions)}).sum
       }
     end
   end
 
   def states(country, date_range_days)
     country = CS.countries[country.to_sym]
-    query_string = build_query_string("SELECT addresses.state_province as state, ",
-                                      "AND addresses.country = '#{ActiveRecord::Base.sanitize_sql(country)}' GROUP BY state",
-                                      date_range_days)
+    states_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country}).group_by { |c| c.address.state_province }
 
-    results = ActiveRecord::Base.connection.select_rows(query_string)
-
-    results.map do |result|
-      state_name = result[0]
+    states_with_chapters.map do |state|
+      chapters = state[1]
       {
-          id: state_name,
-          state: state_name,
-          members: result[1],
-          chapters: result[2],
-          signups: result[3],
-          trainings: result[4],
-          arrestable_pledges: result[5],
-          actions: result[6],
-          mobilizations: result[7],
-          subscriptions: result[8]
+          id: state[0],
+          state: state[0],
+          members: chapters.sum(&:active_members),
+          chapters: chapters.count,
+          signups: (chapters.map {|chapter| chapter.mobilizations.sum(&:new_members_sign_ons)}).sum,
+          trainings: (chapters.map {|chapter| chapter.trainings.length}).sum,
+          arrestable_pledges: (chapters.map {|chapter| chapter.mobilizations.sum(&:arrestable_pledges)}).sum,
+          actions: (chapters.map {|chapter| chapter.street_swarms.length + chapter.arrestable_actions.length}).sum,
+          mobilizations: (chapters.map {|chapter| chapter.mobilizations.length}).sum,
+          subscriptions: (chapters.map {|chapter| chapter.mobilizations.sum(&:xra_donation_suscriptions)}).sum
       }
     end
   end
 
   def chapters(country, state, date_range_days)
     state = validate_state(country, state)
-    query_string = build_query_string("SELECT chapters.id as chapter_ids, chapters.name as chapter, ",
-                                      "AND addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}' GROUP BY chapter_ids",
-                                      date_range_days)
 
-    results = ActiveRecord::Base.connection.select_rows(query_string)
-
-    results.map do |result|
+    states_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: state}).group_by { |c| c.id }
+    states_chapters.map do |chapter|
+      chapter = chapter[1][0]
       {
-          id: result[0],
-          chapter: result[1],
-          members: result[2],
-          chapters: result[3],
-          signups: result[4],
-          trainings: result[5],
-          arrestable_pledges: result[6],
-          actions: result[7],
-          mobilizations: result[8],
-          subscriptions: result[9]
+          id: chapter.id,
+          chapter: chapter.name,
+          members: chapter.active_members,
+          chapters: 1,
+          signups: chapter.mobilizations.sum(&:new_members_sign_ons),
+          trainings: chapter.trainings.length,
+          arrestable_pledges: chapter.mobilizations.sum(&:arrestable_pledges),
+          actions: chapter.street_swarms.length + chapter.arrestable_actions.length,
+          mobilizations: chapter.mobilizations.length,
+          subscriptions: chapter.mobilizations.sum(&:xra_donation_suscriptions)
       }
     end
   end

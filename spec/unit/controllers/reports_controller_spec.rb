@@ -12,14 +12,14 @@ RSpec.describe ReportsController, type: :controller do
       result = json_response.sample
       country = result["country"]
 
-      active_members = Chapter.with_addresses.distinct(addresses: {country: country}).sum("active_members")
-              chapters = Chapter.with_addresses.where(addresses: {country: country}).count
-      signups = Mobilization.with_addresses.distinct(addresses: {country: country}).sum("new_members_sign_ons")
+      active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
+      chapters = Chapter.with_addresses.where(addresses: {country: country}).count
+      signups = Mobilization.with_addresses.where(addresses: {country: country}).sum("new_members_sign_ons")
       trainings = Training.with_addresses.where(addresses: {country: country}).count
-      pledges = Mobilization.with_addresses.distinct(addresses: {country: country}).sum("arrestable_pledges")
+      pledges = Mobilization.with_addresses.where(addresses: {country: country}).sum("arrestable_pledges")
       actions = StreetSwarm.with_addresses.where(addresses: {country: country}).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).count
-      subscriptions = Mobilization.with_addresses.distinct(addresses: {country: country}).sum("xra_donation_suscriptions")
+      subscriptions = Mobilization.with_addresses.where(addresses: {country: country}).sum("xra_donation_suscriptions")
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -34,43 +34,97 @@ RSpec.describe ReportsController, type: :controller do
       get :table, params: { country: 'US', period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response.first
+      region_states =  Regions.us_regions[result['id'].to_sym][:states]
 
-      expect(result["members"]).to eq(5)
-      expect(result["chapters"]).to eq(3)
-      expect(result["signups"]).to eq(1)
-      expect(result["trainings"]).to eq(6)
-      expect(result["arrestable_pledges"]).to eq(1)
-      expect(result["actions"]).to eq(12)
-      expect(result["mobilizations"]).to eq(6)
-      expect(result["subscriptions"]).to eq(1)
+      active_members = Chapter.with_addresses.where(addresses: {state_province: region_states}).sum("active_members")
+      chapters = Chapter.with_addresses.where(addresses: {state_province: region_states}).count
+      signups = Mobilization.with_addresses.where(addresses: {state_province: region_states}).sum("new_members_sign_ons")
+      trainings = Training.with_addresses.where(addresses: {state_province: region_states}).count
+      pledges = Mobilization.with_addresses.where(addresses: {state_province: region_states}).sum("arrestable_pledges")
+      actions = StreetSwarm.with_addresses.where(addresses: {state_province: region_states}).count +
+          ArrestableAction.with_addresses.where(addresses: {state_province: region_states}).count
+      subscriptions = Mobilization.with_addresses.where(addresses: {state_province: region_states}).sum("xra_donation_suscriptions")
+
+      expect(result["members"]).to eq(active_members)
+      expect(result["chapters"]).to eq(chapters)
+      expect(result["signups"]).to eq(signups)
+      expect(result["trainings"]).to eq(trainings)
+      expect(result["arrestable_pledges"]).to eq(pledges)
+      expect(result["actions"]).to eq(actions)
+      expect(result["subscriptions"]).to eq(subscriptions)
     end
 
     it "returns US State data from region" do
       get :table, params: { country: 'US', region: 'region_1', period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response.first
-      expect(result["members"]).to eq(5)
-      expect(result["chapters"]).to eq(3)
-      expect(result["signups"]).to eq(1)
-      expect(result["trainings"]).to eq(6)
-      expect(result["arrestable_pledges"]).to eq(1)
-      expect(result["actions"]).to eq(12)
-      expect(result["mobilizations"]).to eq(6)
-      expect(result["subscriptions"]).to eq(1)
+      state = result['state']
+
+      active_members = Chapter.with_addresses.where(addresses: {state_province: state}).sum("active_members")
+      chapters = Chapter.with_addresses.where(addresses: {state_province: state}).count
+      signups = Mobilization.with_addresses.where(addresses: {state_province: state}).sum("new_members_sign_ons")
+      trainings = Training.with_addresses.where(addresses: {state_province: state}).count
+      pledges = Mobilization.with_addresses.where(addresses: {state_province: state}).sum("arrestable_pledges")
+      actions = StreetSwarm.with_addresses.where(addresses: {state_province: state}).count +
+          ArrestableAction.with_addresses.where(addresses: {state_province: state}).count
+      subscriptions = Mobilization.with_addresses.where(addresses: {state_province: state}).sum("xra_donation_suscriptions")
+
+      expect(result["members"]).to eq(active_members)
+      expect(result["chapters"]).to eq(chapters)
+      expect(result["signups"]).to eq(signups)
+      expect(result["trainings"]).to eq(trainings)
+      expect(result["arrestable_pledges"]).to eq(pledges)
+      expect(result["actions"]).to eq(actions)
+      expect(result["subscriptions"]).to eq(subscriptions)
     end
 
-    it "returns state data" do
-      get :table, params: { country: 'AU', state: 'New South Wales', period: 'week' }
+    it "returns Non US Country data" do
+      country = 'Australia'
+      get :table, params: { country: 'AU', period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response.first
-      expect(result["members"]).to eq(5)
+
+      active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
+      chapters = Chapter.with_addresses.where(addresses: {country: country}).count
+      signups = Mobilization.with_addresses.where(addresses: {country: country}).sum("new_members_sign_ons")
+      trainings = Training.with_addresses.where(addresses: {country: country}).count
+      pledges = Mobilization.with_addresses.where(addresses: {country: country}).sum("arrestable_pledges")
+      actions = StreetSwarm.with_addresses.where(addresses: {country: country}).count +
+          ArrestableAction.with_addresses.where(addresses: {country: country}).count
+      subscriptions = Mobilization.with_addresses.where(addresses: {country: country}).sum("xra_donation_suscriptions")
+
+      expect(result["members"]).to eq(active_members)
+      expect(result["chapters"]).to eq(chapters)
+      expect(result["signups"]).to eq(signups)
+      expect(result["trainings"]).to eq(trainings)
+      expect(result["arrestable_pledges"]).to eq(pledges)
+      expect(result["actions"]).to eq(actions)
+      expect(result["subscriptions"]).to eq(subscriptions)
+    end
+
+
+    it "returns non US state data" do
+      state = 'New South Wales'
+      get :table, params: { country: 'AU', state: state, period: 'week' }
+      json_response = JSON.parse(response.body)
+      result = json_response.first
+      chapter = Chapter.find(result['id'])
+
+      active_members = chapter.active_members
+      signups = Mobilization.where(chapter: chapter).sum("new_members_sign_ons")
+      trainings = Training.where(chapter: chapter).count
+      pledges = Mobilization.where(chapter: chapter).sum("arrestable_pledges")
+      actions = StreetSwarm.where(chapter: chapter).count +
+          ArrestableAction.where(chapter: chapter).count
+      subscriptions = Mobilization.where(chapter: chapter).sum("xra_donation_suscriptions")
+
+      expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(1)
-      expect(result["signups"]).to eq(1)
-      expect(result["trainings"]).to eq(2)
-      expect(result["arrestable_pledges"]).to eq(1)
-      expect(result["actions"]).to eq(4)
-      expect(result["mobilizations"]).to eq(2)
-      expect(result["subscriptions"]).to eq(1)
+      expect(result["signups"]).to eq(signups)
+      expect(result["trainings"]).to eq(trainings)
+      expect(result["arrestable_pledges"]).to eq(pledges)
+      expect(result["actions"]).to eq(actions)
+      expect(result["subscriptions"]).to eq(subscriptions)
     end
 
     it "returns chapter data" do
