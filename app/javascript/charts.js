@@ -33,43 +33,53 @@ const chartOptions = {
     }
 };
 
+const mobilizationParticipants = chartData => {
+    const datasets = [];
+    const metrics = [];
+    let count = 0;
+
+    for(const data of chartData.data) {
+        datasets.push({
+            label: `${data.label} / New Members`,
+            backgroundColor: colors[count],
+            data: data.new,
+            minBarLength: 2,
+            stack: count });
+
+        datasets.push({
+            label: `${data.label} / Participants`,
+            backgroundColor: '#a6a6a6',
+            data: removeNewMembersFromCount(data.new, data.participants),
+            stack: count });
+
+        metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.new)));
+        count++;
+    }
+
+    metrics.push(totalParticipantsDiv());
+
+    $('.mobilization-metrics-container').html(metrics);
+    $('.mobilizations-chart').html('<canvas id="mobilizations-chart"></canvas>');
+
+    new Chart('mobilizations-chart', {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets
+        },
+        options: chartOptions
+    })
+};
+
+const mobilizationSubscriptions = () => {};
+
+const mobilizationArrestablePledges = () => {};
+
 const Charts = {
     initMobilizationsChart: chartData => {
-        const datasets = [];
-        const metrics = [];
-        let count = 0;
-
-        for(const data of chartData.data) {
-            datasets.push({
-                label: `${data.label} / New Members`,
-                backgroundColor: colors[count],
-                data: data.new,
-                minBarLength: 2,
-                stack: count });
-
-            datasets.push({
-                label: `${data.label} / Participants`,
-                backgroundColor: '#a6a6a6',
-                data: removeNewMembersFromCount(data.new, data.participants),
-                stack: count });
-
-            metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.new)));
-            count++;
-        }
-
-        metrics.push(totalParticipantsDiv());
-
-        $('.mobilization-metrics-container').html(metrics);
-        $('.mobilizations-chart').html('<canvas id="mobilizations-chart"></canvas>');
-
-        new Chart('mobilizations-chart', {
-            type: 'bar',
-            data: {
-                labels: chartData.labels,
-                datasets
-            },
-            options: chartOptions
-        })
+        mobilizationParticipants(chartData);
+        mobilizationSubscriptions(chartData);
+        mobilizationArrestablePledges(chartData);
     }
 };
 

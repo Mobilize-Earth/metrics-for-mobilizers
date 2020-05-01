@@ -276,7 +276,9 @@ class ReportsController < ApplicationController
     result = Mobilization.mobilization_type_options.map { |type| {
       label: type,
       new: get_array_of_empty_values(period),
-      participants: get_array_of_empty_values(period)
+      participants: get_array_of_empty_values(period),
+      arrestable_pledges: get_array_of_empty_values(period),
+      subscriptions: get_array_of_empty_values(period),
     }}
 
     today = DateTime.now.end_of_day
@@ -311,6 +313,8 @@ class ReportsController < ApplicationController
         if chart_line[:label] == mobilization.mobilization_type
           chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons
           chart_line[:participants][index] = chart_line[:participants][index] + mobilization.participants
+          chart_line[:arrestable_pledges][index] = chart_line[:arrestable_pledges][index] + mobilization.arrestable_pledges
+          chart_line[:subscriptions][index] = chart_line[:subscriptions][index] + mobilization.xra_donation_suscriptions
         end
       end
     end
