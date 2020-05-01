@@ -17,9 +17,11 @@ feature 'navigation as coordinator' do
     expect(page).to have_content "You are not authorized to access this page."
   end
 
-  scenario 'should be able to click to reports page' do
+  scenario 'should be able to click on reports link and back to chapters/show' do
     click_on "View Reports"
     expect(page).to have_current_path '/reports', ignore_query: true
+    click_on "Report Entry"
+    expect(page).to have_current_path '/chapters/1', ignore_query: true
   end
 end
 
@@ -40,9 +42,11 @@ feature 'navigation as admin' do
     expect(page).to have_content "You are not authorized to access this page."
   end
 
-  scenario 'should be able to click to reports page' do
+  scenario 'should be able to click to reports page and back to onboarding' do
     click_on "View Reports"
     expect(page).to have_current_path '/reports', ignore_query: true
+    click_on "Onboarding"
+    expect(page).to have_content 'Navigation'
   end
 end
 
