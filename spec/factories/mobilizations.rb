@@ -6,5 +6,9 @@ FactoryBot.define do
     xra_donation_suscriptions { 1 }
     arrestable_pledges { 1 }
     xra_newsletter_sign_ups { 1 }
+    user { FactoryBot.create(:user) }
+    chapter { FactoryBot.create(:chapter, {name: Faker::String.random(length: 15)}) }
+    mobilization_type { Mobilization.mobilization_type_options.sample }
+    event_type { ['Virtual', 'In Person'].sample }
   end
 end
