@@ -101,7 +101,35 @@ const mobilizationSubscriptions = chartData => {
     })
 };
 
-const mobilizationArrestablePledges = () => {};
+const mobilizationArrestablePledges = chartData => {
+    const datasets = [];
+    const metrics = [];
+    let count = 0;
+
+    for(const data of chartData.data) {
+        datasets.push({
+            label: `${data.label} / Total Arrestable Pledges`,
+            backgroundColor: colors[count],
+            data: data.arrestable_pledges,
+            minBarLength: 2,
+            stack: count });
+
+        metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.arrestable_pledges)));
+        count++;
+    }
+
+    $('.mobilization-metrics-container-arrestable-pledges').html(metrics);
+    $('.mobilizations-chart-arrestable-pledges').html('<canvas id="mobilizations-arrestable-pledges-chart"></canvas>');
+
+    new Chart('mobilizations-arrestable-pledges-chart', {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets
+        },
+        options: chartOptions
+    })
+};
 
 const Charts = {
     initMobilizationsChart: chartData => {
