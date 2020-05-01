@@ -35,7 +35,6 @@ class ReportsController < ApplicationController
 
     results = ActiveRecord::Base.connection.select_rows(query_string).flatten
     start_date_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
-
     report_data = {
         members: results[0],
         chapters: results[1],

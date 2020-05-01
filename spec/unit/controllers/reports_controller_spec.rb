@@ -3,26 +3,7 @@ require 'rails_helper'
 RSpec.describe ReportsController, type: :controller do
   describe "table" do
     before :each do
-      user = FactoryBot.create(:user, {role: 'External'})
-      3.times do |i|
-        FactoryBot.create(:chapter, name: "US Chapter: #{i}") do |chapter|
-          FactoryBot.create :us_address, state_province: "New York", chapter: chapter
-          FactoryBot.create_list :virtual_mobilization, 2, chapter: chapter, user: user
-          FactoryBot.create_list :street_swarm, 2, chapter: chapter, user: user
-          FactoryBot.create_list :training, 2, chapter: chapter, user: user
-          FactoryBot.create_list :arrestable_action, 2, chapter: chapter, user: user
-        end
-      end
-      3.times do |i|
-        FactoryBot.create(:chapter, name: "Global Chapter: #{i}") do |chapter|
-          FactoryBot.create :address, country: "Australia", state_province: "New South Wales", chapter: chapter
-          FactoryBot.create_list :virtual_mobilization, 2, chapter: chapter, user: user
-          FactoryBot.create_list :street_swarm, 2, chapter: chapter, user: user
-          FactoryBot.create_list :training, 2, chapter: chapter, user: user
-          FactoryBot.create_list :arrestable_action, 2, chapter: chapter, user: user
-        end
-      end
-      coordinator_sign_in(user)
+      seed_db
     end
 
     it "returns countries data" do
@@ -108,6 +89,73 @@ RSpec.describe ReportsController, type: :controller do
     end
   end
 
+  describe "tiles" do
+    before :each do
+      seed_db
+    end
+
+    it "should return all country data" do
+      get :tiles, params: { dateRange: 'week' }
+      result = JSON.parse(response.body)
+
+      actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
+
+      expect(result["members"]).to eq(5)
+      expect(result["chapters"]).to eq(6)
+      expect(result["trainings"]).to eq(12)
+      expect(result["pledges_arrestable"]).to eq(1)
+      expect(result["actions"]).to eq(24)
+      expect(result["mobilizations"]).to eq(12)
+      expect(result["subscriptions"]).to eq(1)
+      expect(actual_date_range).to eq(7)
+    end
+
+    it "should return US data" do
+      get :tiles, params: { country: 'US', dateRange: 'month' }
+      result = JSON.parse(response.body)
+      actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
+
+      expect(result["members"]).to eq(5)
+      expect(result["chapters"]).to eq(3)
+      expect(result["trainings"]).to eq(6)
+      expect(result["pledges_arrestable"]).to eq(1)
+      expect(result["actions"]).to eq(12)
+      expect(result["mobilizations"]).to eq(6)
+      expect(result["subscriptions"]).to eq(1)
+      expect(actual_date_range).to eq(30)
+    end
+
+    it "should return New York data" do
+      get :tiles, params: { country: 'US', state: 'New York', dateRange: 'week' }
+      result = JSON.parse(response.body)
+      actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
+
+      expect(result["members"]).to eq(5)
+      expect(result["chapters"]).to eq(3)
+      expect(result["trainings"]).to eq(6)
+      expect(result["pledges_arrestable"]).to eq(1)
+      expect(result["actions"]).to eq(12)
+      expect(result["mobilizations"]).to eq(6)
+      expect(result["subscriptions"]).to eq(1)
+      expect(actual_date_range).to eq(7)
+    end
+
+    it "should return chapter data" do
+      get :tiles, params: { country: 'US', state: 'New York', chapter: 4, dateRange: 'week' }
+      result = JSON.parse(response.body)
+      actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
+
+      expect(result["members"]).to eq(5)
+      expect(result["chapters"]).to eq(1)
+      expect(result["trainings"]).to eq(2)
+      expect(result["pledges_arrestable"]).to eq(1)
+      expect(result["actions"]).to eq(4)
+      expect(result["mobilizations"]).to eq(2)
+      expect(result["subscriptions"]).to eq(1)
+      expect(actual_date_range).to eq(7)
+    end
+  end
+
   describe "mobilizations chart" do
     before(:each) do
       coordinator_sign_in(FactoryBot.create(:coordinator))
@@ -178,4 +226,27 @@ RSpec.describe ReportsController, type: :controller do
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user
   end
+end
+
+def seed_db
+  user = FactoryBot.create(:user, {role: 'External'})
+  3.times do |i|
+    FactoryBot.create(:chapter, name: "US Chapter: #{i}") do |chapter|
+      FactoryBot.create :us_address, state_province: "New York", chapter: chapter
+      FactoryBot.create_list :virtual_mobilization, 2, chapter: chapter, user: user
+      FactoryBot.create_list :street_swarm, 2, chapter: chapter, user: user
+      FactoryBot.create_list :training, 2, chapter: chapter, user: user
+      FactoryBot.create_list :arrestable_action, 2, chapter: chapter, user: user
+    end
+  end
+  3.times do |i|
+    FactoryBot.create(:chapter, name: "Global Chapter: #{i}") do |chapter|
+      FactoryBot.create :address, country: "Australia", state_province: "New South Wales", chapter: chapter
+      FactoryBot.create_list :virtual_mobilization, 2, chapter: chapter, user: user
+      FactoryBot.create_list :street_swarm, 2, chapter: chapter, user: user
+      FactoryBot.create_list :training, 2, chapter: chapter, user: user
+      FactoryBot.create_list :arrestable_action, 2, chapter: chapter, user: user
+    end
+  end
+  coordinator_sign_in(user)
 end
