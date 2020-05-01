@@ -2,10 +2,10 @@ class ReportsController < ApplicationController
   include Regions
 
   DATE_RANGE_MAPPING = {
-      :week => 7,
-      :month => 30,
-      :quarter => 90,
-      :'half-year' => 180
+      :week => 6,
+      :month => 29,
+      :quarter => 89,
+      :'half-year' => 179
   }
 
   def index
@@ -16,34 +16,42 @@ class ReportsController < ApplicationController
     state = params[:state]
     region = params[:region]
     chapter_id = params[:chapter]
+    date_range_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
 
     query_string = if country.nil?
-                     build_query_string("SELECT ", "")
+                     build_query_string("SELECT ", "", date_range_days)
                    elsif country.upcase == 'US' && !region.nil? && state.nil?
                      states = Regions.us_regions[region.to_sym][:states].map { |s| "'#{s}'" }.join(', ')
-                     build_query_string("SELECT ", "WHERE addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)})")
+                     build_query_string("SELECT ",
+                                        "AND addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)})",
+                                        date_range_days)
                    elsif state.nil?
                      country = CS.countries[country.to_sym]
-                     build_query_string("SELECT ", "WHERE addresses.country = '#{ActiveRecord::Base.sanitize_sql(country)}'")
+                     build_query_string("SELECT ",
+                                        "AND addresses.country = '#{ActiveRecord::Base.sanitize_sql(country)}'",
+                                        date_range_days)
                    elsif chapter_id.nil?
                      state = validate_state(country, state)
-                     build_query_string("SELECT ", "WHERE addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}'")
+                     build_query_string("SELECT ", "AND addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}'",
+                                        date_range_days)
                    else
                      chapter = Chapter.find(chapter_id)
-                     build_query_string("SELECT ", "WHERE chapters.id = '#{ActiveRecord::Base.sanitize_sql(chapter.id)}'")
+                     build_query_string("SELECT ", "AND chapters.id = '#{ActiveRecord::Base.sanitize_sql(chapter.id)}'",
+                                        date_range_days)
                    end
 
     results = ActiveRecord::Base.connection.select_rows(query_string).flatten
-    start_date_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
+
     report_data = {
         members: results[0],
         chapters: results[1],
+        signups: results[2],
         trainings: results[3],
         pledges_arrestable: results[4],
         actions: results[5],
         mobilizations: results[6],
         subscriptions: results[7],
-        start_date: (DateTime.now - start_date_days.days).strftime("%d %B %Y"),
+        start_date: (DateTime.now - date_range_days.days).strftime("%d %B %Y"),
         end_date: DateTime.now.strftime("%d %B %Y")
     }
 
@@ -62,26 +70,27 @@ class ReportsController < ApplicationController
     state = params[:state]
     region = params[:region]
     chapter = params[:chapter]
+    date_range_days = DATE_RANGE_MAPPING[params[:period].to_sym]
     response = if country.nil?
-                 all_countries
+                 all_countries(date_range_days)
                elsif country.upcase == 'US' && region.nil?
-                 us_regions
+                 us_regions(date_range_days)
                elsif country.upcase == 'US' && !region.nil? && state.nil?
-                 us_states(region)
+                 us_states(region, date_range_days)
                elsif state.nil?
-                 states(country)
+                 states(country, date_range_days)
                elsif chapter.nil?
-                 chapters(country, state)
+                 chapters(country, state, date_range_days)
                else
-                 chapter_report(chapter)
+                 chapter_report(chapter, date_range_days)
                end
     render json: response
   end
 
   private
 
-  def all_countries
-    query_string = build_query_string("SELECT addresses.country as country, ", "GROUP BY addresses.country")
+  def all_countries(date_range_days)
+    query_string = build_query_string("SELECT addresses.country as country, ", "GROUP BY country", date_range_days)
 
     results = ActiveRecord::Base.connection.select_rows(query_string)
     results.map do |result|
@@ -101,11 +110,12 @@ class ReportsController < ApplicationController
     end
   end
 
-  def us_regions
+  def us_regions(date_range_days)
     Regions.us_regions.map do |k, v|
       states = v[:states].map { |s| "'#{s}'" }.join(', ')
       query_string = build_query_string("SELECT '#{k}' as region, ",
-                                 "WHERE addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)}) GROUP BY region")
+                                 "AND addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)}) GROUP BY region",
+                                        date_range_days)
       results = ActiveRecord::Base.connection.select_rows(query_string).flatten
       {
         id: k,
@@ -122,10 +132,11 @@ class ReportsController < ApplicationController
     end
   end
 
-  def us_states(region)
+  def us_states(region, date_range_days)
     states = Regions.us_regions[region.to_sym][:states].map { |s| "'#{s}'" }.join(', ')
     query_string = build_query_string("SELECT addresses.state_province as state, ",
-                                      "WHERE addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)}) GROUP BY state")
+                                      "AND addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)}) GROUP BY state",
+                                      date_range_days)
     results = ActiveRecord::Base.connection.select_rows(query_string)
 
     results.map do |result|
@@ -145,10 +156,11 @@ class ReportsController < ApplicationController
     end
   end
 
-  def states(country)
+  def states(country, date_range_days)
     country = CS.countries[country.to_sym]
     query_string = build_query_string("SELECT addresses.state_province as state, ",
-                                      "WHERE addresses.country = '#{ActiveRecord::Base.sanitize_sql(country)}' GROUP BY state")
+                                      "AND addresses.country = '#{ActiveRecord::Base.sanitize_sql(country)}' GROUP BY state",
+                                      date_range_days)
 
     results = ActiveRecord::Base.connection.select_rows(query_string)
 
@@ -169,10 +181,12 @@ class ReportsController < ApplicationController
     end
   end
 
-  def chapters(country, state)
+  def chapters(country, state, date_range_days)
     state = validate_state(country, state)
     query_string = build_query_string("SELECT chapters.id as chapter_ids, chapters.name as chapter, ",
-                                      "WHERE addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}' GROUP BY chapter_ids")
+                                      "AND addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}' GROUP BY chapter_ids",
+                                      date_range_days)
+
     results = ActiveRecord::Base.connection.select_rows(query_string)
 
     results.map do |result|
@@ -195,8 +209,7 @@ class ReportsController < ApplicationController
     CS.states(country.to_sym)[CS.states(country.to_sym).key(state)]
   end
 
-  def build_query_string(prepend_string, append_string)
-    # Use Active Record prepared statements
+  def build_query_string(prepend_string, append_string, date_range_days=7)
     base_query = "SUM(DISTINCT(chapters.active_members)) as members,
                   COUNT(DISTINCT(chapters.id)) as chapters,
                   SUM(DISTINCT(mobilizations.new_members_sign_ons)) as signups,
@@ -210,11 +223,23 @@ class ReportsController < ApplicationController
                   LEFT JOIN mobilizations ON chapters.id = mobilizations.chapter_id
                   LEFT JOIN street_swarms ON chapters.id = street_swarms.chapter_id
                   LEFT JOIN arrestable_actions ON chapters.id = arrestable_actions.chapter_id
-                  LEFT JOIN trainings ON chapters.id = trainings.chapter_id "
+                  LEFT JOIN trainings ON chapters.id = trainings.chapter_id
+                  WHERE (mobilizations.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}) OR (mobilizations.created_at IS NULL)'
+                  AND street_swarms.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}) OR (street_swarms.created_at IS NULL)'
+                  AND arrestable_actions.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}) OR (arrestable_actions.created_at IS NULL)'
+                  AND trainings.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (trainings.created_at IS NULL) "
 
     base_query.prepend(prepend_string)
     base_query << append_string
     base_query
+  end
+
+  def build_start_of_day_timestamp(date_range_days)
+    (Time.now - date_range_days.day).beginning_of_day.utc.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  def build_end_of_day_timestamp(date_range_days)
+    Time.now.end_of_day.utc.strftime('%Y-%m-%d %H:%M:%S')
   end
 
 

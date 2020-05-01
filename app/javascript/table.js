@@ -11,6 +11,7 @@ function init() {
 
 function updateTable() {
     if (xhr) xhr.abort(); //abort outstanding requests
+    getContext();
     xhr = $.getJSON('/reports/table', queryParams);
     xhr.done((result) => {
         if (Object.keys(result).length > 1) {

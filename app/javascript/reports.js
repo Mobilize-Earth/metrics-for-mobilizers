@@ -12,7 +12,11 @@ const setDateRange = (start, end) => {
     }
 }
 
-const setFilterDayCount = num => document.getElementById('filter-day-count').textContent = num;
+const setFilterDayCount = num => {
+    for (const ele of document.getElementsByClassName('filter-day-count')) {
+        ele.textContent = num;
+    }
+}
 
 const setActiveFilter = ele => {
     for(const filterLink of document.getElementsByClassName('nav-link')) {
@@ -47,6 +51,7 @@ const getReportsTilesData = (dateRange) => {
     }).done(data => {
         $('#members').html(data.members === null ? 0 : data.members);
         $('#chapters').html(data.chapters === null ? 0 : data.chapters);
+        $('#newsletter-signups').html(data.signups === null ? 0 : data.signups);
         $('#actions').html(data.actions === null ? 0 : data.actions);
         $('#trainings').html(data.trainings === null ? 0 : data.trainings);
         $('#mobilizations').html(data.mobilizations === null ? 0 : data.mobilizations);
