@@ -7,13 +7,13 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns countries data" do
-      get :table
+      get :table, params: { period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response.sample
       country = result["country"]
 
       active_members = Chapter.with_addresses.distinct(addresses: {country: country}).sum("active_members")
-      chapters = Chapter.with_addresses.where(addresses: {country: country}).count
+              chapters = Chapter.with_addresses.where(addresses: {country: country}).count
       signups = Mobilization.with_addresses.distinct(addresses: {country: country}).sum("new_members_sign_ons")
       trainings = Training.with_addresses.where(addresses: {country: country}).count
       pledges = Mobilization.with_addresses.distinct(addresses: {country: country}).sum("arrestable_pledges")
@@ -31,7 +31,7 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns US Region data" do
-      get :table, params: { country: 'US' }
+      get :table, params: { country: 'US', period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response.first
 
@@ -46,7 +46,7 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns US State data from region" do
-      get :table, params: { country: 'US', region: 'region_1' }
+      get :table, params: { country: 'US', region: 'region_1', period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response.first
       expect(result["members"]).to eq(5)
@@ -60,7 +60,7 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns state data" do
-      get :table, params: { country: 'AU', state: 'New South Wales' }
+      get :table, params: { country: 'AU', state: 'New South Wales', period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response.first
       expect(result["members"]).to eq(5)
@@ -74,7 +74,7 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns chapter data" do
-      get :table, params: { country: 'AU', state: 'New South Wales', chapter: 4 }
+      get :table, params: { country: 'AU', state: 'New South Wales', chapter: 4, period: 'week' }
       json_response = JSON.parse(response.body)
       result = json_response["result"]
       chapter = Chapter.find(4)

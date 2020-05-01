@@ -82,7 +82,7 @@ class ReportsController < ApplicationController
                elsif chapter.nil?
                  chapters(country, state, date_range_days)
                else
-                 chapter_report(chapter, date_range_days)
+                 chapter_report(chapter)
                end
     render json: response
   end
@@ -224,10 +224,10 @@ class ReportsController < ApplicationController
                   LEFT JOIN street_swarms ON chapters.id = street_swarms.chapter_id
                   LEFT JOIN arrestable_actions ON chapters.id = arrestable_actions.chapter_id
                   LEFT JOIN trainings ON chapters.id = trainings.chapter_id
-                  WHERE (mobilizations.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}) OR (mobilizations.created_at IS NULL)'
-                  AND street_swarms.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}) OR (street_swarms.created_at IS NULL)'
-                  AND arrestable_actions.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}) OR (arrestable_actions.created_at IS NULL)'
-                  AND trainings.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (trainings.created_at IS NULL) "
+                  WHERE ((mobilizations.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (mobilizations.created_at IS NULL))
+                  AND ((street_swarms.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (street_swarms.created_at IS NULL))
+                  AND ((arrestable_actions.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (arrestable_actions.created_at IS NULL))
+                  AND ((trainings.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (trainings.created_at IS NULL)) "
 
     base_query.prepend(prepend_string)
     base_query << append_string
