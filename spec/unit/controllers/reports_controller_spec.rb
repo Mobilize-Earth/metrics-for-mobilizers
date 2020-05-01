@@ -162,8 +162,8 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns global weekly data by default" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, xra_donation_suscriptions: 4, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, xra_donation_suscriptions: 1, arrestable_pledges: 6})
 
       get :mobilizations, params: { }
       json_response = JSON.parse(response.body)
@@ -171,11 +171,13 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0], [0], [0], [0], [3], [0], [0], [0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0], [0], [0], [0], [7], [0], [0], [0]])
+      expect(json_response["data"].map { |actual| actual["subscriptions"] }).to eq([[0], [0], [0], [0], [4], [0], [0], [0]])
+      expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0], [0], [0], [0], [5], [0], [0], [0]])
     end
 
     it "returns monthly data" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, xra_donation_suscriptions: 4, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, xra_donation_suscriptions: 6, arrestable_pledges: 1})
 
       get :mobilizations, params: { dateRange: 'month' }
       json_response = JSON.parse(response.body)
@@ -186,12 +188,14 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,5,0,3], [0,0,0,0], [0,0,0,0], [0,0,0,0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,8,0,7], [0,0,0,0], [0,0,0,0], [0,0,0,0]])
+      expect(json_response["data"].map { |actual| actual["subscriptions"] }).to eq([[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,6,0,4], [0,0,0,0], [0,0,0,0], [0,0,0,0]])
+      expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,1,0,5], [0,0,0,0], [0,0,0,0], [0,0,0,0]])
     end
 
     it "returns quarterly data" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, xra_donation_suscriptions: 4, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, xra_donation_suscriptions: 6, arrestable_pledges: 7})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, xra_donation_suscriptions: 8, arrestable_pledges: 9})
 
       get :mobilizations, params: { dateRange: 'quarter' }
       json_response = JSON.parse(response.body)
@@ -201,12 +205,14 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0,0,0], [0,0,0], [0,0,0], [0,0,0], [4,0,3], [0,0,0], [0,0,0], [0,0,0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0,0,0], [0,0,0], [0,0,0], [0,0,0], [8,0,7], [0,0,0], [0,0,0], [0,0,0]])
+      expect(json_response["data"].map { |actual| actual["subscriptions"] }).to eq([[0,0,0], [0,0,0], [0,0,0], [0,0,0], [6,0,4], [0,0,0], [0,0,0], [0,0,0]])
+      expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0,0,0], [0,0,0], [0,0,0], [0,0,0], [7,0,5], [0,0,0], [0,0,0], [0,0,0]])
     end
 
     it "returns bi-annual data" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, xra_donation_suscriptions: 4, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, xra_donation_suscriptions: 6, arrestable_pledges: 7})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, xra_donation_suscriptions: 8, arrestable_pledges: 9})
 
       get :mobilizations, params: { dateRange: 'half-year' }
       json_response = JSON.parse(response.body)
@@ -219,6 +225,8 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,5,0,4,0,3], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,9,0,8,0,7], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]])
+      expect(json_response["data"].map { |actual| actual["subscriptions"] }).to eq([[0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,8,0,6,0,4], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]])
+      expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,9,0,7,0,5], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]])
     end
   end
 
