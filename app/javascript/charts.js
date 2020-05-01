@@ -3,10 +3,10 @@ import Chart from 'chart.js';
 const colors = ['#fc577a', '#ffd04c', '#66a4fb', '#62dcde', '#f2b8ff', '#ff6db0', '#a5d7fd', '#f15946'];
 const calculateTotal = arrayData => arrayData.reduce((a, b) => a + b, 0);
 const removeNewMembersFromCount = (newParticipants, totalParticipants) => totalParticipants.map((count, index) => count - newParticipants[index]);
-const createMetricsDiv = (label, color, totalParticipants) => `<div class="metric">
+const createMetricsDiv = (label, color, value) => `<div class="metric">
     <div class="visual" style="background-color: ${color};"></div>
     <div class="subtitle">${label}</div>
-    <div class="title">${totalParticipants}</div>
+    <div class="title">${value}</div>
 </div>`;
 const totalParticipantsDiv = () => `<div class="metric total-metric">
     <div class="visual" style="background-color: #a6a6a6;"></div>
@@ -71,7 +71,35 @@ const mobilizationParticipants = chartData => {
     })
 };
 
-const mobilizationSubscriptions = () => {};
+const mobilizationSubscriptions = chartData => {
+    const datasets = [];
+    const metrics = [];
+    let count = 0;
+
+    for(const data of chartData.data) {
+        datasets.push({
+            label: `${data.label} / Total Subscriptions`,
+            backgroundColor: colors[count],
+            data: data.subscriptions,
+            minBarLength: 2,
+            stack: count });
+
+        metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.subscriptions)));
+        count++;
+    }
+
+    $('.mobilization-metrics-container-subscriptions').html(metrics);
+    $('.mobilizations-chart-subscriptions').html('<canvas id="mobilizations-subscriptions-chart"></canvas>');
+
+    new Chart('mobilizations-subscriptions-chart', {
+        type: 'bar',
+        data: {
+            labels: chartData.labels,
+            datasets
+        },
+        options: chartOptions
+    })
+};
 
 const mobilizationArrestablePledges = () => {};
 

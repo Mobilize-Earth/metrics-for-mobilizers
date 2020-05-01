@@ -33,7 +33,7 @@
       margin: 0.25rem 0.25rem 0 0.25rem;
       padding: 0.75rem 0.75rem 1rem 0.75rem;
       text-align: center;
-      color :$grey;
+      color: $grey;
       text-decoration: none;
 
       &:hover {
@@ -54,13 +54,13 @@
     text-align: center;
   }
 
-  .mobilizations-chart {
+  [class^="mobilizations-chart"] {
     border-bottom: 1px solid $light-grey;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
     height: 25rem;
 
-    #mobilizations-chart {
+    #mobilizations-chart, #mobilizations-subscriptions-chart {
       height: 25rem;
     }
   }
@@ -91,7 +91,7 @@
       }
     }
 
-    .mobilization-metrics-container {
+    [class^="mobilization-metrics-container"] {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
