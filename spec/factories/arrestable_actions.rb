@@ -6,5 +6,6 @@ FactoryBot.define do
     arrested { 1 }
     days_event_lasted { 1 }
     report_comment { "MyText" }
+    type_arrestable_action {'Local (50+)'}
   end
 end

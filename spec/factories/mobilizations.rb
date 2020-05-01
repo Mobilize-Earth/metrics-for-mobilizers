@@ -10,5 +10,9 @@ FactoryBot.define do
     chapter { FactoryBot.create(:chapter, {name: Faker::String.random(length: 15)}) }
     mobilization_type { Mobilization.mobilization_type_options.sample }
     event_type { ['Virtual', 'In Person'].sample }
+    factory :virtual_mobilization do
+      event_type { 'Virtual' }
+      mobilization_type {'Rebel Ringing'}
+    end
   end
 end
