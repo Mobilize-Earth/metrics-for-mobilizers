@@ -19,19 +19,19 @@ class ReportsController < ApplicationController
     date_range_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
 
     chapters = if country.nil?
-                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
-                   elsif country.upcase == 'US' && !region.nil? && state.nil?
-                     states = Regions.us_regions[region.to_sym][:states]
-                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: states})
-                   elsif state.nil?
-                     country = CS.countries[country.to_sym]
-                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country})
-                   elsif chapter_id.nil?
-                     state = validate_state(country, state)
-                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: state})
-                   else
-                     [Chapter.find(chapter_id)]
-                   end
+                 Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
+               elsif country.upcase == 'US' && !region.nil? && state.nil?
+                 states = Regions.us_regions[region.to_sym][:states]
+                 Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: 'United States', state_province: states})
+               elsif state.nil?
+                 country = CS.countries[country.to_sym]
+                 Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country})
+               elsif chapter_id.nil?
+                 state = validate_state(country, state)
+                 Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: state})
+               else
+                 [Chapter.find(chapter_id)]
+               end
 
     report_data = {
         members: chapters.sum(&:active_members),
@@ -64,18 +64,18 @@ class ReportsController < ApplicationController
     date_range_days = DATE_RANGE_MAPPING[params[:period].to_sym]
     begin
       response = if country.nil?
-                                        all_countries(date_range_days)
-                                      elsif country.upcase == 'US' && region.nil?
-                                        us_regions(date_range_days)
-                                      elsif country.upcase == 'US' && !region.nil? && state.nil?
-                                        us_states(region, date_range_days)
-                                      elsif state.nil?
-                                        states(country, date_range_days)
-                                      elsif chapter.nil?
-                                        chapters(country, state, date_range_days)
-                                      else
-                                        chapter_report(chapter)
-                                      end
+                   all_countries(date_range_days)
+                 elsif country.upcase == 'US' && region.nil?
+                   us_regions(date_range_days)
+                 elsif country.upcase == 'US' && !region.nil? && state.nil?
+                   us_states(region, date_range_days)
+                 elsif state.nil?
+                   states(country, date_range_days)
+                 elsif chapter.nil?
+                   chapters(country, state, date_range_days)
+                 else
+                   chapter_report(chapter)
+                 end
       render json: response
     rescue
       render json: {error: true}
@@ -85,7 +85,9 @@ class ReportsController < ApplicationController
   private
 
   def all_countries(date_range_days)
-    addresses_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).group_by { |c| c.address.country }
+    addresses_with_chapters = Chapter.with_addresses.
+        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        group_by { |c| c.address.country }
 
     addresses_with_chapters.map do |country|
       chapters = country[1]
@@ -110,7 +112,12 @@ class ReportsController < ApplicationController
           id: k,
           region: v[:name],
       }
-      region_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: v[:states]}).group_by { |c| c.address.country }
+
+      region_chapters = Chapter.with_addresses.
+          includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+          where(addresses: {country: 'United States', state_province: v[:states]}).
+          group_by { |c| c.address.country }
+
       region_chapters.map do |country|
         chapters = country[1]
         result[:members] = chapters.sum(&:active_members)
@@ -128,7 +135,10 @@ class ReportsController < ApplicationController
 
   def us_states(region, date_range_days)
     states = Regions.us_regions[region.to_sym][:states]
-    states_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: states}).group_by { |c| c.address.state_province }
+    states_with_chapters = Chapter.with_addresses.
+        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        where(addresses: {country: 'United States', state_province: states}).
+        group_by { |c| c.address.state_province }
 
     states_with_chapters.map do |state|
       chapters = state[1]
@@ -149,7 +159,10 @@ class ReportsController < ApplicationController
 
   def states(country, date_range_days)
     country = CS.countries[country.to_sym]
-    states_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country}).group_by { |c| c.address.state_province }
+    states_with_chapters = Chapter.with_addresses.
+        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        where(addresses: {country: country}).
+        group_by { |c| c.address.state_province }
 
     states_with_chapters.map do |state|
       chapters = state[1]
@@ -171,7 +184,11 @@ class ReportsController < ApplicationController
   def chapters(country, state, date_range_days)
     state = validate_state(country, state)
 
-    states_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: state}).group_by { |c| c.id }
+    states_chapters = Chapter.with_addresses.
+        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        where(addresses: {state_province: state}).
+        group_by { |c| c.id }
+
     states_chapters.map do |chapter|
       chapter = chapter[1][0]
       {
