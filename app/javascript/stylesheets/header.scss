@@ -84,15 +84,17 @@
       }
 
       .dropdown-menu {
-        color: green;
         padding: 0;
+        box-shadow: $standard-box-shadow;
+        border-radius: 0;
+        border: 0;
 
         a {
           display: block;
           color: $black;
           padding: 1rem;
           background-color: $white;
-          border: 2px solid $green;
+          border: 2px solid $light-grey;
           border-bottom: 0;
           text-align: center;
 
@@ -103,7 +105,7 @@
           }
 
           &:last-child {
-            border-bottom: 2px solid $green;
+            border-bottom: 2px solid $light-grey;
           }
         }
       }
