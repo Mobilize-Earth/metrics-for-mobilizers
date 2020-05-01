@@ -16,25 +16,12 @@ feature 'create user' do
         fill_in 'user_first_name', with: 'First Name'
         fill_in 'user_last_name', with: 'Last Name'
         fill_in 'user_email', with: 'test1@test.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '123456'
         fill_in 'user_phone_number', with: '987654321'
         click_button 'Submit'
         expect(User.last.first_name).to eq('First Name')
         expect(User.last.last_name).to eq('Last Name')
         expect(User.last.email).to eq('test1@test.com')
         expect(User.last.phone_number).to eq('987654321')
-    end
-
-    scenario 'should show error when password and password_confirmation do not be equal' do
-        fill_in 'user_first_name', with: 'First Name'
-        fill_in 'user_last_name', with: 'Last Name'
-        fill_in 'user_email', with: 'test1@test.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '12345'
-        fill_in 'user_phone_number', with: '987654321'
-        click_button 'Submit'
-        expect(page).to have_css '.alert-danger'
     end
 
     scenario 'should have a chapter role disabled' do
@@ -45,8 +32,6 @@ feature 'create user' do
         fill_in 'user_first_name', with: 'First Name'
         fill_in 'user_last_name', with: 'Last Name'
         fill_in 'user_email', with: 'test1@test.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '12345'
         fill_in 'user_phone_number', with: '987654321'
         select 'External Coordinator', from: 'user_role'
         expect(page).to have_text('Chapter *')
@@ -56,8 +41,6 @@ feature 'create user' do
         fill_in 'user_first_name', with: 'First Name'
         fill_in 'user_last_name', with: 'Last Name'
         fill_in 'user_email', with: 'test1@test.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '123456'
         fill_in 'user_phone_number', with: '987654321'
         select 'External Coordinator', from: 'user_role'
         click_button 'Submit'
@@ -68,8 +51,6 @@ feature 'create user' do
         fill_in 'user_first_name', with: 'First Name'
         fill_in 'user_last_name', with: 'Last Name'
         fill_in 'user_email', with: 'test1@test.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '123456'
         fill_in 'user_phone_number', with: '987654321'
         select 'Administrator', from: 'user_role'
         click_button 'Submit'
@@ -80,8 +61,6 @@ feature 'create user' do
         fill_in 'user_first_name', with: 'First Name'
         fill_in 'user_last_name', with: 'Last Name'
         fill_in 'user_email', with: 'test1@test.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '123456'
         fill_in 'user_phone_number', with: '000000000'
         select 'Administrator', from: 'user_role'
         click_button 'Submit'
@@ -101,13 +80,6 @@ feature 'edit user' do
         fill_in 'user_first_name', with: 'First Name Edited'
         click_button 'Submit'
         expect(User.last.first_name).to eq('First Name Edited')
-    end
-
-    scenario 'should show error when password and password_confirmation do not be equal' do
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '12345'
-        click_button 'Submit'
-        expect(page).to have_content('Password confirmation doesn\'t match Password')
     end
 end
 
