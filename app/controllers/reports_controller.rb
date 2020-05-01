@@ -314,7 +314,7 @@ class ReportsController < ApplicationController
           chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons
           chart_line[:participants][index] = chart_line[:participants][index] + mobilization.participants
           chart_line[:arrestable_pledges][index] = chart_line[:arrestable_pledges][index] + mobilization.arrestable_pledges
-          chart_line[:subscriptions][index] = chart_line[:subscriptions][index] + mobilization.xra_donation_suscriptions
+          chart_line[:subscriptions][index] = chart_line[:subscriptions][index] + mobilization.total_one_time_donations
         end
       end
     end

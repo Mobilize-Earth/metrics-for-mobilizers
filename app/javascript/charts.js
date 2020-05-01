@@ -84,7 +84,7 @@ const mobilizationSubscriptions = chartData => {
             minBarLength: 2,
             stack: count });
 
-        metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.subscriptions)));
+        metrics.push(createMetricsDiv(data.label, colors[count], data.subscriptions));
         count++;
     }
 
@@ -114,7 +114,7 @@ const mobilizationArrestablePledges = chartData => {
             minBarLength: 2,
             stack: count });
 
-        metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.arrestable_pledges)));
+        metrics.push(createMetricsDiv(data.label, colors[count], data.arrestable_pledges));
         count++;
     }
 
