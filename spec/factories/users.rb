@@ -13,12 +13,10 @@ FactoryBot.define do
     end
 
     factory :administrator do
-      email { "admin@admin.com" }
       role { "admin" }
     end
 
     factory :reviewer do
-      email { "admin@admin.com" }
       role { "reviewer" }
     end
   end

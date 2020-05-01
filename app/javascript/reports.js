@@ -49,14 +49,14 @@ const getReportsTilesData = (dateRange) => {
         type: 'get',
         data: queryParams
     }).done(data => {
-        $('#members').html(data.members === null ? 0 : data.members);
-        $('#chapters').html(data.chapters === null ? 0 : data.chapters);
-        $('#newsletter-signups').html(data.signups === null ? 0 : data.signups);
-        $('#actions').html(data.actions === null ? 0 : data.actions);
-        $('#trainings').html(data.trainings === null ? 0 : data.trainings);
-        $('#mobilizations').html(data.mobilizations === null ? 0 : data.mobilizations);
-        $('#pledges-arrestable').html(data.pledges_arrestable === null ? 0 : data.pledges_arrestable);
-        $('#subscriptions').html(data.subscriptions === null ? 0 : data.subscriptions);
+        $('#members').html(data.members === undefined ? 0 : data.members);
+        $('#chapters').html(data.chapters === undefined ? 0 : data.chapters);
+        $('#newsletter-signups').html(data.signups === undefined ? 0 : data.signups);
+        $('#actions').html(data.actions === undefined ? 0 : data.actions);
+        $('#trainings').html(data.trainings === undefined ? 0 : data.trainings);
+        $('#mobilizations').html(data.mobilizations === undefined ? 0 : data.mobilizations);
+        $('#pledges-arrestable').html(data.pledges_arrestable === undefined ? 0 : data.pledges_arrestable);
+        $('#subscriptions').html(data.subscriptions === undefined ? 0 : data.subscriptions);
         setDateRange(data.start_date, data.end_date);
     });
 }

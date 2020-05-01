@@ -18,39 +18,30 @@ class ReportsController < ApplicationController
     chapter_id = params[:chapter]
     date_range_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
 
-    query_string = if country.nil?
-                     build_query_string("SELECT ", "", date_range_days)
+    chapters = if country.nil?
+                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
                    elsif country.upcase == 'US' && !region.nil? && state.nil?
-                     states = Regions.us_regions[region.to_sym][:states].map { |s| "'#{s}'" }.join(', ')
-                     build_query_string("SELECT ",
-                                        "AND addresses.country = 'United States' AND addresses.state_province IN (#{ActiveRecord::Base.sanitize_sql(states)})",
-                                        date_range_days)
+                     states = Regions.us_regions[region.to_sym][:states]
+                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: states})
                    elsif state.nil?
                      country = CS.countries[country.to_sym]
-                     build_query_string("SELECT ",
-                                        "AND addresses.country = '#{ActiveRecord::Base.sanitize_sql(country)}'",
-                                        date_range_days)
+                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country})
                    elsif chapter_id.nil?
                      state = validate_state(country, state)
-                     build_query_string("SELECT ", "AND addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}'",
-                                        date_range_days)
+                     Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: state})
                    else
-                     chapter = Chapter.find(chapter_id)
-                     build_query_string("SELECT ", "AND chapters.id = '#{ActiveRecord::Base.sanitize_sql(chapter.id)}'",
-                                        date_range_days)
+                     [Chapter.find(chapter_id)]
                    end
 
-    results = ActiveRecord::Base.connection.select_rows(query_string).flatten
-
     report_data = {
-        members: results[0],
-        chapters: results[1],
-        signups: results[2],
-        trainings: results[3],
-        pledges_arrestable: results[4],
-        actions: results[5],
-        mobilizations: results[6],
-        subscriptions: results[7],
+        members: chapters.sum(&:active_members),
+        chapters: chapters.count,
+        signups: (chapters.map {|chapter| chapter.mobilizations.sum(&:new_members_sign_ons)}).sum,
+        trainings: (chapters.map {|chapter| chapter.trainings.length}).sum,
+        pledges_arrestable: (chapters.map {|chapter| chapter.mobilizations.sum(&:arrestable_pledges)}).sum,
+        actions: (chapters.map {|chapter| chapter.street_swarms.length + chapter.arrestable_actions.length}).sum,
+        mobilizations: (chapters.map {|chapter| chapter.mobilizations.length}).sum,
+        subscriptions: (chapters.map {|chapter| chapter.mobilizations.sum(&:xra_donation_suscriptions)}).sum,
         start_date: (DateTime.now - date_range_days.days).strftime("%d %B %Y"),
         end_date: DateTime.now.strftime("%d %B %Y")
     }
@@ -71,20 +62,24 @@ class ReportsController < ApplicationController
     region = params[:region]
     chapter = params[:chapter]
     date_range_days = DATE_RANGE_MAPPING[params[:period].to_sym]
-    response = if country.nil?
-                 all_countries(date_range_days)
-               elsif country.upcase == 'US' && region.nil?
-                 us_regions(date_range_days)
-               elsif country.upcase == 'US' && !region.nil? && state.nil?
-                 us_states(region, date_range_days)
-               elsif state.nil?
-                 states(country, date_range_days)
-               elsif chapter.nil?
-                 chapters(country, state, date_range_days)
-               else
-                 chapter_report(chapter)
-               end
-    render json: response
+    begin
+      response = if country.nil?
+                                        all_countries(date_range_days)
+                                      elsif country.upcase == 'US' && region.nil?
+                                        us_regions(date_range_days)
+                                      elsif country.upcase == 'US' && !region.nil? && state.nil?
+                                        us_states(region, date_range_days)
+                                      elsif state.nil?
+                                        states(country, date_range_days)
+                                      elsif chapter.nil?
+                                        chapters(country, state, date_range_days)
+                                      else
+                                        chapter_report(chapter)
+                                      end
+      render json: response
+    rescue
+      render json: {error: true}
+    end
   end
 
   private
@@ -115,7 +110,6 @@ class ReportsController < ApplicationController
           id: k,
           region: v[:name],
       }
-
       region_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: v[:states]}).group_by { |c| c.address.country }
       region_chapters.map do |country|
         chapters = country[1]
@@ -133,7 +127,8 @@ class ReportsController < ApplicationController
   end
 
   def us_states(region, date_range_days)
-    states_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: 'United States'}).group_by { |c| c.address.state_province }
+    states = Regions.us_regions[region.to_sym][:states]
+    states_with_chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {state_province: states}).group_by { |c| c.address.state_province }
 
     states_with_chapters.map do |state|
       chapters = state[1]
@@ -196,31 +191,6 @@ class ReportsController < ApplicationController
 
   def validate_state(country, state)
     CS.states(country.to_sym)[CS.states(country.to_sym).key(state)]
-  end
-
-  def build_query_string(prepend_string, append_string, date_range_days=7)
-    base_query = "SUM(DISTINCT(chapters.active_members)) as members,
-                  COUNT(DISTINCT(chapters.id)) as chapters,
-                  SUM(DISTINCT(mobilizations.new_members_sign_ons)) as signups,
-                  COUNT(DISTINCT(trainings.id)) as trainings,
-                  SUM(DISTINCT(mobilizations.arrestable_pledges)) as arrestable_pledges,
-                  COUNT(DISTINCT(street_swarms.id)) + COUNT(DISTINCT(arrestable_actions.id)) as actions,
-                  COUNT(DISTINCT(mobilizations.id)) as mobilizations,
-                  SUM(DISTINCT(mobilizations.xra_donation_suscriptions)) as subscriptions
-                  FROM chapters
-                  LEFT JOIN addresses ON chapters.id = addresses.chapter_id
-                  LEFT JOIN mobilizations ON chapters.id = mobilizations.chapter_id
-                  LEFT JOIN street_swarms ON chapters.id = street_swarms.chapter_id
-                  LEFT JOIN arrestable_actions ON chapters.id = arrestable_actions.chapter_id
-                  LEFT JOIN trainings ON chapters.id = trainings.chapter_id
-                  WHERE ((mobilizations.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (mobilizations.created_at IS NULL))
-                  AND ((street_swarms.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (street_swarms.created_at IS NULL))
-                  AND ((arrestable_actions.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (arrestable_actions.created_at IS NULL))
-                  AND ((trainings.created_at BETWEEN '#{build_start_of_day_timestamp(date_range_days)}' AND '#{build_end_of_day_timestamp(date_range_days)}') OR (trainings.created_at IS NULL)) "
-
-    base_query.prepend(prepend_string)
-    base_query << append_string
-    base_query
   end
 
   def build_start_of_day_timestamp(date_range_days)

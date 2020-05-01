@@ -119,14 +119,14 @@ const record = (obj) => {
 
     return `<tr>
               <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
-              <td>${obj.chapters === null ? 0 : obj.chapters}</td>
-              <td>${obj.members === null ? 0 : obj.members}</td>
-              <td>${obj.mobilizations === null ? 0 : obj.mobilizations}</td>
-              <td>${obj.trainings === null ? 0 : obj.trainings}</td>
-              <td>${obj.subscriptions === null ? 0 : obj.subscriptions}</td>
-              <td>${obj.signups === null ? 0 : obj.signups}</td>
-              <td>${obj.arrestable_pledges === null ? 0 : obj.arrestable_pledges}</td>
-              <td>${obj.actions === null ? 0 : obj.actions}</td>
+              <td>${obj.chapters === undefined ? 0 : obj.chapters}</td>
+              <td>${obj.members === undefined ? 0 : obj.members}</td>
+              <td>${obj.mobilizations === undefined ? 0 : obj.mobilizations}</td>
+              <td>${obj.trainings === undefined ? 0 : obj.trainings}</td>
+              <td>${obj.subscriptions === undefined ? 0 : obj.subscriptions}</td>
+              <td>${obj.signups === undefined ? 0 : obj.signups}</td>
+              <td>${obj.arrestable_pledges === undefined ? 0 : obj.arrestable_pledges}</td>
+              <td>${obj.actions === undefined ? 0 : obj.actions}</td>
             </tr>`
 };
 
