@@ -80,11 +80,11 @@ const mobilizationSubscriptions = chartData => {
         datasets.push({
             label: `${data.label} / Total Subscriptions`,
             backgroundColor: colors[count],
-            data: data.subscriptions,
+            data: data.total_one_time_donations,
             minBarLength: 2,
             stack: count });
 
-        metrics.push(createMetricsDiv(data.label, colors[count], data.subscriptions));
+        metrics.push(createMetricsDiv(data.label, colors[count], data.total_one_time_donations));
         count++;
     }
 
