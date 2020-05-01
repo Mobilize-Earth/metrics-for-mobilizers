@@ -172,9 +172,8 @@ class ReportsController < ApplicationController
 
   def chapters(country, state)
     state = validate_state(country, state)
-    query_string = build_query_string("SELECT chapters.id, chapters.name as chapter, ",
-                                      "WHERE addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}' GROUP BY id")
-
+    query_string = build_query_string("SELECT chapters.id as chapter_ids, chapters.name as chapter, ",
+                                      "WHERE addresses.state_province = '#{ActiveRecord::Base.sanitize_sql(state)}' GROUP BY chapter_ids")
     results = ActiveRecord::Base.connection.select_rows(query_string)
 
     results.map do |result|

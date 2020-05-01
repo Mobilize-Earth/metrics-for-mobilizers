@@ -114,6 +114,7 @@ const record = (obj) => {
     queryParams.push(`${groupByProperty}=${obj.id}`)
 
     link += queryParams.join('&') + location.hash;
+    link = encodeURI(link);
 
     return `<tr>
               <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
