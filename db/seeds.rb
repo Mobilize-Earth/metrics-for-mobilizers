@@ -112,3 +112,17 @@ end
 NUMBER_OF_GLOBAL_CHAPTERS.times do |i|
   self.create_chapters(i, 'Global')
 end
+
+chapter = Chapter.create!(
+    name: "Global Chapter Test",
+    active_members: Faker::Number.number(digits: 3),
+    total_subscription_amount: Faker::Number.decimal(l_digits: 3, r_digits: 2)
+)
+
+Address.create!(
+    country: "Australia",
+    state_province: "New South Wales",
+    city: Faker::Address.city,
+    zip_code: Faker::Address.zip,
+    chapter: chapter
+)
