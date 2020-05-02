@@ -33,6 +33,7 @@ class ReportsController < ApplicationController
                else
                  Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
                end
+
     filtered_mobilizations = filter_mobilizations(chapters, date_range_days)
     filtered_trainings = filter_trainings(chapters, date_range_days)
     filtered_street_swarms = filter_street_swarms(chapters, date_range_days)

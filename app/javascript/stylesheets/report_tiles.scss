@@ -7,12 +7,26 @@
     box-shadow: $standard-box-shadow;
     margin: 10px;
     padding: 20px;
-    display: flex;
     justify-content: space-around;
     align-items: center;
 
-    .report-card-left {
-      text-align: center;
+    .growth-number {
+      color: $green
+    }
+
+    .growth-description {
+      font-size: 1.25rem;
+      color: $grey;
+    }
+
+    .report-card-top {
+      text-align: justify;
+      display: inline-block;
+
+      h1,
+      h3 {
+        display: inline-block;
+      }
 
       h1 {
         font-size: 2.5rem;
@@ -27,8 +41,7 @@
 
     h2 {
       font-size: 1.25rem;
-      text-align: center;
-      margin-left: 10px;
+      text-align: justify;
 
       @include media-breakpoint-up(sm) {
         font-size: 1.75rem;
