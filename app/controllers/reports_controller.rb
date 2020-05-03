@@ -19,8 +19,7 @@ class ReportsController < ApplicationController
     date_range_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
 
     if country.nil?
-      chapters = Chapter.with_addresses
-                     .eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
+      chapters = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
       chapters_before_current_period = Chapter.with_addresses.
           eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
           where('chapters.created_at < ?' , (DateTime.now - date_range_days.days).beginning_of_day)
@@ -93,8 +92,8 @@ class ReportsController < ApplicationController
         pledges_arrestable_growth: this_period_mobilizations.sum(&:arrestable_pledges) - previous_period_mobilizations.sum(&:arrestable_pledges),
         actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
         actions_growth: (filtered_street_swarms.length + filtered_arrestable_actions.length) - (previous_period_street_swarms.length + previous_period_arrestable_actions.length),
-        subscriptions: this_period_mobilizations.sum(&:xra_donation_suscriptions),
-        subscriptions_growth: this_period_mobilizations.sum(&:xra_donation_suscriptions) - previous_period_mobilizations.sum(&:xra_donation_suscriptions),
+        subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions),
+        subscriptions_growth: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions) - previous_period_mobilizations.flatten.sum(&:xra_donation_suscriptions),
         start_date: (DateTime.now - date_range_days.days).strftime("%d %B %Y"),
         end_date: DateTime.now.strftime("%d %B %Y")
     }
@@ -165,7 +164,7 @@ class ReportsController < ApplicationController
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: filtered_mobilizations.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
       }
     end
   end
@@ -196,7 +195,7 @@ class ReportsController < ApplicationController
         result[:arrestable_pledges] = filtered_mobilizations.sum(&:arrestable_pledges)
         result[:actions] = filtered_street_swarms.length + filtered_arrestable_actions.length
         result[:mobilizations] = filtered_mobilizations.length
-        result[:subscriptions] =  filtered_mobilizations.sum(&:xra_donation_suscriptions)
+        result[:subscriptions] =  chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
       end
       result
     end
@@ -227,7 +226,7 @@ class ReportsController < ApplicationController
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: filtered_mobilizations.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
       }
     end
   end
@@ -255,7 +254,7 @@ class ReportsController < ApplicationController
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: filtered_mobilizations.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
       }
     end
   end
@@ -286,7 +285,7 @@ class ReportsController < ApplicationController
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: filtered_mobilizations.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
       }
     end
   end
