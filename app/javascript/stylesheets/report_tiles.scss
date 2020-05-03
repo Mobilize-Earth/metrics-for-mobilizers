@@ -11,7 +11,11 @@
     align-items: center;
 
     .growth-number {
-      color: $green
+      color: $green;
+
+      &.number-negative {
+        color: $dark-red;
+      }
     }
 
     .growth-description {

@@ -50,15 +50,42 @@ const getReportsTilesData = (dateRange) => {
         data: queryParams
     }).done(data => {
         $('#members').html(data.members === undefined ? 0 : data.members);
+        parseTilesGrowthData($('#members-growth'), data.members_growth);
+
         $('#chapters').html(data.chapters === undefined ? 0 : data.chapters);
-        $('#newsletter-signups').html(data.signups === undefined ? 0 : data.signups);
-        $('#actions').html(data.actions === undefined ? 0 : data.actions);
-        $('#trainings').html(data.trainings === undefined ? 0 : data.trainings);
+        parseTilesGrowthData($('#chapters-growth'), data.chapters_growth);
+
         $('#mobilizations').html(data.mobilizations === undefined ? 0 : data.mobilizations);
+        parseTilesGrowthData($('#mobilizations-growth'), data.mobilizations_growth);
+
+        $('#newsletter-signups').html(data.signups === undefined ? 0 : data.signups);
+        parseTilesGrowthData($('#newsletter-signups-growth'), data.signups_growth);
+
+        $('#actions').html(data.actions === undefined ? 0 : data.actions);
+        parseTilesGrowthData($('#actions-growth'), data.actions_growth);
+
+        $('#trainings').html(data.trainings === undefined ? 0 : data.trainings);
+        parseTilesGrowthData($('#trainings-growth'), data.trainings_growth);
+
         $('#pledges-arrestable').html(data.pledges_arrestable === undefined ? 0 : data.pledges_arrestable);
+        parseTilesGrowthData($('#pledges-arrestable-growth'), data.pledges_arrestable_growth);
+
         $('#subscriptions').html(data.subscriptions === undefined ? 0 : data.subscriptions);
+        parseTilesGrowthData($('#subscriptions-growth'), `$${data.subscriptions_growth}`);
+
         setDateRange(data.start_date, data.end_date);
     });
+}
+
+const parseTilesGrowthData = (element, data) => {
+    element.removeClass('number-negative')
+    element.parent().find('.fa').removeClass('fa-arrow-down').addClass('fa-arrow-up')
+
+    if (data < 0) {
+        element.addClass('number-negative')
+        element.parent().find('.fa').removeClass('fa-arrow-up').addClass('fa-arrow-down')
+    }
+    element.html(data === undefined ? 0 : data);
 }
 
 const getReportsChartsData = (dateRange) => {

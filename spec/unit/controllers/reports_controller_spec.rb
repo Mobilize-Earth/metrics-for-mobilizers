@@ -14,6 +14,8 @@ RSpec.describe ReportsController, type: :controller do
 
       active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
       chapters = Chapter.with_addresses.where(addresses: {country: country}).count
+      mobilizations = Mobilization.with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       signups = Mobilization.with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
           sum("new_members_sign_ons")
@@ -30,6 +32,7 @@ RSpec.describe ReportsController, type: :controller do
 
       expect(result["chapters"]).to eq(chapters)
       expect(result["members"]).to eq(active_members)
+      expect(result["mobilizations"]).to eq(mobilizations)
       expect(result["signups"]).to eq(signups)
       expect(result["trainings"]).to eq(trainings)
       expect(result["arrestable_pledges"]).to eq(pledges)
@@ -236,32 +239,65 @@ RSpec.describe ReportsController, type: :controller do
       result = JSON.parse(response.body)
 
       active_members = Chapter.sum("active_members")
+      members_before_period = Chapter.
+          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
+          sum("active_members")
       chapters = Chapter.count
+      chapters_before_period = Chapter.
+          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      mobilizations = Mobilization.
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_mobilizations = Mobilization.
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       signups = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
                     .sum("new_members_sign_ons")
+      previous_period_signups = Mobilization.
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                    .sum("new_members_sign_ons")
       trainings = Training.
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_trainings = Training.
+          where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       pledges = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
                     .sum("arrestable_pledges")
+      previous_period_pledges = Mobilization.
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("arrestable_pledges")
       actions = StreetSwarm.
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
                     .count + ArrestableAction.
           where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_actions = StreetSwarm.
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .count + ArrestableAction.
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       subscriptions = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
                           .sum("xra_donation_suscriptions")
+      previous_period_subscriptions = Mobilization.
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                          .sum("xra_donation_suscriptions")
 
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
 
       expect(result["members"]).to eq(active_members)
+      expect(result["members_growth"]).to eq(active_members - members_before_period)
       expect(result["chapters"]).to eq(chapters)
+      expect(result["chapters_growth"]).to eq(chapters - chapters_before_period)
+      expect(result["mobilizations"]).to eq(mobilizations)
+      expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
       expect(result["signups"]).to eq(signups)
+      expect(result["signups_growth"]).to eq(signups - previous_period_signups)
       expect(result["trainings"]).to eq(trainings)
+      expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
       expect(result["pledges_arrestable"]).to eq(pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
       expect(result["actions"]).to eq(actions)
+      expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
       expect(actual_date_range).to eq(6)
     end
 
@@ -271,32 +307,81 @@ RSpec.describe ReportsController, type: :controller do
       result = JSON.parse(response.body)
 
       active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
+      members_before_period = Chapter.
+          with_addresses.where(addresses: {country: country}).
+          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
+          sum("active_members")
       chapters = Chapter.with_addresses.where(addresses: {country: country}).count
-      signups = Mobilization.with_addresses.where(addresses: {country: country}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("new_members_sign_ons")
-      trainings = Training.with_addresses.where(addresses: {country: country}).
+      chapters_before_period = Chapter.
+          with_addresses.where(addresses: {country: country}).
+          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      mobilizations = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_mobilizations = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      signups = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .sum("new_members_sign_ons")
+      previous_period_signups = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("new_members_sign_ons")
+      trainings = Training.
+          with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      pledges = Mobilization.with_addresses.where(addresses: {country: country}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("arrestable_pledges")
-      actions = StreetSwarm.with_addresses.where(addresses: {country: country}).
-          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
-          ArrestableAction.with_addresses.where(addresses: {country: country}).
-              where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.with_addresses.where(addresses: {country: country}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_donation_suscriptions")
+      previous_period_trainings = Training.
+          with_addresses.where(addresses: {country: country}).
+          where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      pledges = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .sum("arrestable_pledges")
+      previous_period_pledges = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("arrestable_pledges")
+      actions = StreetSwarm.
+          with_addresses.where(addresses: {country: country}).
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .count + ArrestableAction.
+          with_addresses.where(addresses: {country: country}).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_actions = StreetSwarm.
+          with_addresses.where(addresses: {country: country}).
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .count + ArrestableAction.
+          with_addresses.where(addresses: {country: country}).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      subscriptions = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                          .sum("xra_donation_suscriptions")
+      previous_period_subscriptions = Mobilization.
+          with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                          .sum("xra_donation_suscriptions")
 
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
 
       expect(result["members"]).to eq(active_members)
+      expect(result["members_growth"]).to eq(active_members - members_before_period)
       expect(result["chapters"]).to eq(chapters)
+      expect(result["chapters_growth"]).to eq(chapters - chapters_before_period)
+      expect(result["mobilizations"]).to eq(mobilizations)
+      expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
       expect(result["signups"]).to eq(signups)
+      expect(result["signups_growth"]).to eq(signups - previous_period_signups)
       expect(result["trainings"]).to eq(trainings)
+      expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
       expect(result["pledges_arrestable"]).to eq(pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
       expect(result["actions"]).to eq(actions)
+      expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
       expect(actual_date_range).to eq(6)
     end
 
@@ -308,30 +393,79 @@ RSpec.describe ReportsController, type: :controller do
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
 
       active_members = Chapter.with_addresses.where(addresses: {state_province: state}).sum("active_members")
+      members_before_period = Chapter.with_addresses.
+          where(addresses: {state_province: state}).
+          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
+          sum("active_members")
       chapters = Chapter.with_addresses.where(addresses: {state_province: state}).count
-      signups = Mobilization.with_addresses.where(addresses: {state_province: state}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("new_members_sign_ons")
-      trainings = Training.with_addresses.where(addresses: {state_province: state}).
+      chapters_before_period = Chapter.with_addresses.
+          where(addresses: {state_province: state}).
+          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      mobilizations = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_mobilizations = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      signups = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .sum("new_members_sign_ons")
+      previous_period_signups = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("new_members_sign_ons")
+      trainings = Training.with_addresses.
+          where(addresses: {state_province: state}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      pledges = Mobilization.with_addresses.where(addresses: {state_province: state}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("arrestable_pledges")
-      actions = StreetSwarm.with_addresses.where(addresses: {state_province: state}).
-          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
-          ArrestableAction.with_addresses.where(addresses: {state_province: state}).
-              where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.with_addresses.where(addresses: {state_province: state}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_donation_suscriptions")
+      previous_period_trainings = Training.with_addresses.
+          where(addresses: {state_province: state}).
+          where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      pledges = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .sum("arrestable_pledges")
+      previous_period_pledges = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("arrestable_pledges")
+      actions = StreetSwarm.with_addresses.
+          where(addresses: {state_province: state}).
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .count + ArrestableAction.with_addresses.
+          where(addresses: {state_province: state}).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_actions = StreetSwarm.with_addresses.
+          where(addresses: {state_province: state}).
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .count + ArrestableAction.with_addresses.
+          where(addresses: {state_province: state}).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      subscriptions = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                          .sum("xra_donation_suscriptions")
+      previous_period_subscriptions = Mobilization.with_addresses.
+          where(addresses: {state_province: state}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                          .sum("xra_donation_suscriptions")
 
       expect(result["members"]).to eq(active_members)
+      expect(result["members_growth"]).to eq(active_members - members_before_period)
       expect(result["chapters"]).to eq(chapters)
+      expect(result["chapters_growth"]).to eq(chapters - chapters_before_period)
+      expect(result["mobilizations"]).to eq(mobilizations)
+      expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
       expect(result["signups"]).to eq(signups)
+      expect(result["signups_growth"]).to eq(signups - previous_period_signups)
       expect(result["trainings"]).to eq(trainings)
+      expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
       expect(result["pledges_arrestable"]).to eq(pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
       expect(result["actions"]).to eq(actions)
+      expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
       expect(actual_date_range).to eq(6)
     end
 
@@ -340,31 +474,62 @@ RSpec.describe ReportsController, type: :controller do
       get :tiles, params: { country: 'US', state: 'New York', chapter: chapter_id, dateRange: 'week' }
       result = JSON.parse(response.body)
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
-      chapter = Chapter.find(chapter_id)
 
+      chapter = Chapter.find(chapter_id)
+      active_members = chapter.active_members
+      members_before_period = Chapter.where(id: chapter.id).
+          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
+          sum("active_members")
+      mobilizations = Mobilization.where(chapter: chapter).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_mobilizations = Mobilization.where(chapter: chapter).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       signups = Mobilization.where(chapter: chapter).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum('new_members_sign_ons')
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .sum("new_members_sign_ons")
+      previous_period_signups = Mobilization.where(chapter: chapter).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("new_members_sign_ons")
       trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_trainings = Training.where(chapter: chapter).
+          where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       pledges = Mobilization.where(chapter: chapter).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("arrestable_pledges")
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .sum("arrestable_pledges")
+      previous_period_pledges = Mobilization.where(chapter: chapter).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("arrestable_pledges")
       actions = StreetSwarm.where(chapter: chapter).
-          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
-          ArrestableAction.where(chapter: chapter).
-              where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .count + ArrestableAction.where(chapter: chapter).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_actions = StreetSwarm.where(chapter: chapter).
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .count + ArrestableAction.where(chapter: chapter).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       subscriptions = Mobilization.where(chapter: chapter).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_donation_suscriptions")
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                          .sum("xra_donation_suscriptions")
+      previous_period_subscriptions = Mobilization.where(chapter: chapter).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                          .sum("xra_donation_suscriptions")
 
-      expect(result["members"]).to eq(chapter.active_members)
+      expect(result["members"]).to eq(active_members)
+      expect(result["members_growth"]).to eq(active_members - members_before_period)
       expect(result["chapters"]).to eq(1)
+      expect(result["mobilizations"]).to eq(mobilizations)
+      expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
       expect(result["signups"]).to eq(signups)
+      expect(result["signups_growth"]).to eq(signups - previous_period_signups)
       expect(result["trainings"]).to eq(trainings)
+      expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
       expect(result["pledges_arrestable"]).to eq(pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
       expect(result["actions"]).to eq(actions)
+      expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
       expect(actual_date_range).to eq(6)
     end
   end
@@ -464,10 +629,10 @@ def seed_db
   3.times do |i|
     FactoryBot.create(:chapter, name: "Old US Chapter: #{i}") do |chapter|
       FactoryBot.create :us_address, state_province: "New York", chapter: chapter
-      FactoryBot.create_list :virtual_mobilization, 2, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
-      FactoryBot.create_list :street_swarm, 2, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
-      FactoryBot.create_list :training, 2, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
-      FactoryBot.create_list :arrestable_action, 2, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
+      FactoryBot.create_list :virtual_mobilization, 4, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
+      FactoryBot.create_list :street_swarm, 1, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
+      FactoryBot.create_list :training, 1, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
+      FactoryBot.create_list :arrestable_action, 1, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
     end
   end
 
