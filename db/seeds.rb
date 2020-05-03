@@ -11,6 +11,9 @@ NUMBER_OF_US_CHAPTERS = 5
 NUMBER_OF_GLOBAL_CHAPTERS = 5
 NUMBER_OF_FORMS_SUBMISSIONS = 5
 
+NUMBER_OF_PAST_US_CHAPTERS = 5
+NUMBER_OF_PAST_GLOBAL_CHAPTERS = 5
+
 ArrestableAction.destroy_all
 Mobilization.destroy_all
 Training.destroy_all
@@ -35,13 +38,14 @@ chapter.users.create!([
   { password: 'external', password_confirmation: 'external', email: 'john@test.com', role: 'external', first_name: "John", last_name: "Smith", phone_number: "1" }
 ])
 
-def create_chapters(chapter_id, type)
+def create_chapters(chapter_id, type, days_offset)
   state = Faker::Address.state
 
   chapter = Chapter.create!(
-      name: "#{state} Chapter #{chapter_id}",
+      name: "#{state} #{type} #{chapter_id}",
       active_members: Faker::Number.number(digits: 3),
-      total_subscription_amount: Faker::Number.decimal(l_digits: 3, r_digits: 2)
+      total_subscription_amount: Faker::Number.decimal(l_digits: 3, r_digits: 2),
+      created_at: Date.today - days_offset.days
   )
 
   user = User.create!(
@@ -52,15 +56,19 @@ def create_chapters(chapter_id, type)
       first_name: Faker::Name.first_name ,
       last_name: Faker::Name.last_name ,
       phone_number: "8675309",
-      chapter: chapter
+      chapter: chapter,
+      created_at: Date.today - days_offset.days
   )
 
+  country = (type.include? 'US') ? 'United States' : Faker::Address.country
+
   Address.create!(
-      country: type == 'US' ? 'United States' : Faker::Address.country,
+      country: country,
       state_province: state,
       city: Faker::Address.city,
       zip_code: Faker::Address.zip,
-      chapter: chapter
+      chapter: chapter,
+      created_at: Date.today - days_offset.days
   )
 
   NUMBER_OF_FORMS_SUBMISSIONS.times do |i|
@@ -71,7 +79,8 @@ def create_chapters(chapter_id, type)
         trained_arrestable_present: Faker::Number.number(digits: 2),
         arrested: Faker::Number.number(digits: 2),
         chapter: chapter,
-        user: user
+        user: user,
+        created_at: Date.today - days_offset.days
     )
 
     participants = Faker::Number.number(digits: 2)
@@ -93,24 +102,34 @@ def create_chapters(chapter_id, type)
         number_attendees: Faker::Number.number(digits: 2),
         chapter: chapter,
         user: user,
-        training_type: Training.training_type_options.sample
+        training_type: Training.training_type_options.sample,
+        created_at: Date.today - days_offset.days
     )
 
     StreetSwarm.create!(
         xr_members_attended: Faker::Number.number(digits: 2),
         chapter: chapter,
-        user: user
+        user: user,
+        created_at: Date.today - days_offset.days
     )
   end
 end
 
 NUMBER_OF_US_CHAPTERS.times do |i|
-  self.create_chapters(i, 'US')
+  self.create_chapters(i, 'US', 0)
+end
+
+NUMBER_OF_PAST_US_CHAPTERS.times do |i|
+  self.create_chapters(i, 'Past US', 8)
 end
 
 
 NUMBER_OF_GLOBAL_CHAPTERS.times do |i|
-  self.create_chapters(i, 'Global')
+  self.create_chapters(i, 'Global', 0)
+end
+
+NUMBER_OF_PAST_GLOBAL_CHAPTERS.times do |i|
+  self.create_chapters(i, 'Past Global', 8)
 end
 
 chapter = Chapter.create!(
