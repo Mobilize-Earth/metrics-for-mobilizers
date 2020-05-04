@@ -2,6 +2,7 @@ import Chart from 'chart.js';
 
 const colors = ['#fc577a', '#ffd04c', '#66a4fb', '#62dcde', '#f2b8ff', '#ff6db0', '#a5d7fd', '#f15946'];
 const calculateTotal = arrayData => arrayData.reduce((a, b) => a + b, 0);
+const calculateTotalAsMoney = arrayData => `$${calculateTotal(arrayData.map(x => parseFloat(x))).toFixed(2)}`;
 const removeNewMembersFromCount = (newParticipants, totalParticipants) => totalParticipants.map((count, index) => count - newParticipants[index]);
 const createMetricsDiv = (label, color, value) => `<div class="metric">
     <div class="visual" style="background-color: ${color};"></div>
@@ -84,7 +85,7 @@ const mobilizationSubscriptions = chartData => {
             minBarLength: 2,
             stack: count });
 
-        metrics.push(createMetricsDiv(data.label, colors[count], data.total_one_time_donations));
+        metrics.push(createMetricsDiv(data.label, colors[count], calculateTotalAsMoney(data.total_one_time_donations)));
         count++;
     }
 
@@ -114,7 +115,7 @@ const mobilizationArrestablePledges = chartData => {
             minBarLength: 2,
             stack: count });
 
-        metrics.push(createMetricsDiv(data.label, colors[count], data.arrestable_pledges));
+        metrics.push(createMetricsDiv(data.label, colors[count], calculateTotal(data.arrestable_pledges)));
         count++;
     }
 
