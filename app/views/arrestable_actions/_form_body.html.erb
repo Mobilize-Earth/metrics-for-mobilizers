@@ -1,6 +1,7 @@
 <%= form_for @arrestable_action do |f| %>
     <h2 id="form-title">&nbsp;</h2>
     <%= hidden_field_tag :type_arrestable_action , "", id: "training-type-input" %>
+    <%= hidden_field_tag :report_date %>
     <div class="form-group">
         <div>
             <%= f.label :xra_members, "# of XRA members *", class: "action-form-label" %>
@@ -45,3 +46,7 @@
         <p class="warning">Cannot undo this action</p>
     </div>
 <% end %>
+<script>
+    var localTime = new Date();
+    $('#report_date').val(localTime)
+</script>

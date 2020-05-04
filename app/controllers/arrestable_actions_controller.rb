@@ -5,8 +5,11 @@ class ArrestableActionsController < ApplicationController
         @types = ArrestableAction.options
         authorize! :new, ArrestableActionsController
     end
-    
+
     def create
+      date_params = params[:report_date]
+      localTime = DateTime.parse(date_params)
+      report_date = localTime.beginning_of_week
         @arrestable_action = ArrestableAction.new(
             user_id: current_user.id,
             chapter_id: current_user.chapter.id,
@@ -16,7 +19,8 @@ class ArrestableActionsController < ApplicationController
             trained_arrestable_present: params[:arrestable_action][:trained_arrestable_present],
             arrested: params[:arrestable_action][:arrested],
             days_event_lasted: params[:arrestable_action][:days_event_lasted],
-            report_comment: params[:arrestable_action][:report_comment]
+            report_comment: params[:arrestable_action][:report_comment],
+            report_date: report_date
         )
         if @arrestable_action.save
             flash[:success] = "Arrestable Action data successfully entered"
