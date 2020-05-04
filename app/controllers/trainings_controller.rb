@@ -10,11 +10,15 @@ class TrainingsController < ApplicationController
   end
 
   def create
+    date_params = params[:report_date]
+    localTime = DateTime.parse(date_params)
+    report_date = localTime.beginning_of_week
     @training = Training.new(
       number_attendees: params[:training][:number_attendees],
       training_type: params[:training_type],
       chapter: current_user.chapter,
-      user: current_user
+      user: current_user,
+      report_date: report_date
     )
 
     if @training.save

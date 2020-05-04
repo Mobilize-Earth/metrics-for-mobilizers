@@ -1,6 +1,7 @@
 <%= form_for @training do |f| %>
   <h2 id="form-title">&nbsp;</h2>
   <%= hidden_field_tag :training_type, "", id: "training-type-input" %>
+  <%= hidden_field_tag :report_date %>
   <div class="form-group">
     <div>
       <%= f.label :number_attendees, "# of Attendees*", class: "action-form-label" %>
@@ -15,3 +16,7 @@
     <p class="warning">Cannot undo this action</p>
   </div>
 <% end %>
+<script>
+    var localTime = new Date();
+    $('#report_date').val(localTime)
+</script>
