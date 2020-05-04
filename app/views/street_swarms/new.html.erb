@@ -1,6 +1,6 @@
 <div class="default-background">
   <%= render 'layouts/messages', flash: flash %>
-  <%= render 'forms/form_header', title: 'Street Swarms', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Street Swarm.' %>
+  <%= render 'forms/form_header', title: 'Street Swarms', subtitle: 'Click the tab below to complete your form.' %>
   <%= render "forms/form", street_swarm: @street_swarm do |f| %>
     <%= render 'street_swarms/form_body' %>
   <% end %>
