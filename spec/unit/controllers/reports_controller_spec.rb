@@ -18,7 +18,7 @@ RSpec.describe ReportsController, type: :controller do
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       signups = Mobilization.with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("new_members_sign_ons")
+          sum("xra_newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       pledges = Mobilization.with_addresses.where(addresses: {country: country}).
@@ -27,7 +27,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.with_addresses.where(addresses: {country: country}).sum("xra_donation_suscriptions")
+      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount")
 
       expect(result["chapters"]).to eq(chapters)
       expect(result["members"]).to eq(active_members)
@@ -47,12 +47,13 @@ RSpec.describe ReportsController, type: :controller do
 
       active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
       chapters = Chapter.with_addresses.where(addresses: {country: country}).count
-      signups = Mobilization.with_addresses.where(addresses: {country: country}).sum("new_members_sign_ons")
+      signups = Mobilization.with_addresses.where(addresses: {country: country}).sum("xra_newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {country: country}).count
       pledges = Mobilization.with_addresses.where(addresses: {country: country}).sum("arrestable_pledges")
       actions = StreetSwarm.with_addresses.where(addresses: {country: country}).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).count
-      subscriptions = Mobilization.with_addresses.where(addresses: {country: country}).sum("xra_donation_suscriptions")
+      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount")
+
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -73,7 +74,7 @@ RSpec.describe ReportsController, type: :controller do
       chapters = Chapter.with_addresses.where(addresses: {state_province: region_states}).count
       signups = Mobilization.with_addresses.where(addresses: {state_province: region_states}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("new_members_sign_ons")
+          sum("xra_newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {state_province: region_states}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
           count
@@ -84,8 +85,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {state_province: region_states}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.with_addresses.where(addresses: {state_province: region_states}).
-          sum("xra_donation_suscriptions")
+      subscriptions = Chapter.with_addresses.where(addresses: {state_province: region_states}).sum("total_subscription_amount")
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -106,7 +106,7 @@ RSpec.describe ReportsController, type: :controller do
       chapters = Chapter.with_addresses.where(addresses: {state_province: state}).count
       signups = Mobilization.with_addresses.where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("new_members_sign_ons")
+          sum("xra_newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {state_province: state}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       pledges = Mobilization.with_addresses.where(addresses: {state_province: state}).
@@ -116,8 +116,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {state_province: state}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.with_addresses.where(addresses: {state_province: state}).
-          sum("xra_donation_suscriptions")
+      subscriptions = Chapter.with_addresses.where(addresses: {state_province: state}).sum("total_subscription_amount")
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -138,7 +137,7 @@ RSpec.describe ReportsController, type: :controller do
       chapters = Chapter.with_addresses.where(addresses: {country: country}).count
       signups = Mobilization.with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("new_members_sign_ons")
+          sum("xra_newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       pledges = Mobilization.with_addresses.where(addresses: {country: country}).
@@ -147,8 +146,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.with_addresses.where(addresses: {country: country}).
-         sum("xra_donation_suscriptions")
+      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount")
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -171,7 +169,7 @@ RSpec.describe ReportsController, type: :controller do
       active_members = chapter.active_members
       signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("new_members_sign_ons")
+          sum("xra_newsletter_sign_ups")
       trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       pledges = Mobilization.where(chapter: chapter).
@@ -181,8 +179,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.where(chapter: chapter).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.where(chapter: chapter).
-          sum("xra_donation_suscriptions")
+      subscriptions = chapter.total_subscription_amount
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(1)
@@ -201,7 +198,7 @@ RSpec.describe ReportsController, type: :controller do
 
       signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum('new_members_sign_ons')
+          sum('xra_newsletter_sign_ups')
       trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       pledges = Mobilization.where(chapter: chapter).
@@ -211,8 +208,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.where(chapter: chapter).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Mobilization.where(chapter: chapter).
-          sum("xra_donation_suscriptions")
+      subscriptions = chapter.total_subscription_amount
 
 
       expect(result["members"]).to eq(chapter.active_members)
@@ -236,22 +232,36 @@ RSpec.describe ReportsController, type: :controller do
       result = JSON.parse(response.body)
 
       active_members = Chapter.sum("active_members")
-      members_before_period = Chapter.
-          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
-          sum("active_members")
+
+      chapters_in_this_period = Chapter.
+          where('chapters.created_at >= ?', (DateTime.now - 6.days).beginning_of_day)
+      members_in_this_period = chapters_in_this_period.sum("active_members") +
+          Mobilization.where('mobilizations.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("new_members_sign_ons")
+
+      subscriptions = Chapter.sum("total_subscription_amount").to_int
+
+      # TODO - We are currently using mobilizations.total_one_time_donations to calculate new subscriptions in a period.
+      # We should update this DB column name to be total_donation_subscriptions instead. This applies to the tests below too.
+
+      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount").to_int +
+          Mobilization.where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("total_one_time_donations").to_int
+
       chapters = Chapter.count
-      chapters_before_period = Chapter.
-          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+
       mobilizations = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_mobilizations = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       signups = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("new_members_sign_ons")
+                    .sum("xra_newsletter_sign_ups")
       previous_period_signups = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                    .sum("new_members_sign_ons")
+                    .sum("xra_newsletter_sign_ups")
       trainings = Training.
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_trainings = Training.
@@ -270,17 +280,13 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
                                     .count + ArrestableAction.
           where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      subscriptions = Mobilization.sum("xra_donation_suscriptions")
-      previous_period_subscriptions = Mobilization.
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
-          sum("xra_donation_suscriptions")
 
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
 
       expect(result["members"]).to eq(active_members)
-      expect(result["members_growth"]).to eq(active_members - members_before_period)
+      expect(result["members_growth"]).to eq(members_in_this_period)
       expect(result["chapters"]).to eq(chapters)
-      expect(result["chapters_growth"]).to eq(chapters - chapters_before_period)
+      expect(result["chapters_growth"]).to eq(chapters_in_this_period.count)
       expect(result["mobilizations"]).to eq(mobilizations)
       expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
       expect(result["signups"]).to eq(signups)
@@ -292,7 +298,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
-      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions_in_this_period)
       expect(actual_date_range).to eq(6)
     end
 
@@ -301,17 +307,29 @@ RSpec.describe ReportsController, type: :controller do
       get :tiles, params: { country: 'US', dateRange: 'week' }
       result = JSON.parse(response.body)
 
-      active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
-      members_before_period = Chapter.
-          with_addresses.where(addresses: {country: country}).
-          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
-          sum("active_members")
       chapters = Chapter.with_addresses.where(addresses: {country: country}).count
-      chapters_before_period = Chapter.
-          with_addresses.where(addresses: {country: country}).
-          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      mobilizations = Mobilization.
-          with_addresses.where(addresses: {country: country}).
+      chapters_in_this_period = Chapter.with_addresses.
+          where(addresses: {country: country}).
+          where('chapters.created_at >= ?', (DateTime.now - 6.days).beginning_of_day)
+      active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
+      members_in_this_period = chapters_in_this_period.sum("active_members") +
+          Mobilization.with_addresses.
+              where(addresses: {country: country}).
+              where('mobilizations.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("new_members_sign_ons")
+
+      subscriptions = Chapter.with_addresses.
+          where(addresses: {country: country}).sum("total_subscription_amount").to_int
+
+      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount") +
+          Mobilization.with_addresses.where(addresses: {country: country}).
+              where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("total_one_time_donations").to_int
+
+      mobilizations = Mobilization.with_addresses.
+          where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_mobilizations = Mobilization.
           with_addresses.where(addresses: {country: country}).
@@ -319,11 +337,11 @@ RSpec.describe ReportsController, type: :controller do
       signups = Mobilization.
           with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("new_members_sign_ons")
+                    .sum("xra_newsletter_sign_ups")
       previous_period_signups = Mobilization.
           with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("new_members_sign_ons")
+                                    .sum("xra_newsletter_sign_ups")
       trainings = Training.
           with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
@@ -350,19 +368,13 @@ RSpec.describe ReportsController, type: :controller do
                                     .count + ArrestableAction.
           with_addresses.where(addresses: {country: country}).
           where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      subscriptions = Mobilization.
-          with_addresses.where(addresses: {country: country}).sum("xra_donation_suscriptions")
-      previous_period_subscriptions = Mobilization.
-          with_addresses.where(addresses: {country: country}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                          .sum("xra_donation_suscriptions")
 
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
 
       expect(result["members"]).to eq(active_members)
-      expect(result["members_growth"]).to eq(active_members - members_before_period)
+      expect(result["members_growth"]).to eq(members_in_this_period)
       expect(result["chapters"]).to eq(chapters)
-      expect(result["chapters_growth"]).to eq(chapters - chapters_before_period)
+      expect(result["chapters_growth"]).to eq(chapters_in_this_period.count)
       expect(result["mobilizations"]).to eq(mobilizations)
       expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
       expect(result["signups"]).to eq(signups)
@@ -374,7 +386,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
-      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions_in_this_period)
       expect(actual_date_range).to eq(6)
     end
 
@@ -385,15 +397,29 @@ RSpec.describe ReportsController, type: :controller do
 
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
 
-      active_members = Chapter.with_addresses.where(addresses: {state_province: state}).sum("active_members")
-      members_before_period = Chapter.with_addresses.
-          where(addresses: {state_province: state}).
-          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
-          sum("active_members")
       chapters = Chapter.with_addresses.where(addresses: {state_province: state}).count
-      chapters_before_period = Chapter.with_addresses.
+      chapters_in_this_period = Chapter.with_addresses.
           where(addresses: {state_province: state}).
-          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+          where('chapters.created_at >= ?', (DateTime.now - 6.days).beginning_of_day)
+      active_members = Chapter.with_addresses.
+          where(addresses: {state_province: state}).
+          sum("active_members")
+      members_in_this_period = chapters_in_this_period.sum("active_members") +
+          Mobilization.with_addresses.
+              where(addresses: {state_province: state}).
+              where('mobilizations.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("new_members_sign_ons")
+
+      subscriptions = Chapter.with_addresses.
+          where(addresses: {state_province: state}).
+          sum("total_subscription_amount").to_int
+
+      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount") +
+          Mobilization.with_addresses.where(addresses: {state_province: state}).
+              where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("total_one_time_donations").to_int
       mobilizations = Mobilization.with_addresses.
           where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
@@ -403,11 +429,11 @@ RSpec.describe ReportsController, type: :controller do
       signups = Mobilization.with_addresses.
           where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("new_members_sign_ons")
+                    .sum("xra_newsletter_sign_ups")
       previous_period_signups = Mobilization.with_addresses.
           where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("new_members_sign_ons")
+                                    .sum("xra_newsletter_sign_ups")
       trainings = Training.with_addresses.
           where(addresses: {state_province: state}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
@@ -434,18 +460,11 @@ RSpec.describe ReportsController, type: :controller do
                                     .count + ArrestableAction.with_addresses.
           where(addresses: {state_province: state}).
           where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      subscriptions = Mobilization.with_addresses.
-          where(addresses: {state_province: state}).
-          sum("xra_donation_suscriptions")
-      previous_period_subscriptions = Mobilization.with_addresses.
-          where(addresses: {state_province: state}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                          .sum("xra_donation_suscriptions")
 
       expect(result["members"]).to eq(active_members)
-      expect(result["members_growth"]).to eq(active_members - members_before_period)
+      expect(result["members_growth"]).to eq(members_in_this_period)
       expect(result["chapters"]).to eq(chapters)
-      expect(result["chapters_growth"]).to eq(chapters - chapters_before_period)
+      expect(result["chapters_growth"]).to eq(chapters_in_this_period.count)
       expect(result["mobilizations"]).to eq(mobilizations)
       expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
       expect(result["signups"]).to eq(signups)
@@ -457,31 +476,28 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
-      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions_in_this_period)
       expect(actual_date_range).to eq(6)
     end
 
     it "should return chapter data" do
-      chapter_id = 4
+      chapter_id = 1
       get :tiles, params: { country: 'US', state: 'New York', chapter: chapter_id, dateRange: 'week' }
       result = JSON.parse(response.body)
       actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
 
       chapter = Chapter.find(chapter_id)
-      active_members = chapter.active_members
-      members_before_period = Chapter.where(id: chapter.id).
-          where('chapters.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).
-          sum("active_members")
+
       mobilizations = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_mobilizations = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("new_members_sign_ons")
+                    .sum("xra_newsletter_sign_ups")
       previous_period_signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("new_members_sign_ons")
+                                    .sum("xra_newsletter_sign_ups")
       trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_trainings = Training.where(chapter: chapter).
@@ -500,14 +516,9 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
                                     .count + ArrestableAction.where(chapter: chapter).
           where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      subscriptions = Mobilization.where(chapter: chapter).
-          sum("xra_donation_suscriptions")
-      previous_period_subscriptions = Mobilization.where(chapter: chapter).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                          .sum("xra_donation_suscriptions")
 
-      expect(result["members"]).to eq(active_members)
-      expect(result["members_growth"]).to eq(active_members - members_before_period)
+      expect(result["members"]).to eq(chapter.active_members)
+      expect(result["members_growth"]).to eq(chapter.active_members)
       expect(result["chapters"]).to eq(1)
       expect(result["mobilizations"]).to eq(mobilizations)
       expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
@@ -519,9 +530,26 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
-      expect(result["subscriptions"]).to eq(subscriptions)
-      expect(result["subscriptions_growth"]).to eq(subscriptions - previous_period_subscriptions)
+      expect(result["subscriptions"]).to eq(chapter.total_subscription_amount)
+      expect(result["subscriptions_growth"]).to eq(chapter.total_subscription_amount)
       expect(actual_date_range).to eq(6)
+
+      old_chapter_id = 4
+      get :tiles, params: { country: 'US', state: 'New York', chapter: old_chapter_id, dateRange: 'week' }
+      new_result = JSON.parse(response.body)
+      old_chapter = Chapter.find(old_chapter_id)
+      new_members_in_this_period = Mobilization.with_addresses.
+              where(chapter: old_chapter_id).
+              where('mobilizations.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
+              sum("new_members_sign_ons")
+
+      new_subscriptions_in_this_period = Mobilization.with_addresses.
+              where(chapter: old_chapter).
+              where('mobilizations.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
+              sum("total_one_time_donations").to_int
+
+      expect(new_result["members_growth"]).to eq(new_members_in_this_period)
+      expect(new_result["subscriptions_growth"]).to eq(new_subscriptions_in_this_period)
     end
   end
 
@@ -618,7 +646,7 @@ def seed_db
   end
 
   3.times do |i|
-    FactoryBot.create(:chapter, name: "Old US Chapter: #{i}") do |chapter|
+    FactoryBot.create(:chapter, name: "Old US Chapter: #{i}", created_at: (DateTime.now - 32.days).beginning_of_day) do |chapter|
       FactoryBot.create :us_address, state_province: "New York", chapter: chapter
       FactoryBot.create_list :virtual_mobilization, 4, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
       FactoryBot.create_list :street_swarm, 1, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
@@ -638,7 +666,7 @@ def seed_db
   end
 
   3.times do |i|
-    FactoryBot.create(:chapter, name: "Old Global Chapter: #{i}") do |chapter|
+    FactoryBot.create(:chapter, name: "Old Global Chapter: #{i}", created_at: (DateTime.now - 32.days).beginning_of_day) do |chapter|
       FactoryBot.create :address, country: "Australia", state_province: "New South Wales", chapter: chapter
       FactoryBot.create_list :virtual_mobilization, 2, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day
       FactoryBot.create_list :street_swarm, 2, chapter: chapter, user: user, created_at: (DateTime.now - 7.days).beginning_of_day

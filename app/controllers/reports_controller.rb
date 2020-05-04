@@ -20,44 +20,45 @@ class ReportsController < ApplicationController
 
     if country.nil?
       chapters = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
-      chapters_before_current_period = Chapter.with_addresses.
+      chapters_this_period = Chapter.with_addresses.
           eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where('chapters.created_at < ?' , (DateTime.now - date_range_days.days).beginning_of_day)
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     elsif country.upcase == 'US' && !region.nil? && state.nil?
       states = Regions.us_regions[region.to_sym][:states]
       chapters = Chapter.with_addresses
                      .eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
           where(addresses: {country: 'United States', state_province: states})
-      chapters_before_current_period = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+      chapters_this_period = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
           where(addresses: {country: 'United States', state_province: states}).
-          where('chapters.created_at < ?' , (DateTime.now - date_range_days.days).beginning_of_day)
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     elsif state.nil?
       country = CS.countries[country.to_sym]
       chapters = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country})
 
-      chapters_before_current_period = Chapter.with_addresses.
+      chapters_this_period = Chapter.with_addresses.
           eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
           where(addresses: {country: country}).
-          where('chapters.created_at < ?' , (DateTime.now - date_range_days.days).beginning_of_day)
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
 
     elsif chapter_id.nil?
       state = validate_state(country, state)
+      country = CS.countries[country.to_sym]
       chapters = Chapter.with_addresses.
           eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {state_province: state})
-      chapters_before_current_period = Chapter.
+          where(addresses: {state_province: state, country: country})
+      chapters_this_period = Chapter.
           with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {state_province: state}).
-          where('chapters.created_at < ?' , (DateTime.now - date_range_days.days).beginning_of_day)
+          where(addresses: {state_province: state, country: country}).
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     else
       chapters = Chapter.with_addresses.
           eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
-      chapters_before_current_period = Chapter.with_addresses.
+      chapters_this_period = Chapter.with_addresses.
           eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id).
-          where('chapters.created_at < ?' , (DateTime.now - date_range_days.days).beginning_of_day)
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     end
 
-    this_period_mobilizations = filter_mobilizations(chapters, date_range_days)
+    mobilizations_this_period = filter_mobilizations(chapters, date_range_days)
     previous_period_mobilizations = filter_mobilizations(chapters,
                                                          calculate_days_ago_for_previous_period(date_range_days),
                                                          (DateTime.now - date_range_days.days).beginning_of_day)
@@ -79,21 +80,21 @@ class ReportsController < ApplicationController
 
     report_data = {
         chapters: chapters.count,
-        chapters_growth: chapters.count - chapters_before_current_period.count,
+        chapters_growth: chapters_this_period.count,
         members: chapters.sum(&:active_members),
-        members_growth: chapters.sum(&:active_members) - chapters_before_current_period.sum(&:active_members),
-        mobilizations: this_period_mobilizations.length,
-        mobilizations_growth: this_period_mobilizations.length - previous_period_mobilizations.length,
-        signups: this_period_mobilizations.sum(&:new_members_sign_ons),
-        signups_growth: this_period_mobilizations.sum(&:new_members_sign_ons) - previous_period_mobilizations.sum(&:new_members_sign_ons),
+        members_growth: get_members_growth(chapters_this_period, mobilizations_this_period),
+        subscriptions: chapters.sum(&:total_subscription_amount).to_int,
+        subscriptions_growth: get_subscriptions_growth(chapters_this_period, mobilizations_this_period),
+        mobilizations: mobilizations_this_period.length,
+        mobilizations_growth: mobilizations_this_period.length - previous_period_mobilizations.length,
+        signups: mobilizations_this_period.sum(&:xra_newsletter_sign_ups),
+        signups_growth: mobilizations_this_period.sum(&:xra_newsletter_sign_ups) - previous_period_mobilizations.sum(&:xra_newsletter_sign_ups),
         trainings: filtered_trainings.length,
         trainings_growth: filtered_trainings.length - previous_period_trainings.length,
-        pledges_arrestable: this_period_mobilizations.sum(&:arrestable_pledges),
-        pledges_arrestable_growth: this_period_mobilizations.sum(&:arrestable_pledges) - previous_period_mobilizations.sum(&:arrestable_pledges),
+        pledges_arrestable: mobilizations_this_period.sum(&:arrestable_pledges),
+        pledges_arrestable_growth: mobilizations_this_period.sum(&:arrestable_pledges) - previous_period_mobilizations.sum(&:arrestable_pledges),
         actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
         actions_growth: (filtered_street_swarms.length + filtered_arrestable_actions.length) - (previous_period_street_swarms.length + previous_period_arrestable_actions.length),
-        subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions),
-        subscriptions_growth: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions) - previous_period_mobilizations.flatten.sum(&:xra_donation_suscriptions),
         start_date: (DateTime.now - date_range_days.days).strftime("%d %B %Y"),
         end_date: DateTime.now.strftime("%d %B %Y")
     }
@@ -136,6 +137,18 @@ class ReportsController < ApplicationController
 
   private
 
+  def get_members_growth(chapters_this_period, mobilizations_this_period)
+    mobilizations_this_period.select { |m| chapters_this_period.map(&:id).exclude? m.chapter_id }.sum(&:new_members_sign_ons) +
+        chapters_this_period.sum(&:active_members)
+  end
+
+  def get_subscriptions_growth(chapters_this_period, mobilizations_this_period)
+    # TODO - We are currently using mobilizations.total_one_time_donations to calculate new subscriptions in a period.
+    # We should update this DB column name to be total_donation_subscriptions instead.
+    mobilizations_this_period.select { |m| chapters_this_period.map(&:id).exclude? m.chapter_id }.sum(&:total_one_time_donations).to_int +
+        chapters_this_period.sum(&:total_subscription_amount).to_int
+  end
+
   def calculate_days_ago_for_previous_period(date_range_days)
     date_range_days * 2 + 1
   end
@@ -159,12 +172,12 @@ class ReportsController < ApplicationController
           country: country[0],
           members: chapters.sum(&:active_members),
           chapters: chapters.count,
-          signups: filtered_mobilizations.sum(&:new_members_sign_ons),
+          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
           trainings: filtered_trainings.length,
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.sum(&:total_subscription_amount).to_int
       }
     end
   end
@@ -190,12 +203,12 @@ class ReportsController < ApplicationController
 
         result[:members] = chapters.sum(&:active_members)
         result[:chapters] = chapters.count
-        result[:signups] = filtered_mobilizations.sum(&:new_members_sign_ons)
+        result[:signups] = filtered_mobilizations.sum(&:xra_newsletter_sign_ups)
         result[:trainings] = filtered_trainings.length
         result[:arrestable_pledges] = filtered_mobilizations.sum(&:arrestable_pledges)
         result[:actions] = filtered_street_swarms.length + filtered_arrestable_actions.length
         result[:mobilizations] = filtered_mobilizations.length
-        result[:subscriptions] =  chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
+        result[:subscriptions] =  chapters.sum(&:total_subscription_amount).to_int
       end
       result
     end
@@ -221,12 +234,12 @@ class ReportsController < ApplicationController
           state: state[0],
           members: chapters.sum(&:active_members),
           chapters: chapters.count,
-          signups: filtered_mobilizations.sum(&:new_members_sign_ons),
+          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
           trainings: filtered_trainings.length,
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.sum(&:total_subscription_amount).to_int
       }
     end
   end
@@ -249,22 +262,23 @@ class ReportsController < ApplicationController
           state: state[0],
           members: chapters.sum(&:active_members),
           chapters: chapters.count,
-          signups: filtered_mobilizations.sum(&:new_members_sign_ons),
+          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
           trainings: filtered_trainings.length,
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.sum(&:total_subscription_amount).to_int
       }
     end
   end
 
   def chapters(country, state, date_range_days)
     state = validate_state(country, state)
+    country = CS.countries[country.to_sym]
 
     states_chapters = Chapter.with_addresses.
         includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-        where(addresses: {state_province: state}).
+        where(addresses: {country: country, state_province: state}).
         group_by { |c| c.id }
 
     states_chapters.map do |chapter|
@@ -280,12 +294,12 @@ class ReportsController < ApplicationController
           chapter: chapter.name,
           members: chapter.active_members,
           chapters: 1,
-          signups: filtered_mobilizations.sum(&:new_members_sign_ons),
+          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
           trainings: filtered_trainings.length,
           arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
           actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
           mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.map(&:mobilizations).flatten.sum(&:xra_donation_suscriptions)
+          subscriptions: chapters.sum(&:total_subscription_amount).to_int
       }
     end
   end
@@ -304,11 +318,12 @@ class ReportsController < ApplicationController
         chapter: chapter.name,
         members: chapter.active_members,
         chapters: 1,
-        signups: filtered_mobilizations.sum(&:new_members_sign_ons),
+        signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
         trainings: filtered_trainings.length,
         arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
         actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
-        mobilizations: filtered_mobilizations.length, subscriptions: filtered_mobilizations.sum(&:xra_donation_suscriptions)
+        mobilizations: filtered_mobilizations.length,
+        subscriptions: chapter.total_subscription_amount.to_int
     }
     }
   end
