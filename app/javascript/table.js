@@ -117,8 +117,10 @@ const record = (obj) => {
     link += queryParams.join('&') + location.hash;
     link = encodeURI(link);
 
+    let linkElement = chapter ? `${obj[groupByProperty]}` : `<a href=${link}>${obj[groupByProperty]}</a>`;
+
     return `<tr>
-              <td scope="row"><a href=${link}>${obj[groupByProperty]}</a></td>
+              <td scope="row">${linkElement}</td>
               <td>${obj.chapters === undefined ? 0 : obj.chapters}</td>
               <td>${obj.members === undefined ? 0 : obj.members}</td>
               <td>${obj.mobilizations === undefined ? 0 : obj.mobilizations}</td>
