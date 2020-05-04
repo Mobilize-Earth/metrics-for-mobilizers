@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_30_144529) do
+ActiveRecord::Schema.define(version: 2020_05_04_131022) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "country"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_144529) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "report_date"
     t.index ["chapter_id"], name: "index_arrestable_actions_on_chapter_id"
     t.index ["user_id"], name: "index_arrestable_actions_on_user_id"
   end
@@ -60,6 +61,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_144529) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "mobilization_type"
     t.string "event_type"
+    t.datetime "report_date"
     t.index ["chapter_id"], name: "index_mobilizations_on_chapter_id"
     t.index ["user_id"], name: "index_mobilizations_on_user_id"
   end
@@ -70,6 +72,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_144529) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "report_date"
     t.index ["chapter_id"], name: "index_social_media_blitzings_on_chapter_id"
     t.index ["user_id"], name: "index_social_media_blitzings_on_user_id"
   end
@@ -92,6 +95,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_144529) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "training_type"
+    t.datetime "report_date"
     t.index ["chapter_id"], name: "index_trainings_on_chapter_id"
     t.index ["user_id"], name: "index_trainings_on_user_id"
   end
