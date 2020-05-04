@@ -123,7 +123,7 @@ const record = (obj) => {
               <td>${obj.members === undefined ? 0 : obj.members}</td>
               <td>${obj.mobilizations === undefined ? 0 : obj.mobilizations}</td>
               <td>${obj.trainings === undefined ? 0 : obj.trainings}</td>
-              <td>${obj.subscriptions === undefined ? 0 : obj.subscriptions}</td>
+              <td>$${obj.subscriptions === undefined ? 0 : obj.subscriptions}</td>
               <td>${obj.signups === undefined ? 0 : obj.signups}</td>
               <td>${obj.arrestable_pledges === undefined ? 0 : obj.arrestable_pledges}</td>
               <td>${obj.actions === undefined ? 0 : obj.actions}</td>
