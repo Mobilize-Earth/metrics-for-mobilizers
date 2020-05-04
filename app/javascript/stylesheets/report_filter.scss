@@ -13,6 +13,22 @@
     }
   }
 
+  #report-page-breadcrumbs {
+
+    &.hidden,
+    .hidden {
+      display: none;
+    }
+
+    .fa-angle-right {
+      padding: 0 1rem;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
   .report-page-header-right {
     display: flex;
     justify-content: flex-end;

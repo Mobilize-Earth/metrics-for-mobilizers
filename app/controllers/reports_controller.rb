@@ -9,6 +9,9 @@ class ReportsController < ApplicationController
   }
 
   def index
+    if params[:chapter]
+      @chapter_name = Chapter.find(params[:chapter]).name
+    end
   end
 
   def tiles

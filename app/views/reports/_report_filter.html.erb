@@ -1,5 +1,26 @@
 <div class="report-filter-container row">
   <div class="report-page-header col-md-6 col-sm-12">
+    <div id="report-page-breadcrumbs" class="hidden">
+      <h5>
+        <a href="/reports" id="report-breadcrumb-global">Global</a>
+        <span id="report-breadcrumb-country-wrapper" class="hidden">
+          <span class="fa fa-angle-right"></span>
+          <span id="report-breadcrumb-country">Country</span>
+        </span>
+        <span id="report-breadcrumb-region-wrapper" class="hidden">
+          <span class="fa fa-angle-right"></span>
+          <span id="report-breadcrumb-region">Region</span>
+        </span>
+        <span id="report-breadcrumb-state-wrapper" class="hidden">
+          <span class="fa fa-angle-right"></span>
+          <span id="report-breadcrumb-state">State</span>
+        </span>
+        <span id="report-breadcrumb-chapter-wrapper" class="hidden">
+          <span class="fa fa-angle-right"></span>
+          <span id="report-breadcrumb-chapter">Chapter</span>
+        </span>
+      </h5>
+    </div>
     <h1 class="report-page-title">Global</h1>
     <h2 class="report-page-subtitle">
       <span class="report-page-start-date">30 February 2020</span>
@@ -17,3 +38,57 @@
     </nav>
   </div>
 </div>
+
+<script>
+  function initializeBreadcrumbs() {
+      const countryNamesMapping = <%= CS.countries.to_json.html_safe %>;
+      const regionNamesMapping = <%= Regions.us_regions.to_json.html_safe %>;
+
+      let params = new URL(window.location.href).searchParams;
+      let country = params.get('country');
+      let state = params.get('state');
+      let region = params.get('region');
+      let chapter = params.get('chapter');
+
+      if (!country) return;
+
+      if (country) {
+          $('#report-page-breadcrumbs').removeClass('hidden');
+          showBreadCrumb('country', countryNamesMapping[country]);
+      }
+
+      if (region) {
+          showBreadCrumb('region', regionNamesMapping[`${region}`]['name']);
+          showBreadCrumb('country', `<a href="/reports?country=${country}">${countryNamesMapping[country]}</a>`);
+      }
+
+      if (state && region) {
+          showBreadCrumb('region', `<a href="/reports?country=${country}&region=${region}">${regionNamesMapping[`${region}`]['name']}</a>`);
+      }
+
+      if (state) {
+          showBreadCrumb('state', state);
+          showBreadCrumb('country', `<a href="/reports?country=${country}">${countryNamesMapping[country]}</a>`);
+      }
+
+      if (chapter) {
+          showBreadCrumb('chapter', <%= @chapter_name.to_json.html_safe %>);
+      }
+
+      if (chapter && region) {
+          $('#report-breadcrumb-state').html(`<a href="/reports?country=${country}&region=${region}&state=${encodeURIComponent(state)}">${state}</a>`);
+      }
+
+      if (chapter && !region) {
+          $('#report-breadcrumb-state').html(`<a href="/reports?country=${country}&state=${encodeURIComponent(state)}">${state}</a>`);
+      }
+  }
+
+  function showBreadCrumb(type, htmlString) {
+      $(`#report-breadcrumb-${type}-wrapper`).removeClass('hidden');
+      $(`#report-breadcrumb-${type}`).html(htmlString);
+  }
+
+  initializeBreadcrumbs();
+
+</script>

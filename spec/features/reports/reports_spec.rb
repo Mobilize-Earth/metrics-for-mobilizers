@@ -1,5 +1,66 @@
 require 'rails_helper'
 
+feature 'reports breadcrumbs' do
+  before(:each) do
+    @user = FactoryBot.create(:coordinator)
+    sign_in(@user.email, @user.password)
+  end
+
+  scenario 'should not be visible on page load' do
+    visit reports_path
+    expect(page).to have_selector('#report-page-breadcrumbs', visible: false)
+  end
+
+  scenario 'should show Global and Country on country filter' do
+    visit reports_path(country: 'US')
+    expect(find('#report-breadcrumb-global')).to have_content 'Global'
+    expect(find('#report-breadcrumb-country')).to have_content 'United States'
+  end
+
+  scenario 'should show Global, Country and Region on region filter' do
+    visit reports_path(country: 'US', region: 'region_1')
+    expect(find('#report-breadcrumb-global')).to have_content 'Global'
+    expect(find('#report-breadcrumb-country')).to have_content 'United States'
+    expect(find('#report-breadcrumb-region')).to have_content 'Upper East'
+  end
+
+  scenario 'should show Global, Country, Region and State on US state filter' do
+    visit reports_path(country: 'US', region: 'region_1', state: 'New York')
+    expect(find('#report-breadcrumb-global')).to have_content 'Global'
+    expect(find('#report-breadcrumb-country')).to have_content 'United States'
+    expect(find('#report-breadcrumb-region')).to have_content 'Upper East'
+    expect(find('#report-breadcrumb-state')).to have_content 'New York'
+  end
+
+  scenario 'should show Global, Country, Region and State on on-US state filter' do
+    visit reports_path(country: 'AU', state: 'New South Wales')
+    expect(find('#report-breadcrumb-global')).to have_content 'Global'
+    expect(find('#report-breadcrumb-country')).to have_content 'Australia'
+    expect(find('#report-breadcrumb-state')).to have_content 'New South Wales'
+    expect(page).to have_selector('#report-breadcrumb-region', visible: false)
+  end
+
+  scenario 'should show Global, Country, Region and State on US chapter filter' do
+    chapter = Chapter.find(1)
+    visit reports_path(country: 'US', region: 'region_1', state: 'New York', chapter: chapter.id)
+    expect(find('#report-breadcrumb-global')).to have_content 'Global'
+    expect(find('#report-breadcrumb-country')).to have_content 'United States'
+    expect(find('#report-breadcrumb-region')).to have_content 'Upper East'
+    expect(find('#report-breadcrumb-state')).to have_content 'New York'
+    expect(find('#report-breadcrumb-chapter')).to have_content chapter.name
+  end
+
+  scenario 'should show Global, Country, Region and State on on-US chapter filter' do
+    chapter = Chapter.find(1)
+    visit reports_path(country: 'AU', state: 'New South Wales', chapter: chapter.id)
+    expect(find('#report-breadcrumb-global')).to have_content 'Global'
+    expect(find('#report-breadcrumb-country')).to have_content 'Australia'
+    expect(find('#report-breadcrumb-state')).to have_content 'New South Wales'
+    expect(find('#report-breadcrumb-chapter')).to have_content chapter.name
+    expect(page).to have_selector('#report-breadcrumb-region', visible: false)
+  end
+end
+
 feature 'report tiles' do
   before(:each) do
     @user = FactoryBot.create(:coordinator)
