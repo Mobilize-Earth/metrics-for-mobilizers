@@ -1,6 +1,7 @@
 <%= form_for @social_media_blitzing do |f| %>
     <h2 id="form-title">&nbsp;</h2>
     <%= hidden_field_tag :social_media_blitzing_type , "", id: "training-type-input" %>
+    <%= hidden_field_tag :report_date %>
     <div class="form-group">
         <div>
             <%= f.label :social_media_campaigns, "# Social Media Campaigns *", class: "action-form-label" %>
@@ -15,3 +16,7 @@
         <p class="warning">Cannot undo this action</p>
     </div>
 <% end %>
+<script>
+    var localTime = new Date();
+    $('#report_date').val(localTime)
+</script>
