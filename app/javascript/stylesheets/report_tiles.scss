@@ -26,6 +26,7 @@
     .report-card-top {
       text-align: justify;
       display: inline-block;
+      width: 100%;
 
       h1,
       h3 {
@@ -38,14 +39,32 @@
       }
 
       h3 {
-        font-size: 1.25rem;
+        font-size: 1rem;
         color: $grey;
+      }
+
+      .card-top-right {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+    }
+
+    .report-card-bottom {
+
+      .growth-description {
+        font-size: 1rem;
+      }
+
+      .fa {
+        padding-left: 10px;
       }
     }
 
     h2 {
       font-size: 1.25rem;
       text-align: justify;
+      padding-top: 10px;
+      padding-bottom: 10px;
 
       @include media-breakpoint-up(sm) {
         font-size: 1.75rem;
