@@ -7,10 +7,6 @@ RUN apk update \
 RUN mkdir /app
 WORKDIR /app
 
-COPY Gemfile /app/Gemfile
-COPY Gemfile.lock /app/Gemfile.lock
-COPY startup.sh /app/startup
-
 RUN gem install sassc -- --disable-march-tune-native
 RUN gem install mailcatcher
 RUN bundle install
