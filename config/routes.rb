@@ -1,15 +1,16 @@
 Rails.application.routes.draw do
   get 'reports/index'
+
   devise_for :users, controllers: {
-    sessions: 'users/sessions',
-    passwords: 'users/passwords'
+      sessions: 'users/sessions',
+      passwords: 'users/passwords'
   }
 
-  resources :users
   resources :chapters
+  resources :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   authenticated :user, ->(u) { u.role == 'external' } do
-    root to: "chapters#current_user_chapter", as: :external_root
+    root to: "forms#index", as: :external_root
   end
 
   authenticated :user, ->(u) { u.role == 'admin' } do

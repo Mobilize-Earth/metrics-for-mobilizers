@@ -29,17 +29,14 @@
     display: flex;
 
     .chart-tab {
+      @include standard-hover-state();
+
       font-size: .9rem;
       margin: 0.25rem 0.25rem 0 0.25rem;
       padding: 0.75rem 0.75rem 1rem 0.75rem;
       text-align: center;
       color: $grey;
       text-decoration: none;
-
-      &:hover {
-        background-color: $light-grey;
-        cursor: pointer;
-      }
     }
 
     .active {

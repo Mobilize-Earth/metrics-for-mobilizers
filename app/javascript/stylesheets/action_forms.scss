@@ -7,15 +7,13 @@
   }
 
   .nav-pills .nav-link {
+    @include standard-hover-state();
+
+    color: $black;
     margin-bottom: 10px;
     background-color: #fff;
-    color: #333;
     text-align: center;
     white-space: nowrap;
-
-    &:hover {
-      background-color: #ededed;
-    }
   }
 
   .nav-pills .nav-link.active {
@@ -34,7 +32,7 @@
   }
 
   #form-title {
-    color: #333;
+    color: $black;
     font-size: 1.6rem;
   }
 
@@ -45,7 +43,7 @@
   }
 
   .action-form-content {
-    background-color: white;
+    background-color: $white;
     box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.5);
     border: solid 1px #f4f5f0;
     padding: 20px;
@@ -54,7 +52,7 @@
   }
 
   .action-submit-btn {
-    background-color: #03ad6f;
+    background-color: $green;
     font-size: 1rem;
     font-weight: 600;
     font-stretch: normal;
@@ -72,14 +70,14 @@
     font-style: italic;
   }
   .action-form-label {
-    color: #9b9b9b;
+    color: $grey;
     font-size: 15px;
   }
   .action-form-input {
     max-width: 140px;
   }
   .action-form-option-button {
-    color: #252525;
+    color: $black;
     font-size: 13px;
     padding: 5px;
   }

@@ -42,7 +42,6 @@ class Ability
     end
 
     if user.role == 'external' then
-      can :show, ChaptersController
       can :index, FormsController
       can :new, ArrestableActionsController
       can :new, StreetSwarmsController

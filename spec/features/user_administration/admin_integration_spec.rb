@@ -85,24 +85,42 @@ end
 
 feature 'navigation' do
     before(:each) do
-        @admin_user = FactoryBot.create(:administrator)
+        @user = FactoryBot.create(:administrator)
+        sign_in(@user.email, @user.password)
+        visit_home_page
     end
 
-    scenario 'should be redirect to sign in page when access user administration page' do
-        visit_home_page
-        visit new_user_path
-        expect(page).to have_current_path new_user_session_path, ignore_query: true
+    scenario 'homepage should be admins/index' do
+        expect(page).to have_content 'Navigation'
     end
 
     scenario 'should access create user page with correct credentials' do
-        sign_in(@admin_user.email, @admin_user.password)
         find_link('link-users').click
         expect(page).to have_current_path new_user_path, ignore_query: true
     end
 
     scenario 'should access edit user page with correct credentials' do
-        sign_in(@admin_user.email, @admin_user.password)
-        visit edit_user_path(@admin_user)
-        expect(page).to have_current_path edit_user_path(@admin_user), ignore_query: true
+        visit edit_user_path(@user)
+        expect(page).to have_current_path edit_user_path(@user), ignore_query: true
+    end
+
+    scenario 'should be able to click to reports page and back to onboarding' do
+        click_on "View Reports"
+        expect(page).to have_current_path '/reports', ignore_query: true
+        click_on "Onboarding"
+        expect(page).to have_content 'Navigation'
+    end
+
+    scenario 'should redirect to admin dashboard when visiting forms/index' do
+        visit "/forms/index"
+        expect(page).to have_content "Navigation"
+        expect(page).to have_content "You are not authorized to access this page."
+    end
+end
+
+feature 'navigation' do
+    scenario 'should be redirect to sign in page when access user administration page' do
+        visit new_user_path
+        expect(page).to have_current_path "/users/sign_in", ignore_query: true
     end
 end

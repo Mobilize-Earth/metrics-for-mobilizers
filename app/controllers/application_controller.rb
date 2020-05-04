@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
         if current_user.role == 'admin' then
             admins_index_url
         elsif current_user.role == 'external' then
-            chapter_url(current_user.chapter)
+            external_root_path
         end
     end
 
@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
         if current_user.role == 'admin' then
             redirect_to admins_index_url
         elsif current_user.role == 'external' then
-            redirect_to chapter_url(current_user.chapter)
+            redirect_to external_root_path
         end
         flash[:error] = exception.message
     end

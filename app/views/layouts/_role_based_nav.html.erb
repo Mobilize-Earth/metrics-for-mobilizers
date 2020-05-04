@@ -5,7 +5,7 @@
     <% end %>
 
     <% if current_user.role == 'external' %>
-      <%= link_to "Report Entry", admins_root_path, {class: controller_name == 'chapters' && action_name == 'show' ? 'selected' : '', id: 'report-entry-nav-link'} %>
+      <%= link_to "Report Entry", admins_root_path, {class: controller_name == 'forms' && action_name == 'index' ? 'selected' : '', id: 'report-entry-nav-link'} %>
     <% end %>
 
     <% if current_user.role == 'admin' || current_user.role == 'external' %>

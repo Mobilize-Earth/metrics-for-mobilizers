@@ -16,6 +16,8 @@
     height: 100%;
 
     a {
+      @include standard-hover-state();
+
       display: inline-block;
       padding: 0 1rem;
       line-height: $header-height / 2;
@@ -23,13 +25,6 @@
       color: $black;
       font-size: 1rem;
       letter-spacing: 0.5px;
-
-      &:hover {
-        background-color: $light-grey;
-        cursor: pointer;
-        color: $black;
-        text-decoration: none;
-      }
     }
 
     .selected {
@@ -38,16 +33,15 @@
   }
 
   .login-button, .logout-button {
+    @include standard-hover-state();
+
     border: 2px solid $green;
     padding: 0.5rem 2rem;
-
-    &:hover {
-      background-color: $light-grey;
-      cursor: pointer;
-    }
   }
 
   .header-right {
+    @include standard-hover-state();
+
     margin-right: 1.5rem;
     margin-left: auto;
 
@@ -60,13 +54,10 @@
       margin: 0 0.5rem;
     }
 
-    &:hover {
-      background-color: $light-grey;
-      cursor: pointer;
-    }
-
     .dropdown {
       .dropdown-toggle {
+        @include standard-hover-state();
+
         color: $black;
         line-height: $header-height / 2;
         display: block;
@@ -74,12 +65,6 @@
 
         .fa {
           margin-top: -3px;
-        }
-
-        &:hover {
-          text-decoration: none;
-          background-color: $light-grey;
-          cursor: pointer;
         }
       }
 
@@ -90,6 +75,8 @@
         border: 0;
 
         a {
+          @include standard-hover-state();
+
           display: block;
           color: $black;
           padding: 1rem;
@@ -97,12 +84,6 @@
           border: 2px solid $light-grey;
           border-bottom: 0;
           text-align: center;
-
-          &:hover {
-            text-decoration: none;
-            background-color: $light-grey;
-            cursor: pointer;
-          }
 
           &:last-child {
             border-bottom: 2px solid $light-grey;

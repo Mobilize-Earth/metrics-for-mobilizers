@@ -25,6 +25,8 @@
   }
 
   .nav-link {
+    @include standard-hover-state();
+
     margin-left: 5px;
     background-color: white;
     border-radius: 3px;
@@ -32,10 +34,6 @@
     width: 60px;
     box-shadow: $standard-box-shadow;
     cursor: pointer;
-
-    &:hover {
-      background-color: $light-grey;
-    }
   }
 
   .nav-link.active {
