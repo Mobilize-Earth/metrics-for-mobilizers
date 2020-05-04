@@ -17,7 +17,10 @@ feature 'external coordinator', :devise do
         expect(page).to have_content "You are not authorized to access this page."
     end
 
-    scenario 'redirected from landing page to dashboard' do
+    scenario 'should be able to click to reports page and back to forms' do
+        click_on "View Reports"
+        expect(page).to have_current_path '/reports', ignore_query: true
+        click_on "Report Entry"
         expect(page).to have_content 'Click to complete for each activity category your chapter participated in this week.'
     end
 end

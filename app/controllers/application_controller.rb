@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
             admins_index_url
         elsif current_user.role == 'external' then
             external_root_path
+        elsif current_user.role == 'reviewer' then
+            reviewer_root_path
         end
     end
 
@@ -15,6 +17,8 @@ class ApplicationController < ActionController::Base
             redirect_to admins_index_url
         elsif current_user.role == 'external' then
             redirect_to external_root_path
+        elsif current_user.role == 'reviewer' then
+            redirect_to reviewer_root_path
         end
         flash[:error] = exception.message
     end

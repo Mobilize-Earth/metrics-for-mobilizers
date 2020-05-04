@@ -8,7 +8,7 @@
       <%= link_to "Report Entry", admins_root_path, {class: controller_name == 'forms' && action_name == 'index' ? 'selected' : '', id: 'report-entry-nav-link'} %>
     <% end %>
 
-    <% if current_user.role == 'admin' || current_user.role == 'external' %>
+    <% if current_user.role == 'admin' || current_user.role == 'external' || current_user.role == 'reviewer' %>
       <%= link_to "View Reports", reports_path, {class: controller_name == 'reports' && action_name == 'index' ? 'selected' : '', id: 'view-reports-nav-link'} %>
     <% end %>
   <% end %>

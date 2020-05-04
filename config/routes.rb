@@ -17,6 +17,10 @@ Rails.application.routes.draw do
     root to: "admins#index", as: :admins_root
   end
 
+  authenticated :user, ->(u) { u.role == 'reviewer' } do
+    root to: "reports#index", as: :reviewer_root
+  end
+
   root to: "home#index"
 
   get '/forms/index' => 'forms#index'
