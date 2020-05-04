@@ -1,27 +1,27 @@
 <div class="report-filter-container row">
-  <div class="report-page-header col-md-6 col-sm-12">
-    <div id="report-page-breadcrumbs" class="hidden">
-      <h5>
-        <a href="/reports" id="report-breadcrumb-global">Global</a>
-        <span id="report-breadcrumb-country-wrapper" class="hidden">
+  <div id="report-page-breadcrumbs" class="col-md-12 hidden">
+    <h5>
+      <a href="/reports" id="report-breadcrumb-global">Global</a>
+      <span id="report-breadcrumb-country-wrapper" class="hidden">
           <span class="fa fa-angle-right"></span>
           <span id="report-breadcrumb-country">Country</span>
         </span>
-        <span id="report-breadcrumb-region-wrapper" class="hidden">
+      <span id="report-breadcrumb-region-wrapper" class="hidden">
           <span class="fa fa-angle-right"></span>
           <span id="report-breadcrumb-region">Region</span>
         </span>
-        <span id="report-breadcrumb-state-wrapper" class="hidden">
+      <span id="report-breadcrumb-state-wrapper" class="hidden">
           <span class="fa fa-angle-right"></span>
           <span id="report-breadcrumb-state">State</span>
         </span>
-        <span id="report-breadcrumb-chapter-wrapper" class="hidden">
+      <span id="report-breadcrumb-chapter-wrapper" class="hidden">
           <span class="fa fa-angle-right"></span>
           <span id="report-breadcrumb-chapter">Chapter</span>
         </span>
-      </h5>
-    </div>
-    <h1 class="report-page-title">Global</h1>
+    </h5>
+  </div>
+  <div class="report-page-header col-md-6 col-sm-12">
+    <h1 id="report-page-title">Global</h1>
     <h2 class="report-page-subtitle">
       <span class="report-page-start-date">30 February 2020</span>
       -
@@ -55,11 +55,13 @@
       if (country) {
           $('#report-page-breadcrumbs').removeClass('hidden');
           showBreadCrumb('country', countryNamesMapping[country]);
+          updateReportPageTitle(countryNamesMapping[country]);
       }
 
       if (region) {
           showBreadCrumb('region', regionNamesMapping[`${region}`]['name']);
           showBreadCrumb('country', `<a href="/reports?country=${country}">${countryNamesMapping[country]}</a>`);
+          updateReportPageTitle(regionNamesMapping[`${region}`]['name']);
       }
 
       if (state && region) {
@@ -68,11 +70,13 @@
 
       if (state) {
           showBreadCrumb('state', state);
+          updateReportPageTitle(state);
           showBreadCrumb('country', `<a href="/reports?country=${country}">${countryNamesMapping[country]}</a>`);
       }
 
       if (chapter) {
           showBreadCrumb('chapter', <%= @chapter_name.to_json.html_safe %>);
+          updateReportPageTitle(<%= @chapter_name.to_json.html_safe %>);
       }
 
       if (chapter && region) {
@@ -87,6 +91,10 @@
   function showBreadCrumb(type, htmlString) {
       $(`#report-breadcrumb-${type}-wrapper`).removeClass('hidden');
       $(`#report-breadcrumb-${type}`).html(htmlString);
+  }
+
+  function updateReportPageTitle(title) {
+      $('#report-page-title').html(title);
   }
 
   initializeBreadcrumbs();

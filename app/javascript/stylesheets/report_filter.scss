@@ -4,9 +4,6 @@
   .report-page-header {
     padding-left: 25px;
 
-    .report-page-title {
-    }
-
     .report-page-subtitle {
       color: $green;
       font-size: 1rem;
@@ -14,6 +11,12 @@
   }
 
   #report-page-breadcrumbs {
+    padding-left: 25px;
+
+    h5 {
+      font-size: 1rem;
+    }
+
 
     &.hidden,
     .hidden {
