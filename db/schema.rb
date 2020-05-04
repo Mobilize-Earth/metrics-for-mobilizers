@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_144529) do
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "report_date"
     t.index ["chapter_id"], name: "index_street_swarms_on_chapter_id"
     t.index ["user_id"], name: "index_street_swarms_on_user_id"
   end
@@ -114,7 +115,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_144529) do
     t.datetime "invitation_accepted_at"
     t.integer "invitation_limit"
     t.string "invited_by_type"
-    t.bigint "invited_by_id"
+    t.integer "invited_by_id"
     t.integer "invitations_count", default: 0
     t.index ["chapter_id"], name: "index_users_on_chapter_id"
     t.index ["email"], name: "index_users_on_email", unique: true
