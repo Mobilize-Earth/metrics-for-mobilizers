@@ -7,6 +7,11 @@ $table-padding: 1rem;
     font-size: 16px;
   }
 }
+
+.report-table-padding-wrapper {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .report-table-container {
   max-height: 535px;
   overflow-y: auto;
