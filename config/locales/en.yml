@@ -42,10 +42,10 @@ en:
               taken: "Chapter %{attribute} is already taken"
               too_long: "Chapter %{attribute} is too long"
             active_members:
-              blank: "number of members total is required"
-              not_a_number: "number of members total must be a number"
-              not_an_integer: "number of members total must be a number"
-              less_than_or_equal_to: "number of members total is too long"
+              blank: "Members total is required"
+              not_a_number: "Members total must be a number"
+              not_an_integer: "Members total must be a number"
+              less_than_or_equal_to: "Members total is too long"
             total_subscription_amount:
               blank: "$ Total of Subscriptions is required"
               not_a_number: "$ Total of Subscriptions must be a number"
@@ -66,43 +66,43 @@ en:
         arrestable_action:
           attributes:
             xra_members:
-              greater_than_or_equal_to: "Number of members must be greater than or equal to zero"
-              not_an_integer: "Number of members must be a number"
-              less_than_or_equal_to: "Number of members is too long"
-              not_a_number: "Number of members must be a number"
+              greater_than_or_equal_to: "Members amount must be greater than or equal to zero"
+              not_an_integer: "Members amount must be a number"
+              less_than_or_equal_to: "Members amount is too long"
+              not_a_number: "Members amount must be a number"
             xra_not_members:
-              greater_than_or_equal_to: "Number of non-members must be greater than or equal to zero"
-              not_an_integer: "Number of non-members must be a number"
-              less_than_or_equal_to: "Number of non-members is too long"
-              not_a_number: "Number of non-members must be a number"
+              greater_than_or_equal_to: "Non-members amount must be greater than or equal to zero"
+              not_an_integer: "Non-members amount must be a number"
+              less_than_or_equal_to: "Non-members amount is too long"
+              not_a_number: "Non-members amount must be a number"
             trained_arrestable_present:
-              greater_than_or_equal_to: "Number of trained arrestable must be greater than or equal to zero"
-              not_an_integer: "Number of trained arrestable present must be a number"
-              less_than_or_equal_to: "Number of trained arrestable present is too long"
-              not_a_number: "Number of trained arrestable present must be a number"
+              greater_than_or_equal_to: "Amount of trained arrestable must be greater than or equal to zero"
+              not_an_integer: "Amount of trained arrestable present must be a number"
+              less_than_or_equal_to: "Amount of trained arrestable present is too long"
+              not_a_number: "Amount of trained arrestable present must be a number"
             arrested:
-              greater_than_or_equal_to: "Number of arrested must be greater than or equal to zero"
-              not_an_integer: "Number of arrested must be a number"
-              less_than_or_equal_to: "Number of arrested is too long"
-              not_a_number: "Number of arrested must be a number"
+              greater_than_or_equal_to: "Amount arrested must be greater than or equal to zero"
+              not_an_integer: "Amount arrested must be a number"
+              less_than_or_equal_to: "Amount arrested is too long"
+              not_a_number: "Amount arrested must be a number"
             days_event_lasted:
-              greater_than_or_equal_to: "Number of days event lasted must be greater than or equal to zero"
-              not_an_integer: "Number of days event lasted must be a number"
-              less_than_or_equal_to: "Number of days event lasted is too long"
-              not_a_number: "Number of days event lasted must be a number"
+              greater_than_or_equal_to: "Days event lasted must be greater than or equal to zero"
+              not_an_integer: "Days event lasted must be a number"
+              less_than_or_equal_to: "Days event lasted is too long"
+              not_a_number: "Days event lasted must be a number"
             report_comment:
               format: "Report comment %{message}"
         training:
           attributes:
             number_attendees:
-              greater_than_or_equal_to: "Number of attendees must be greater than zero"
-              not_an_integer: "Number of attendees must be a number"
-              less_than_or_equal_to: "Number of attendees is too long"
-              not_a_number: "Number of attendees must be a number"
+              greater_than_or_equal_to: "Attendees must be greater than zero"
+              not_an_integer: "Attendees must be a number"
+              less_than_or_equal_to: "Attendees is too long"
+              not_a_number: "Attendees must be a number"
         mobilization:
           attributes:
             xra_donation_suscriptions:
-              format: "Donation subscriptions %{message}"
+              format: "Donor subscriptions %{message}"
               greater_than_or_equal_to: "must be greater than or equal to 0"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"
@@ -120,7 +120,7 @@ en:
               less_than_or_equal_to: "is too big"
               not_a_number: "must be a number"
             participants:
-              format: "Number of participants %{message}"
+              format: "Participants %{message}"
               greater_than_or_equal_to: "must be greater than or equal to 0"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"
@@ -132,7 +132,7 @@ en:
               less_than_or_equal_to: "is too big"
               not_a_number: "must be a number"
             arrestable_pledges:
-              format: "Number of arrestable pledges %{message}"
+              format: "Arrestable pledges %{message}"
               greater_than_or_equal_to: "must be greater than or equal to 0"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"

@@ -8,11 +8,14 @@
     (() => {
         let from = getMonday();
         let to = getSunday();
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
         set_week(from, to);
 
         function set_week(fromDate, toDate) {
-            let from = `${String(fromDate.getMonth() + 1).padStart(2, '0')}/${String(fromDate.getDate()).padStart(2, '0')}/${fromDate.getFullYear()}`;
-            let to = `${String(toDate.getMonth() + 1).padStart(2, '0')}/${String(toDate.getDate()).padStart(2, '0')}/${toDate.getFullYear()}`;
+            let from = `${String(fromDate.getDate()).padStart(2, '0')} ${String(monthNames[fromDate.getMonth()])} ${fromDate.getFullYear()}`;
+            let to = `${String(toDate.getDate()).padStart(2, '0')} ${String(monthNames[toDate.getMonth()])}  ${toDate.getFullYear()}`;
             document.getElementById('reporting-period').innerHTML = `${from} - ${to}`;
         }
 

@@ -19,7 +19,7 @@ feature 'create/edit chapter' do
     fill_in 'chapter_address_attributes_zip_code', with: 12345
 
     find('input[name="commit"]').click
-    expect(page).to have_text('number of members total is too long')
+    expect(page).to have_text('Members total is too long')
   end
 
   scenario 'should throw error if user tries to create chapter with subscription value greater than 1000000000' do

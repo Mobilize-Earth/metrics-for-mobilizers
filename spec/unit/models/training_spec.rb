@@ -10,19 +10,19 @@ RSpec.describe Training, type: :model do
     it 'should not take strings' do
       @training.number_attendees = 'string'
       @training.valid?
-      expect(@training.errors[:number_attendees]).to include('Number of attendees must be a number')
+      expect(@training.errors[:number_attendees]).to include('Attendees must be a number')
     end
 
     it 'should only take positive numbers' do
       @training.number_attendees = -1
       @training.valid?
-      expect(@training.errors[:number_attendees]).to include('Number of attendees must be greater than zero')
+      expect(@training.errors[:number_attendees]).to include('Attendees must be greater than zero')
     end
 
     it 'should not take float numbers' do
       @training.number_attendees = 0.1
       @training.valid?
-      expect(@training.errors[:number_attendees]).to include('Number of attendees must be a number')
+      expect(@training.errors[:number_attendees]).to include('Attendees must be a number')
     end
 
     it 'should have user, chapter and training_type' do
@@ -55,7 +55,7 @@ RSpec.describe Training, type: :model do
       @training.number_attendees = 1000000000 + 1
       @training.valid?
       expect(@training.errors[:number_attendees])
-        .to include('Number of attendees is too long')
+        .to include('Attendees is too long')
     end
   end
 end
