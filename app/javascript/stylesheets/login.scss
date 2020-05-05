@@ -14,21 +14,18 @@
 }
 
 .data_entry {
-    width: 415px;
     height: 75px;
-    padding-top: 10px;
     border: 1px solid $black;
 }
 
 .login_button_section {
     padding-top: 30px;
-    text-align: center;
+    text-align: right;
 }
 
 .login_button {
-    width: 207.5px;
-    height: 75px;
-    font-size: 24px;
+    padding: 1rem 2.5rem;
+    font-size: 1.5rem;
     font-weight: 700;
 }
 
@@ -38,18 +35,18 @@
 
 .login_input input { 
     text-indent: 35px;
+    width: 100%;
 }
 
 .login_input_icon { 
     position: absolute;
-    top: 30px;
+    top: 28px;
     left: 10px;
     cursor: pointer;
 }
 
 .login_message_error {
     padding-top: 25px;
-    width: 415px;
 }
 
 .login_forget_password {
@@ -69,4 +66,14 @@
     position: absolute;
     top: 200px;
     right: 0px;
+}
+
+#error_explanation {
+    h2 {
+        display: none;
+    }
+}
+
+.outer-box {
+    z-index: 1;
 }

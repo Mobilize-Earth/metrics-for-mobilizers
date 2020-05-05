@@ -1,10 +1,8 @@
 <div class="container-fluid default-background">
-  <div class="row" style="padding-left: 50px;">
-    <div class="col-md-3 offset-md-3 ">
-      <div class="data_form_title">
-        <p>Sign in</p>
-      </div>
+  <div class="row">
+    <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12 outer-box">
       <div class= "data_form">
+        <div class="data_form_title"><p>Sign in</p></div>
         <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
           <div class="field data_field">
             <%= f.label :email, "Your Email" %><br />

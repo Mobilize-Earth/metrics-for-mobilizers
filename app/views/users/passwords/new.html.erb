@@ -1,16 +1,29 @@
-<h2>Forgot your password?</h2>
+<div class="default-background">
+  <%= render 'layouts/messages', flash: flash %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12 outer-box">
+        <div class="data_form">
+          <div class="data_form_title"><p>Forgot password</p></div>
+          <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+            <%= render "devise/shared/error_messages", resource: resource %>
+            <div class="field data_field">
+              <%= f.label :email %>
+              <div class="login_input">
+                <i class="fa fa-envelope login_input_icon"></i>
+                <%= f.email_field :email, autofocus: true, autocomplete: "email", maxlength: 50, class: 'data_entry email-input' %>
+              </div>
+            </div>
+            <div class="actions login_button_section">
+              <%= link_to 'Cancel', '/users/sign_in', class: "btn btn-outline-danger login_button"%>
+              <%= f.submit "Save", class: 'btn btn-success login_button' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <%= image_tag('/images/half_circle.png', class: 'half_login_logo')%>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
+</div>
