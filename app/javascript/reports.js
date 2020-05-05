@@ -49,12 +49,13 @@ function getCurrentQueryParams() {
 
 const getReportsTilesData = () => {
     let queryParams = getCurrentQueryParams();
-
+    startTurbolinksProgress();
     $.ajax({
         url: '/reports/tiles',
         type: 'get',
         data: queryParams
     }).done(data => {
+        stopTurbolinksProgress();
         $('#members').html(data.members === undefined ? 0 : data.members);
         parseTilesGrowthData($('#members-growth'), data.members_growth);
 
@@ -147,5 +148,17 @@ const reports = () => {
 
     registerFilterClickHandlers();
 };
+
+function startTurbolinksProgress() {
+    if(!Turbolinks.supported) return;
+    Turbolinks.controller.adapter.progressBar.setValue(0);
+    Turbolinks.controller.adapter.progressBar.show();
+}
+
+function stopTurbolinksProgress() {
+    if(!Turbolinks.supported) return;
+    Turbolinks.controller.adapter.progressBar.hide();
+    Turbolinks.controller.adapter.progressBar.setValue(100);
+}
 
 export default reports;
