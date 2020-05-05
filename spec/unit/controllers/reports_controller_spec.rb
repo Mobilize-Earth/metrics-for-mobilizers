@@ -686,6 +686,36 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 115
     end
 
+    it 'should return state of sonora weekly data only when query has country equals to MX and state sonora' do
+      # setup
+      FactoryBot.create(:chapter, name: 'My chapter in Sonora, MX') do |chapter|
+        FactoryBot.create(:address, country: 'Mexico', state_province: 'Sonora', chapter: chapter)
+        FactoryBot.create(:mobilization, chapter: chapter,
+                          mobilization_type: '1:1 Recruiting / Other',
+                          participants: 77,
+                          total_one_time_donations: 77.77,
+                          arrestable_pledges: 77)
+      end
+
+      FactoryBot.create(:chapter, name: 'My chapter in Nuevo leon, MX') do |chapter|
+        FactoryBot.create(:address, country: 'Mexico', state_province: 'Nuevo León', chapter: chapter)
+        FactoryBot.create(:mobilization, chapter: chapter,
+                          mobilization_type: '1:1 Recruiting / Other',
+                          participants: 77,
+                          total_one_time_donations: 77.77,
+                          arrestable_pledges: 77)
+      end
+
+      # run
+      get :mobilizations, params: { country: 'MX', state: 'Sonora' }
+
+      # assert
+      json_response = JSON.parse(response.body)
+      expect(json_response['data'][0]["participants"][0]).to eq 77
+      expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "77.77"
+      expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 77
+    end
+
   end
 
   def coordinator_sign_in(user)

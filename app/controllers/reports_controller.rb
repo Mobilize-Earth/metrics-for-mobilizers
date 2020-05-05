@@ -108,7 +108,11 @@ class ReportsController < ApplicationController
   def mobilizations
     render json: {
         labels: get_chart_labels_for_period(params[:dateRange]),
-        data: get_chart_data(params[:dateRange], params[:country], params[:region])
+        data: get_chart_data(params[:dateRange],
+                             params[:country],
+                             params[:region],
+                             params[:state]
+        )
     }
   end
 
@@ -409,7 +413,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def get_chart_data(period, country, region)
+  def get_chart_data(period, country_id, region_id, state)
     result = Mobilization.mobilization_type_options.map { |type| {
       label: type,
       new: get_array_of_empty_values(period),
@@ -419,9 +423,10 @@ class ReportsController < ApplicationController
     }}
 
     today = DateTime.now.end_of_day
-    country = CS.countries[country.to_sym] unless country.nil?
-    region = Regions.us_regions[region.to_sym] unless region.nil?
+    country = CS.countries[country_id.to_sym] unless country_id.nil?
+    region = Regions.us_regions[region_id.to_sym] unless region_id.nil?
     states = region[:states] unless region.nil?
+    states = [state] unless state.nil?
 
     case period
     when "month"
