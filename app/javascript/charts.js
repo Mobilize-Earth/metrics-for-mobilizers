@@ -92,13 +92,43 @@ const mobilizationSubscriptions = chartData => {
     $('.mobilization-metrics-container-subscriptions').html(metrics);
     $('.mobilizations-chart-subscriptions').html('<canvas id="mobilizations-subscriptions-chart"></canvas>');
 
+    const options = {
+        title: {
+            display: false
+        },
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+                label: function (tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                    if (label) {
+                        label += ': ';
+                    }
+                    label += '$' + tooltipItem.value;
+                    return label;
+                }
+            }
+        },
+        maintainAspectRatio: false,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    callback: function (value) {
+                        return '$' + value;
+                    }
+                }
+            }]
+        }
+    };
     new Chart('mobilizations-subscriptions-chart', {
         type: 'bar',
         data: {
             labels: chartData.labels,
             datasets
         },
-        options: chartOptions
+        options: options
     })
 };
 
