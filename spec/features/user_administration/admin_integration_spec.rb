@@ -20,6 +20,7 @@ feature 'create user' do
         click_button 'Submit'
         expect(User.last.first_name).to eq('First Name')
         expect(User.last.last_name).to eq('Last Name')
+        expect(User.last.full_name).to eq('First Name Last Name')
         expect(User.last.email).to eq('test1@test.com')
         expect(User.last.phone_number).to eq('987654321')
     end

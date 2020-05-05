@@ -48,7 +48,7 @@ const mobilizationParticipants = chartData => {
             stack: count });
 
         datasets.push({
-            label: `${data.label} / Participants`,
+            label: `${data.label} / Non-Converted`,
             backgroundColor: '#a6a6a6',
             data: removeNewMembersFromCount(data.new, data.participants),
             stack: count });

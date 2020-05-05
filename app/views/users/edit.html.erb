@@ -3,7 +3,7 @@
     <div class="col-md-4 offset-md-4 user-div">
         <div class="user-new-tittle">Edit User</div>
         <div class="user-new-sub-tittle">* Required</div>
-        <%= render "users/form" %>
+        <%= render "users/form", submit_url: :users_update_path %>
     </div>
     <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
 </div>

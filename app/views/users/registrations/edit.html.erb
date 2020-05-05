@@ -1,43 +1,49 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<div class="default-background">
+  <%= render 'layouts/messages', flash: flash %>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12 outer-box">
+        <div class="data_form">
+          <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+            <%= render "devise/shared/error_messages", resource: resource %>
 
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+            <div class="data_form_title">
+              <p>Reset Password</p>
+            </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+            <div class="field data_field">
+              <%= f.label :current_password %>
+              <div class="login_input">
+                <span class="fa fa-key login_input_icon"></span>
+                <%= f.password_field :current_password, autocomplete: "current-password", class: 'data_entry' %>
+              </div>
+            </div>
+
+            <div class="field data_field">
+              <%= f.label :password %>
+              <div class="login_input">
+                <span class="fa fa-key login_input_icon"></span>
+              <%= f.password_field :password, autocomplete: "new-password", class: 'data_entry' %>
+              </div>
+            </div>
+
+            <div class="field data_field">
+              <%= f.label :password_confirmation %>
+              <div class="login_input">
+                <span class="fa fa-key login_input_icon"></span>
+                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'data_entry' %>
+              </div>
+            </div>
+
+            <div class="actions login_button_section">
+              <%= link_to 'Cancel', root_path, class: "btn btn-outline-danger login_button"%>
+              <%= f.submit "Save", class: 'btn btn-success login_button' %>
+            </div>
+            <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%= image_tag('/images/half_circle.png', class: 'half_login_logo')%>
   </div>
-
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-
-<%= link_to "Back", :back %>
+</div>

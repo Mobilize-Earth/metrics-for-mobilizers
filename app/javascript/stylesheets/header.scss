@@ -73,6 +73,7 @@
         box-shadow: $standard-box-shadow;
         border-radius: 0;
         border: 0;
+        z-index: 3;
 
         a {
           @include standard-hover-state();

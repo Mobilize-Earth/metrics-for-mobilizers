@@ -13,20 +13,17 @@
 
             <div class="field data_field">
               <%= f.label :password, "New password" %>
-              <% if @minimum_password_length %>
-                <em>(<%= @minimum_password_length %> characters minimum)</em>
-              <% end %>
               <div class="login_input">
-                <i class="fa fa-envelope login_input_icon"></i>
-                <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: 'data_entry email-input' %>
+                <span class="fa fa-key login_input_icon"></span>
+                <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: 'data_entry' %>
               </div>
             </div>
 
             <div class="field data_field">
               <%= f.label :password_confirmation, "Confirm new password" %>
               <div class="login_input">
-                <i class="fa fa-envelope login_input_icon"></i>
-                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'data_entry email-input' %>
+                <span class="fa fa-key login_input_icon"></span>
+                <%= f.password_field :password_confirmation, autocomplete: "new-password", class: 'data_entry' %>
               </div>
             </div>
 

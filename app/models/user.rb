@@ -2,9 +2,9 @@ class User < ApplicationRecord
   belongs_to :chapter, optional: true
   validates :chapter, presence: true, if: :external_coordinator?
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :registerable,
+  # :confirmable, :lockable, :timeoutable,
   # :rememberable, :trackable and :omniauthable
-  devise :invitable, :database_authenticatable, :recoverable, :validatable
+  devise :invitable, :database_authenticatable, :recoverable, :validatable, :registerable
   attr_accessor :invitation_link, :skip_password_validation
 
   validates :first_name, :last_name, :phone_number, presence: true

@@ -1,13 +1,17 @@
 Rails.application.routes.draw do
   get 'reports/index'
+  post '/users', to: 'users#create', as: :users_create_path
+  patch '/users', to: 'users#update', as: :users_update_path
 
   devise_for :users, controllers: {
       sessions: 'users/sessions',
-      passwords: 'users/passwords'
+      passwords: 'users/passwords',
+      registrations: 'users/registrations',
   }
 
   resources :chapters
   resources :users
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   authenticated :user, ->(u) { u.role == 'external' } do
     root to: "forms#index", as: :external_root
