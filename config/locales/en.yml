@@ -42,10 +42,10 @@ en:
               taken: "Chapter %{attribute} is already taken"
               too_long: "Chapter %{attribute} is too long"
             active_members:
-              blank: "# of Members total is required"
-              not_a_number: "# of Members total must be a number"
-              not_an_integer: "# of Members total must be an integer"
-              less_than_or_equal_to: "# of Members total is too long"
+              blank: "number of members total is required"
+              not_a_number: "number of members total must be a number"
+              not_an_integer: "number of members total must be a number"
+              less_than_or_equal_to: "number of members total is too long"
             total_subscription_amount:
               blank: "$ Total of Subscriptions is required"
               not_a_number: "$ Total of Subscriptions must be a number"
@@ -57,48 +57,86 @@ en:
             zip_code:
               blank: "Zip Code is required"
               not_a_number: "Zip Code must be a number"
-              not_an_integer: "Zip Code must be an integer"
+              not_an_integer: "Zip Code must be a number"
               too_long: "Zip Code is too long"
         street_swarm:
           attributes:
             xr_members_attended:
-              format: "# of Participants %{message}"
+              format: "Number of participants %{message}"
         arrestable_action:
           attributes:
             xra_members:
-              greater_than_or_equal_to: "# of XRA members must be greater than or equal to zero"
-              not_an_integer: "# of XRA members must be an integer"
-              less_than_or_equal_to: "# of XRA members is too long"
-              not_a_number: "# of XRA members must be a number"
+              greater_than_or_equal_to: "Number of members must be greater than or equal to zero"
+              not_an_integer: "Number of members must be a number"
+              less_than_or_equal_to: "Number of members is too long"
+              not_a_number: "Number of members must be a number"
             xra_not_members:
-              greater_than_or_equal_to: "# of not XRA members must be greater than or equal to zero"
-              not_an_integer: "# of not XRA members must be an integer"
-              less_than_or_equal_to: "# of not XRA members is too long"
-              not_a_number: "# of not XRA members must be a number"
+              greater_than_or_equal_to: "Number of non-members must be greater than or equal to zero"
+              not_an_integer: "Number of non-members must be a number"
+              less_than_or_equal_to: "Number of non-members is too long"
+              not_a_number: "Number of non-members must be a number"
             trained_arrestable_present:
-              greater_than_or_equal_to: "# of not XRA members must be greater than or equal to zero"
-              not_an_integer: "# of trained arrestable present must be an integer"
-              less_than_or_equal_to: "# of trained arrestable present is too long"
-              not_a_number: "# of trained arrestable present must be a number"
+              greater_than_or_equal_to: "Number of trained arrestable must be greater than or equal to zero"
+              not_an_integer: "Number of trained arrestable present must be a number"
+              less_than_or_equal_to: "Number of trained arrestable present is too long"
+              not_a_number: "Number of trained arrestable present must be a number"
             arrested:
-              greater_than_or_equal_to: "# of arrested must be greater than or equal to zero"
-              not_an_integer: "# of arrested must be an integer"
-              less_than_or_equal_to: "# of arrested is too long"
-              not_a_number: "# of arrested must be a number"
+              greater_than_or_equal_to: "Number of arrested must be greater than or equal to zero"
+              not_an_integer: "Number of arrested must be a number"
+              less_than_or_equal_to: "Number of arrested is too long"
+              not_a_number: "Number of arrested must be a number"
             days_event_lasted:
-              greater_than_or_equal_to: "# of days event lasted must be greater than or equal to zero"
-              not_an_integer: "# of days event lasted must be an integer"
-              less_than_or_equal_to: "# of days event lasted is too long"
-              not_a_number: "# of days event lasted must be a number"
+              greater_than_or_equal_to: "Number of days event lasted must be greater than or equal to zero"
+              not_an_integer: "Number of days event lasted must be a number"
+              less_than_or_equal_to: "Number of days event lasted is too long"
+              not_a_number: "Number of days event lasted must be a number"
             report_comment:
               format: "Report comment %{message}"
         training:
           attributes:
             number_attendees:
-              greater_than_or_equal_to: "# of Attendees must be greater than zero"
-              not_an_integer: "# of Attendees must be an integer"
-              less_than_or_equal_to: "# of Attendees is too long"
-              not_a_number: "# of Attendees must be a number"
+              greater_than_or_equal_to: "Number of attendees must be greater than zero"
+              not_an_integer: "Number of attendees must be a number"
+              less_than_or_equal_to: "Number of attendees is too long"
+              not_a_number: "Number of attendees must be a number"
+        mobilization:
+          attributes:
+            xra_donation_suscriptions:
+              format: "Donation subscriptions %{message}"
+              greater_than_or_equal_to: "must be greater than or equal to 0"
+              not_an_integer: "must be a number"
+              less_than_or_equal_to: "is too big"
+              not_a_number: "must be a number"
+            xra_newsletter_sign_ups:
+              format: "Newsletter sign ups %{message}"
+              greater_than_or_equal_to: "must be greater than or equal to 0"
+              not_an_integer: "must be a number"
+              less_than_or_equal_to: "is too big"
+              not_a_number: "must be a number"
+            new_members_sign_ons:
+              format: "New member sign ons %{message}"
+              greater_than_or_equal_to: "must be greater than or equal to 0"
+              not_an_integer: "must be a number"
+              less_than_or_equal_to: "is too big"
+              not_a_number: "must be a number"
+            participants:
+              format: "Number of participants %{message}"
+              greater_than_or_equal_to: "must be greater than or equal to 0"
+              not_an_integer: "must be a number"
+              less_than_or_equal_to: "is too big"
+              not_a_number: "must be a number"
+            total_one_time_donations:
+              format: "Total one time donations %{message}"
+              greater_than_or_equal_to: "must be greater than or equal to 0"
+              not_an_integer: "must be a number"
+              less_than_or_equal_to: "is too big"
+              not_a_number: "must be a number"
+            arrestable_pledges:
+              format: "Number of arrestable pledges %{message}"
+              greater_than_or_equal_to: "must be greater than or equal to 0"
+              not_an_integer: "must be a number"
+              less_than_or_equal_to: "is too big"
+              not_a_number: "must be a number"
         user:
           attributes:
             chapter:

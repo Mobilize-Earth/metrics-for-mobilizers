@@ -1,0 +1,35 @@
+<% if current_page?(controller: 'forms', action: 'index') %>
+  <h4 class="form-index-date-heading">Entering details for 'Report <span id="reporting-period">CW</span>'</h4>
+<% else %>
+  <h4 class="date-partial">Entering details for 'Report <span id="reporting-period">CW</span>'</h4>
+<% end %>
+
+<script>
+    (() => {
+        let from = getMonday();
+        let to = getSunday();
+        set_week(from, to);
+
+        function set_week(fromDate, toDate) {
+            let from = `${String(fromDate.getMonth() + 1).padStart(2, '0')}/${String(fromDate.getDate()).padStart(2, '0')}/${fromDate.getFullYear()}`;
+            let to = `${String(toDate.getMonth() + 1).padStart(2, '0')}/${String(toDate.getDate()).padStart(2, '0')}/${toDate.getFullYear()}`;
+            document.getElementById('reporting-period').innerHTML = `${from} - ${to}`;
+        }
+
+        function getSunday() {
+            let today = new Date(Date.now());
+            let sunday= new Date(today.getTime());
+            sunday.setDate(today.getDate() + (today.getDay() + (6 - today.getDay())));
+            sunday.setHours(23, 59, 59);
+            return sunday;
+        }
+
+        function getMonday() {
+            let today = new Date(Date.now());
+            let monday = new Date(today.getTime());
+            monday.setDate(today.getDate() - (today.getDay() - 1));
+            monday.setHours(0, 0, 0);
+            return monday;
+        }
+    })();
+</script>

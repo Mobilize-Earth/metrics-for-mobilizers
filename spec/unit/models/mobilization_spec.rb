@@ -14,12 +14,12 @@ RSpec.describe Mobilization, type: :model do
             @mobilization.arrestable_pledges = 'string'
             @mobilization.xra_newsletter_sign_ups = 'string'
             @mobilization.valid?
-            expect(@mobilization.errors[:participants]).to include('is not a number')
-            expect(@mobilization.errors[:new_members_sign_ons]).to include('is not a number')
-            expect(@mobilization.errors[:total_one_time_donations]).to include('is not a number')
-            expect(@mobilization.errors[:xra_donation_suscriptions]).to include('is not a number')
-            expect(@mobilization.errors[:arrestable_pledges]).to include('is not a number')
-            expect(@mobilization.errors[:xra_newsletter_sign_ups]).to include('is not a number')
+            expect(@mobilization.errors[:participants]).to include("must be a number")
+            expect(@mobilization.errors[:new_members_sign_ons]).to include("must be a number")
+            expect(@mobilization.errors[:total_one_time_donations]).to include("must be a number")
+            expect(@mobilization.errors[:xra_donation_suscriptions]).to include("must be a number")
+            expect(@mobilization.errors[:arrestable_pledges]).to include("must be a number")
+            expect(@mobilization.errors[:xra_newsletter_sign_ups]).to include("must be a number")
         end
 
         it 'should not take negative numbers in numeric fields' do
@@ -45,11 +45,11 @@ RSpec.describe Mobilization, type: :model do
             @mobilization.arrestable_pledges = 0.1
             @mobilization.xra_newsletter_sign_ups = 0.1
             @mobilization.valid?
-            expect(@mobilization.errors[:participants]).to include('must be an integer')
-            expect(@mobilization.errors[:new_members_sign_ons]).to include('must be an integer')
-            expect(@mobilization.errors[:xra_donation_suscriptions]).to include('must be an integer')
-            expect(@mobilization.errors[:arrestable_pledges]).to include('must be an integer')
-            expect(@mobilization.errors[:xra_newsletter_sign_ups]).to include('must be an integer')
+            expect(@mobilization.errors[:participants]).to include('must be a number')
+            expect(@mobilization.errors[:new_members_sign_ons]).to include('must be a number')
+            expect(@mobilization.errors[:xra_donation_suscriptions]).to include('must be a number')
+            expect(@mobilization.errors[:arrestable_pledges]).to include('must be a number')
+            expect(@mobilization.errors[:xra_newsletter_sign_ups]).to include('must be a number')
         end
 
         it 'should not take fields greater than 1 billion' do
@@ -60,12 +60,12 @@ RSpec.describe Mobilization, type: :model do
             @mobilization.arrestable_pledges = 1000000000+1
             @mobilization.xra_newsletter_sign_ups = 1000000000+1
             @mobilization.valid?
-            expect(@mobilization.errors[:participants]).to include('must be less than or equal to 1000000000')
-            expect(@mobilization.errors[:new_members_sign_ons]).to include('must be less than or equal to 1000000000')
-            expect(@mobilization.errors[:total_one_time_donations]).to include('must be less than or equal to 1000000000')
-            expect(@mobilization.errors[:xra_donation_suscriptions]).to include('must be less than or equal to 1000000000')
-            expect(@mobilization.errors[:arrestable_pledges]).to include('must be less than or equal to 1000000000')
-            expect(@mobilization.errors[:xra_newsletter_sign_ups]).to include('must be less than or equal to 1000000000')
+            expect(@mobilization.errors[:participants]).to include('is too big')
+            expect(@mobilization.errors[:new_members_sign_ons]).to include('is too big')
+            expect(@mobilization.errors[:total_one_time_donations]).to include('is too big')
+            expect(@mobilization.errors[:xra_donation_suscriptions]).to include('is too big')
+            expect(@mobilization.errors[:arrestable_pledges]).to include('is too big')
+            expect(@mobilization.errors[:xra_newsletter_sign_ups]).to include('is too big')
         end
 
         it 'should have user, chapter, type' do

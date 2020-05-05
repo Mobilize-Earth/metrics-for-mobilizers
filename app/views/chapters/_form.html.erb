@@ -15,7 +15,7 @@
       </div>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-1">
-          <%= f.label :active_members, "# of Members Total *" %>
+          <%= f.label :active_members, "Number of Members Total *" %>
           <%= f.text_field :active_members, class: "form-control" %>
         </div>
       </div>
@@ -68,7 +68,8 @@
           <%= address.select(:city, @cities, { prompt: true }, { class: "form-control" }) %>
         </div>
         <div class="col-md-4 offset-md-1">
-          <%= address.label :zip_code, "Zip Code *" %>
+          <%= address.label :zip_code, "Zip/Postal Code *" %>
+          <p class="form-label-description">Do not input your personal zip/postal code, input that of your local town or city hall.</p>
           <%= address.text_field :zip_code, class: "form-control" %>
         </div>
       </div>

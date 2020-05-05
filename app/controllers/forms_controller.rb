@@ -3,5 +3,6 @@ class FormsController < ApplicationController
 
   def index
     authorize! :index, FormsController
+    @chapter = current_user.chapter
   end
 end

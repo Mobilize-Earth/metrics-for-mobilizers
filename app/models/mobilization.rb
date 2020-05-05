@@ -30,7 +30,7 @@ class Mobilization < ApplicationRecord
             :greater_than_or_equal_to => 0,
             less_than_or_equal_to: 1_000_000_000
         }
-    validates :mobilization_type, presence: true, :inclusion => { message: "must be a valid mobilization type", in: Mobilization.mobilization_type_options }
+    validates :mobilization_type, presence: true, :inclusion => { message: "must be a valid activity type", in: Mobilization.mobilization_type_options }
     validates :total_one_time_donations, numericality:{
         :greater_than_or_equal_to => 0,
         less_than_or_equal_to: 1_000_000_000

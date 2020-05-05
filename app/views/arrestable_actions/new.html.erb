@@ -1,6 +1,6 @@
 <div class="default-background">
   <%= render 'layouts/messages', flash: flash %>
-  <%= render 'forms/form_header', title: 'Arrestable Actions', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Arrestable Action.' %>
+  <%= render 'forms/form_header', title: 'Actions', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Action.' %>
   <%= render "forms/form", arrestable_action: @arrestable_action do |f| %>
     <%= render 'arrestable_actions/form_body' %>
   <% end %>

@@ -41,11 +41,11 @@ RSpec.describe ArrestableAction, type: :model do
 			@arrestable_action.arrested = 0.1
 			@arrestable_action.days_event_lasted = 0.1
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members][0]).to include("must be an integer")
-			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be an integer')
-			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be an integer')
-			expect(@arrestable_action.errors[:arrested][0]).to include('must be an integer')
-			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be an integer')
+			expect(@arrestable_action.errors[:xra_members][0]).to include("must be a number")
+			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:arrested][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be a number')
 		end
 
 		it 'should not take numeric fields greater than 1 billion' do

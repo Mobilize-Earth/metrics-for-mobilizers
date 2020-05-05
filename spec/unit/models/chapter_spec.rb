@@ -9,7 +9,7 @@ describe Chapter, type: :model do
       chapter.total_subscription_amount = ''
       chapter.valid?
       expect(chapter.errors[:name]).to include("Chapter Name is required")
-      expect(chapter.errors[:active_members]).to include("# of Members total is required")
+      expect(chapter.errors[:active_members]).to include("number of members total is required")
       expect(chapter.errors[:total_subscription_amount]).to include("$ Total of Subscriptions is required")
     end
 
@@ -28,7 +28,7 @@ describe Chapter, type: :model do
     it "should not save if active members is greater than 1,000,000,000" do
       chapter = Chapter.create(name: "chapter 45", active_members: 2_000_000_000, total_subscription_amount: 0.00)
       chapter.valid?
-      expect(chapter.errors[:active_members]).to include("# of Members total is too long")
+      expect(chapter.errors[:active_members]).to include("number of members total is too long")
     end
 
     it "should not save if total subscription amount is greater than 1,000,000,000" do
@@ -59,14 +59,14 @@ describe Chapter, type: :model do
         chapter = Chapter.new
         chapter.active_members = 0.0
         chapter.valid?
-        expect(chapter.errors[:active_members]).to include("# of Members total must be an integer")
+        expect(chapter.errors[:active_members]).to include("number of members total must be a number")
       end
 
       it "should throw error if text" do
         chapter = Chapter.new
         chapter.active_members = "abc"
         chapter.valid?
-        expect(chapter.errors[:active_members]).to include("# of Members total must be a number")
+        expect(chapter.errors[:active_members]).to include("number of members total must be a number")
       end
   end
 

@@ -24,7 +24,7 @@ class MobilizationsController < ApplicationController
             report_date: report_date
         )
         if @mobilization.save
-            flash[:success] = "#{@mobilization.mobilization_type} mobilization data was successfully reported!"
+            flash[:success] = "#{@mobilization.mobilization_type} activity was successfully reported!"
             redirect_to mobilizations_path
             update_chapter_members(@mobilization.new_members_sign_ons)
         else
