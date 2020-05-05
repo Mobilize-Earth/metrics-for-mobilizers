@@ -24,41 +24,41 @@ class ReportsController < ApplicationController
     if country.nil?
       chapters = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
       chapters_this_period = Chapter.with_addresses.
-          eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+                             eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     elsif country.upcase == 'US' && !region.nil? && state.nil?
       states = Regions.us_regions[region.to_sym][:states]
       chapters = Chapter.with_addresses
-                     .eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {country: 'United States', state_province: states})
+                        .eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                 where(addresses: {country: 'United States', state_province: states})
       chapters_this_period = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {country: 'United States', state_province: states}).
-          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+                             where(addresses: {country: 'United States', state_province: states}).
+                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     elsif state.nil?
       country = CS.countries[country.to_sym]
       chapters = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country})
 
       chapters_this_period = Chapter.with_addresses.
-          eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {country: country}).
-          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+                             eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                             where(addresses: {country: country}).
+                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
 
     elsif chapter_id.nil?
       state = validate_state(country, state)
       country = CS.countries[country.to_sym]
       chapters = Chapter.with_addresses.
-          eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {state_province: state, country: country})
+                 eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                 where(addresses: {state_province: state, country: country})
       chapters_this_period = Chapter.
-          with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {state_province: state, country: country}).
-          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+                             with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                             where(addresses: {state_province: state, country: country}).
+                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     else
       chapters = Chapter.with_addresses.
-          eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
+                 eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
       chapters_this_period = Chapter.with_addresses.
-          eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id).
-          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+                             eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id).
+                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     end
 
     mobilizations_this_period = filter_mobilizations(chapters, date_range_days)
@@ -108,7 +108,7 @@ class ReportsController < ApplicationController
   def mobilizations
     render json: {
         labels: get_chart_labels_for_period(params[:dateRange]),
-        data: get_chart_data_for_period(params[:dateRange])
+        data: get_chart_data(params[:dateRange], params[:country])
     }
   end
 
@@ -159,8 +159,8 @@ class ReportsController < ApplicationController
   def all_countries(date_range_days)
 
     addresses_with_chapters = Chapter.with_addresses.
-        eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-        group_by { |c| c.address.country }
+                              eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                              group_by { |c| c.address.country }
 
     addresses_with_chapters.map do |country|
       chapters = country[1]
@@ -193,9 +193,9 @@ class ReportsController < ApplicationController
       }
 
       region_chapters = Chapter.with_addresses.
-          includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {country: 'United States', state_province: v[:states]}).
-          group_by { |c| c.address.country }
+                        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                        where(addresses: {country: 'United States', state_province: v[:states]}).
+                        group_by { |c| c.address.country }
 
       region_chapters.map do |country|
         chapters = country[1]
@@ -220,9 +220,9 @@ class ReportsController < ApplicationController
   def us_states(region, date_range_days)
     states = Regions.us_regions[region.to_sym][:states]
     states_with_chapters = Chapter.with_addresses.
-        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-        where(addresses: {country: 'United States', state_province: states}).
-        group_by { |c| c.address.state_province }
+                           includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                           where(addresses: {country: 'United States', state_province: states}).
+                           group_by { |c| c.address.state_province }
 
     states_with_chapters.map do |state|
       chapters = state[1]
@@ -250,9 +250,9 @@ class ReportsController < ApplicationController
   def states(country, date_range_days)
     country = CS.countries[country.to_sym]
     states_with_chapters = Chapter.with_addresses.
-        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-        where(addresses: {country: country}).
-        group_by { |c| c.address.state_province }
+                           includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                           where(addresses: {country: country}).
+                           group_by { |c| c.address.state_province }
 
     states_with_chapters.map do |state|
       chapters = state[1]
@@ -280,9 +280,9 @@ class ReportsController < ApplicationController
     country = CS.countries[country.to_sym]
 
     states_chapters = Chapter.with_addresses.
-        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-        where(addresses: {country: country, state_province: state}).
-        group_by { |c| c.id }
+                      includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                      where(addresses: {country: country, state_province: state}).
+                      group_by { |c| c.id }
 
     states_chapters.map do |chapter|
       chapter = chapter[1][0]
@@ -409,7 +409,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def get_chart_data_for_period(period)
+  def get_chart_data(period, country)
     result = Mobilization.mobilization_type_options.map { |type| {
       label: type,
       new: get_array_of_empty_values(period),
@@ -419,33 +419,37 @@ class ReportsController < ApplicationController
     }}
 
     today = DateTime.now.end_of_day
+    country = CS.countries[country.to_sym] unless country.nil?
 
     case period
     when "month"
-      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 3)
-      get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 2)
-      get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 1)
-      get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 0)
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 3, country)
+      get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 2, country)
+      get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 1, country)
+      get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 0, country)
     when "quarter"
-      get_mobilizations(today.beginning_of_month, today, result, 2)
-      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 1)
-      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 0)
+      get_mobilizations(today.beginning_of_month, today, result, 2, country)
+      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 1, country)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 0, country)
     when "half-year"
-      get_mobilizations(today.beginning_of_month, today, result, 5)
-      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 4)
-      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 3)
-      get_mobilizations((DateTime.now - 3.months).beginning_of_month, (DateTime.now - 3.months).end_of_month, result, 2)
-      get_mobilizations((DateTime.now - 4.months).beginning_of_month, (DateTime.now - 4.months).end_of_month, result, 1)
-      get_mobilizations((DateTime.now - 5.months).beginning_of_month, (DateTime.now - 5.months).end_of_month, result, 0)
+      get_mobilizations(today.beginning_of_month, today, result, 5, country)
+      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 4, country)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 3, country)
+      get_mobilizations((DateTime.now - 3.months).beginning_of_month, (DateTime.now - 3.months).end_of_month, result, 2, country)
+      get_mobilizations((DateTime.now - 4.months).beginning_of_month, (DateTime.now - 4.months).end_of_month, result, 1, country)
+      get_mobilizations((DateTime.now - 5.months).beginning_of_month, (DateTime.now - 5.months).end_of_month, result, 0, country)
     else
-      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 0)
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 0, country)
     end
 
     result.sort! { |a,b| a[:label] <=> b[:label] }
   end
 
-  def get_mobilizations(start_date, end_date, output, index)
-    Mobilization.where('created_at BETWEEN ? AND ?', start_date, end_date).each do |mobilization|
+  def get_mobilizations(start_date, end_date, output, index, country)
+    country_filter = 'country=?' unless country.nil?
+    Mobilization.left_outer_joins(:address)
+                .where('mobilizations.created_at BETWEEN ? AND ?', start_date, end_date)
+                .where(country_filter, country).each do |mobilization|
       output.each do |chart_line|
         if chart_line[:label] == mobilization.mobilization_type
           chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons

@@ -19,7 +19,7 @@ const setFilterDayCount = num => {
 }
 
 const setActiveFilter = ele => {
-    for(const filterLink of document.getElementsByClassName('nav-link')) {
+    for (const filterLink of document.getElementsByClassName('nav-link')) {
         filterLink.classList.remove('active');
     }
 
@@ -30,7 +30,7 @@ const setURLHash = (hash) => {
     location.hash = hash;
 };
 
-const getReportsTilesData = (dateRange) => {
+function getCurrentQueryParams() {
     let currentUrl = new URL(window.location.href);
     let params = currentUrl.searchParams;
     let country = params.get('country');
@@ -38,11 +38,17 @@ const getReportsTilesData = (dateRange) => {
     let region = params.get('region');
     let chapter = params.get('chapter');
 
-    let queryParams = { dateRange };
+    const dateRange = location.hash ? stripHash(location.hash) : 'week';
+    let queryParams = {dateRange};
     if (country) queryParams.country = country;
     if (state) queryParams.state = state;
     if (region) queryParams.region = region;
     if (chapter) queryParams.chapter = chapter;
+    return queryParams;
+}
+
+const getReportsTilesData = () => {
+    let queryParams = getCurrentQueryParams();
 
     $.ajax({
         url: '/reports/tiles',
@@ -88,24 +94,24 @@ const parseTilesGrowthData = (element, data) => {
     element.html(data === undefined ? 0 : data);
 }
 
-const getReportsChartsData = (dateRange) => {
+const getReportsChartsData = (queryParams) => {
     $.ajax({
         url: '/reports/charts/mobilizations',
         type: 'get',
-        data: {dateRange}
+        data: queryParams
     }).done(data => {
         Charts.initMobilizationsChart(data);
     });
 }
 
 const onHashChange = () => {
-    const hash = location.hash ? stripHash(location.hash) : 'week';
-    getReportsTilesData(hash);
-    getReportsChartsData(hash);
+    let queryParams = getCurrentQueryParams();
+    getReportsTilesData(queryParams);
+    getReportsChartsData(queryParams);
+    let dateRange = queryParams.dateRange;
+    setActiveFilter(document.getElementById(`filter-${dateRange}`));
 
-    setActiveFilter(document.getElementById(`filter-${hash}`));
-
-    switch (hash) {
+    switch (dateRange) {
         case "week":
             setFilterDayCount(7);
             break;
