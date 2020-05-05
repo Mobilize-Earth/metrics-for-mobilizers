@@ -1,11 +1,33 @@
-<h1>Welcome to the Reporting tool, <%= @user.full_name %></h1>
+<p style="font-size: 14px; font-weight: 500; letter-spacing: 1.05px; color: #000000;">
+    <strong>Welcome to ‘Truth in Numbers,’</strong>
+</p>
 
-<p> You have successfully signed up to reporting.organise.earth </p>
-
-<p> Your role assigned is: <%= Role.roles[@user.role] %></p>
-
+<p  style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 10px;">
+    You have successfully been added to <strong>reporting.organise.earth</strong><br/>
+    You are categorized as an <%= Role.roles[@user.role] %>
+</p>
+<% if @user.role == "admin" %>
+    <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000;">
+        You can now add other users and view reports.
+    </p>
+<% end %>
 <% if @user.role == "external" %>
-    <p> You belong to the chapter: <%= @user.chapter.name %></p>
+    <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 10px;">
+        You can now enter your weekly reports and see the results of the movement.<br/>
+        You belong to <%= @user.chapter.name %> Chapter located in Blank State, Region, Country.
+    </p>
+<% end %>
+<% if @user.role == "reviewer" %>
+    <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000;">
+        You can now view reports.
+    </p>
 <% end %>
 
-<p><%= link_to t("devise.mailer.invitation_instructions.accept"), @user.invitation_link %></p>
+<p style="font-size: 12px; letter-spacing: 0.9px; color: #4a90e2;">
+    <%= link_to "Accept Invitation", @user.invitation_link%>
+</p>
+
+<p style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 25px;">
+    If you have any questions reach out to... <br/>
+    Do not reply to this email.
+</p>

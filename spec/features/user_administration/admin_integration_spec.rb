@@ -7,6 +7,11 @@ feature 'create user' do
         find_link('link-users').click
     end
 
+
+    scenario 'should have a chapter role disabled' do
+        expect(page).to have_field('user_chapter_id', :type => 'select', :disabled => true)
+    end
+
     scenario 'should show error messages when do not complete information' do
         click_button 'Submit'
         expect(page).to have_css '.alert-danger'
@@ -23,10 +28,6 @@ feature 'create user' do
         expect(User.last.full_name).to eq('First Name Last Name')
         expect(User.last.email).to eq('test1@test.com')
         expect(User.last.phone_number).to eq('987654321')
-    end
-
-    scenario 'should have a chapter role disabled' do
-        expect(page).to have_field('user_chapter_id', :type => 'select', :disabled => true)
     end
 
     scenario 'should make chapter required when external role is selected' do
