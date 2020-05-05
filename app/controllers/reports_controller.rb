@@ -108,7 +108,7 @@ class ReportsController < ApplicationController
   def mobilizations
     render json: {
         labels: get_chart_labels_for_period(params[:dateRange]),
-        data: get_chart_data(params[:dateRange], params[:country])
+        data: get_chart_data(params[:dateRange], params[:country], params[:region])
     }
   end
 
@@ -409,7 +409,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  def get_chart_data(period, country)
+  def get_chart_data(period, country, region)
     result = Mobilization.mobilization_type_options.map { |type| {
       label: type,
       new: get_array_of_empty_values(period),
@@ -420,36 +420,40 @@ class ReportsController < ApplicationController
 
     today = DateTime.now.end_of_day
     country = CS.countries[country.to_sym] unless country.nil?
+    region = Regions.us_regions[region.to_sym] unless region.nil?
+    states = region[:states] unless region.nil?
 
     case period
     when "month"
-      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 3, country)
-      get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 2, country)
-      get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 1, country)
-      get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 0, country)
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 3, country, states)
+      get_mobilizations((DateTime.now - 13.days).beginning_of_day, (DateTime.now - 7.days).end_of_day, result, 2, country, states)
+      get_mobilizations((DateTime.now - 20.days).beginning_of_day, (DateTime.now - 14.days).end_of_day, result, 1, country, states)
+      get_mobilizations((DateTime.now - 27.days).beginning_of_day, (DateTime.now - 21.days).end_of_day, result, 0, country, states)
     when "quarter"
-      get_mobilizations(today.beginning_of_month, today, result, 2, country)
-      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 1, country)
-      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 0, country)
+      get_mobilizations(today.beginning_of_month, today, result, 2, country, states)
+      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 1, country, states)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 0, country, states)
     when "half-year"
-      get_mobilizations(today.beginning_of_month, today, result, 5, country)
-      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 4, country)
-      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 3, country)
-      get_mobilizations((DateTime.now - 3.months).beginning_of_month, (DateTime.now - 3.months).end_of_month, result, 2, country)
-      get_mobilizations((DateTime.now - 4.months).beginning_of_month, (DateTime.now - 4.months).end_of_month, result, 1, country)
-      get_mobilizations((DateTime.now - 5.months).beginning_of_month, (DateTime.now - 5.months).end_of_month, result, 0, country)
+      get_mobilizations(today.beginning_of_month, today, result, 5, country, states)
+      get_mobilizations((DateTime.now - 1.months).beginning_of_month, (DateTime.now - 1.months).end_of_month, result, 4, country, states)
+      get_mobilizations((DateTime.now - 2.months).beginning_of_month, (DateTime.now - 2.months).end_of_month, result, 3, country, states)
+      get_mobilizations((DateTime.now - 3.months).beginning_of_month, (DateTime.now - 3.months).end_of_month, result, 2, country, states)
+      get_mobilizations((DateTime.now - 4.months).beginning_of_month, (DateTime.now - 4.months).end_of_month, result, 1, country, states)
+      get_mobilizations((DateTime.now - 5.months).beginning_of_month, (DateTime.now - 5.months).end_of_month, result, 0, country, states)
     else
-      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 0, country)
+      get_mobilizations((DateTime.now - 6.days).beginning_of_day, today, result, 0, country, states)
     end
 
     result.sort! { |a,b| a[:label] <=> b[:label] }
   end
 
-  def get_mobilizations(start_date, end_date, output, index, country)
+  def get_mobilizations(start_date, end_date, output, index, country, states)
+    state_filter = {'addresses.state_province' => states} unless states.nil?
     country_filter = 'country=?' unless country.nil?
     Mobilization.left_outer_joins(:address)
                 .where('mobilizations.created_at BETWEEN ? AND ?', start_date, end_date)
-                .where(country_filter, country).each do |mobilization|
+                .where(country_filter, country)
+                .where(state_filter).each do |mobilization|
       output.each do |chart_line|
         if chart_line[:label] == mobilization.mobilization_type
           chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons

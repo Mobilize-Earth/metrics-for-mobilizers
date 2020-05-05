@@ -650,11 +650,40 @@ RSpec.describe ReportsController, type: :controller do
       get :mobilizations, params: {country: 'MX'}
 
       # assert
-      # p Mobilization.all.joins(:address).where('country=?', 'Mexico')
       json_response = JSON.parse(response.body)
       expect(json_response['data'][0]["participants"][0]).to eq 102
       expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "102.0"
       expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 112
+    end
+
+    it 'should return US Region 3 weekly data only when query has country equals to US and region region_3' do
+      # setup
+      FactoryBot.create(:chapter, name: 'My chapter in US region 3') do |chapter|
+        FactoryBot.create(:us_address, state_province: 'Mississippi', chapter: chapter)
+        FactoryBot.create(:mobilization, chapter: chapter,
+                          mobilization_type: '1:1 Recruiting / Other',
+                          participants: 105,
+                          total_one_time_donations: 105.00,
+                          arrestable_pledges: 115)
+      end
+
+      FactoryBot.create(:chapter, name: 'My chapter in US region 2') do |chapter|
+        FactoryBot.create(:us_address, state_province: 'Pennsylvania', chapter: chapter)
+        FactoryBot.create(:mobilization, chapter: chapter,
+                          mobilization_type: '1:1 Recruiting / Other',
+                          participants: 101,
+                          total_one_time_donations: 101.00,
+                          arrestable_pledges: 111)
+      end
+
+      # run
+      get :mobilizations, params: {country: 'US', region: 'region_3'}
+
+      # assert
+      json_response = JSON.parse(response.body)
+      expect(json_response['data'][0]["participants"][0]).to eq 105
+      expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "105.0"
+      expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 115
     end
 
   end
