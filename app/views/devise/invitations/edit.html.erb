@@ -1,45 +1,49 @@
 <div  class="default-background">
-    <% if resource.errors.full_messages.present? %>
-      <div class="row">
-        <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
-          <% resource.errors.full_messages.each do |error | %>
-            <div>
-              <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-              <%= error %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-    <div class="col-md-4 offset-md-4 user-div">
-      <div class="data_form_title">Welcome, <%= @user.full_name %></div>
-        <div class="user-new-sub-tittle">* Required</div>
-        <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
-          <%= f.hidden_field :invitation_token, readonly: true %>
-          <div class="data_field">
-            <%= f.label :email, "Confirm your email:" %><br />
-            <%= f.email_field :email %>
-          </div>
-          <% if f.object.class.require_password_on_accepting %>
-            <div class="data_field">
-              <%= f.label :password, "Password *" %><br />
-              <%= f.password_field :password %>
-            </div>
-            <div class="field">
-              <%= f.label :password_confirmation, "Password confirmation *" %><br />
-              <%= f.password_field :password_confirmation %>
-            </div>
-          <% end %>
-          <% flash.each do |name, msg| %>
-            <%= content_tag :div, msg, id: "flash_#{name}" %>
-          <% end %>
-          <div class="actions">
-            <%= f.submit t("devise.invitations.edit.submit_button"), :class => 'btn btn-success login_button' %>
+  <% if resource.errors.full_messages.present? %>
+    <div class="row">
+      <div class="col-md-4 offset-md-4 alert alert-danger alert-dismissable fade show" role="alert">
+        <% resource.errors.full_messages.each do |error | %>
+          <div>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <%= error %>
           </div>
         <% end %>
+      </div>
     </div>
-    <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
+  <% end %>
+  <div class="col-md-4 offset-md-4 user-div">
+    <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
+      <div class="data_form_title">Welcome, <%= @user.email %></div>
+      <div class="user-new-sub-tittle">* Required</div>
+      <%= f.hidden_field :invitation_token, readonly: true %>
+      <div class="form-row chapter-row">
+        <%= f.label "First name *" %>
+        <%= f.text_field :first_name, autofocus: true, class: "form-control", :maxlength => 50 %>
+      </div>
+      <div class="form-row chapter-row">
+        <%= f.label "Last name *" %>
+        <%= f.text_field :last_name, class: "form-control", :maxlength => 50 %>
+      </div>
+      <div class="form-row chapter-row">
+        <%= f.label "Phone number *" %>
+        <%= f.text_field :phone_number, class: "form-control", :maxlength => 30 %>
+      </div>
+      <% if f.object.class.require_password_on_accepting %>
+        <div class="form-row chapter-row">
+          <%= f.label :password, "Password *" %>
+          <%= f.password_field :password, class: "form-control", :maxlength => 150 %>
+        </div>
+        <div class="form-row chapter-row">
+          <%= f.label :password_confirmation, "Password confirmation *" %>
+          <%= f.password_field :password_confirmation, class: "form-control", :maxlength => 150 %>
+        </div>
+      <% end %>
+      <div class="form-row options-form-div">
+        <%= link_to "Cancel", root_path, class: "btn btn-outline-danger btn-padding-md" %>
+        <%= f.submit "Submit", class: "btn btn-success chapter-submit-btn btn-padding-md"%>
+      </div>
+    <% end %>
+  </div>
+  <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
 </div>
-
-

@@ -7,17 +7,14 @@ class UsersController < ApplicationController
 
     def create
         @user = User.new(
-          first_name: params[:user][:first_name],
-          last_name: params[:user][:last_name],
           email: params[:user][:email],
-          phone_number: params[:user][:phone_number],
           chapter_id: params[:user][:chapter_id],
           role: params[:user][:role]
         )
         @user.skip_password_validation = true
         if @user.valid?
           invite_valid_user
-          flash[:success] = "The user #{@user.first_name} #{@user.last_name} was successfully created!"
+          flash[:success] = "The user #{@user.email} was successfully invited!"
           redirect_to admins_index_path
         else
           flash.now[:errors] = @user.errors.full_messages
@@ -39,9 +36,9 @@ class UsersController < ApplicationController
 
     def update
       @user = User.find(params[:id])
-      @user.update(params.require(:user).permit(:first_name, :last_name, :email, :role, :phone_number, :chapter_id))
+      @user.update_attributes(:email => params[:user][:email], :chapter_id => params[:user][:chapter_id], :role => params[:user][:role])
       if @user.valid?
-        flash[:success] = "The user #{@user.first_name} #{@user.last_name} was successfully updated!"
+        flash[:success] = "The user #{@user.full_name} was successfully updated!"
         redirect_to admins_index_path
       else
         flash[:errors] = @user.errors.full_messages

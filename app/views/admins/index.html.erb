@@ -65,7 +65,11 @@
                       <div class="column col-2"><%= user.role.capitalize %></div>
                     <% end %>
                     <div class="column col-2"><%= user.created_at.strftime("%m/%d/%Y") %></div>
-                    <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
+                    <% if user.invitation_token.nil? %>
+                      <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
+                    <% else %>
+                      <div class="column col-1"></div>
+                    <% end %>
                   </div>
                 <% end %>
               </div>

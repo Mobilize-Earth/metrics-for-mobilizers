@@ -8,6 +8,40 @@ RSpec.describe User, type: :model do
 
   describe 'when user is saved' do
 
+    it 'should have email and password' do
+      @user.valid?
+      expect(@user.errors[:email]).to include('can\'t be blank')
+      expect(@user.errors[:password]).to include('can\'t be blank')
+    end
+
+    it 'should validate only external role have chapter' do
+      @user.role = 'admin'
+      @user.chapter_id = 1
+      @user.valid?
+      expect(@user.errors[:role]).to include('should be external')
+    end
+
+    it 'should not validate password when skip password validation is true' do
+      @user.skip_password_validation = true
+      @user.valid?
+      expect(@user.errors[:password]).to_not include('can\'t be blank')
+    end
+
+    it 'should validate chapter when role is external' do
+      @user.role = 'external'
+      @user.valid?
+      expect(@user.errors[:chapter]).to include('must be assigned to External Coordinators')
+    end
+  end
+
+  describe 'when user is updated' do
+
+    before :each do
+      @user.email = 'test_user@test.com'
+      @user.skip_password_validation = true
+      @user.save
+    end
+
     it 'should not take string in phone number' do
       @user.phone_number = 'string'
       @user.valid?
@@ -26,38 +60,18 @@ RSpec.describe User, type: :model do
       expect(@user.errors[:phone_number]).to include('must be an integer')
     end
 
-    it 'should have first_name last name phone number password and email' do
-      @user.valid?
-      expect(@user.errors[:first_name]).to include('can\'t be blank')
-      expect(@user.errors[:last_name]).to include('can\'t be blank')
-      expect(@user.errors[:phone_number]).to include('can\'t be blank')
-      expect(@user.errors[:password]).to include('can\'t be blank')
-      expect(@user.errors[:email]).to include('can\'t be blank')
-    end
-
-    it 'should not validate password when skip password validation is true' do
-      @user.skip_password_validation = true
-      @user.valid?
-      expect(@user.errors[:password]).to_not include('can\'t be blank')
-    end
-
-    it 'should validate chapter when role is external' do
-      @user.role = 'external'
-      @user.valid?
-      expect(@user.errors[:chapter]).to include('must be assigned to External Coordinators')
-    end
-
     it 'should validate phone number 000000000' do
       @user.phone_number = '000000000'
       @user.valid?
       expect(@user.errors[:phone_number]).to include('invalid')
     end
 
-    it 'should validate only external role have chapter' do
-      @user.role = 'admin'
-      @user.chapter_id = 1
-      @user.valid?
-      expect(@user.errors[:role]).to include('should be external')
+    it 'should have first_name last name phone number password and email' do
+      @user_last = User.last
+      @user_last.valid?
+      expect(@user.errors[:first_name]).to include('can\'t be blank')
+      expect(@user.errors[:last_name]).to include('can\'t be blank')
+      expect(@user.errors[:phone_number]).to include('can\'t be blank')
     end
   end
 

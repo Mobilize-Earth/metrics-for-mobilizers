@@ -7,9 +7,9 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable, :recoverable, :validatable, :registerable
   attr_accessor :invitation_link, :skip_password_validation
 
-  validates :first_name, :last_name, :phone_number, presence: true
-  validates :phone_number, numericality: {only_integer: true, :greater_than => 0}
-  validates :phone_number, format: { without: /(000000000)/, message: "invalid" }
+  validates :first_name, :last_name, :phone_number, presence: true, on: :update
+  validates :phone_number, numericality: {only_integer: true, :greater_than => 0}, on: :update
+  validates :phone_number, format: { without: /(000000000)/, message: "invalid" }, on: :update
   validate :check_role_dashboard
   validates :email, :email => true
 
