@@ -701,13 +701,45 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:address, country: 'Mexico', state_province: 'Nuevo León', chapter: chapter)
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
+                          participants: 87,
+                          total_one_time_donations: 87.77,
+                          arrestable_pledges: 87)
+      end
+
+      # run
+      get :mobilizations, params: { country: 'MX', state: 'Sonora' }
+
+      # assert
+      json_response = JSON.parse(response.body)
+      expect(json_response['data'][0]["participants"][0]).to eq 77
+      expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "77.77"
+      expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 77
+    end
+
+    it 'should return Chapter Mozart weekly data only when query has its chapter id' do
+      # setup
+      mozart_chapter_id = nil
+      FactoryBot.create(:chapter, name: 'Chapter Mozart') do |chapter|
+        mozart_chapter_id = chapter[:id]
+        FactoryBot.create(:address, country: 'Mexico', state_province: 'Sonora', chapter: chapter)
+        FactoryBot.create(:mobilization, chapter: chapter,
+                          mobilization_type: '1:1 Recruiting / Other',
                           participants: 77,
                           total_one_time_donations: 77.77,
                           arrestable_pledges: 77)
       end
 
+      FactoryBot.create(:chapter, name: 'Chapter Liszt') do |chapter|
+        FactoryBot.create(:address, country: 'Mexico', state_province: 'Sonora', chapter: chapter)
+        FactoryBot.create(:mobilization, chapter: chapter,
+                          mobilization_type: '1:1 Recruiting / Other',
+                          participants: 87,
+                          total_one_time_donations: 87.77,
+                          arrestable_pledges: 87)
+      end
+
       # run
-      get :mobilizations, params: { country: 'MX', state: 'Sonora' }
+      get :mobilizations, params: { country: 'MX', state: 'Sonora', chapter: mozart_chapter_id }
 
       # assert
       json_response = JSON.parse(response.body)
