@@ -22,24 +22,23 @@ class ReportsController < ApplicationController
     date_range_days = DATE_RANGE_MAPPING[params[:dateRange].to_sym]
 
     if country.nil?
-      chapters = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
+      chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
       chapters_this_period = Chapter.with_addresses.
-                             eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+          includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
                              where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     elsif country.upcase == 'US' && !region.nil? && state.nil?
       states = Regions.us_regions[region.to_sym][:states]
-      chapters = Chapter.with_addresses
-                        .eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                 where(addresses: {country: 'United States', state_province: states})
-      chapters_this_period = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                             where(addresses: {country: 'United States', state_province: states}).
-                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+      chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+          where(addresses: {country: 'United States', state_province: states})
+      chapters_this_period = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+          where(addresses: {country: 'United States', state_province: states}).
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
     elsif state.nil?
       country = CS.countries[country.to_sym]
-      chapters = Chapter.with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(addresses: {country: country})
-
-      chapters_this_period = Chapter.with_addresses.
-                             eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+      chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings, :address).where(addresses: {country: country})
+      chapters_this_period = Chapter.
+                             includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings,  :address).
                              where(addresses: {country: country}).
                              where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
 
@@ -47,37 +46,37 @@ class ReportsController < ApplicationController
       state = validate_state(country, state)
       country = CS.countries[country.to_sym]
       chapters = Chapter.with_addresses.
-                 eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                 includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
                  where(addresses: {state_province: state, country: country})
       chapters_this_period = Chapter.
-                             with_addresses.eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                             with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
                              where(addresses: {state_province: state, country: country}).
                              where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     else
       chapters = Chapter.with_addresses.
-                 eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
+                 includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
       chapters_this_period = Chapter.with_addresses.
-                             eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id).
+                             includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id).
                              where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     end
 
-    mobilizations_this_period = filter_mobilizations(chapters, date_range_days)
-    previous_period_mobilizations = filter_mobilizations(chapters,
+    mobilizations_this_period = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
+    previous_period_mobilizations = filter_records_by_date_range(chapters, 'mobilizations',
                                                          calculate_days_ago_for_previous_period(date_range_days),
                                                          (DateTime.now - date_range_days.days).beginning_of_day)
 
-    filtered_trainings = filter_trainings(chapters, date_range_days)
-    previous_period_trainings = filter_trainings(chapters,
+    filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
+    previous_period_trainings = filter_records_by_date_range(chapters, 'trainings',
                                                      calculate_days_ago_for_previous_period(date_range_days),
                                                      (DateTime.now - date_range_days.days).beginning_of_day)
 
-    filtered_street_swarms = filter_street_swarms(chapters, date_range_days)
-    previous_period_street_swarms = filter_street_swarms(chapters,
+    filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
+    previous_period_street_swarms = filter_records_by_date_range(chapters, 'street_swarms',
                                                  calculate_days_ago_for_previous_period(date_range_days),
                                                  (DateTime.now - date_range_days.days).beginning_of_day)
 
-    filtered_arrestable_actions = filter_arrestable_actions(chapters, date_range_days)
-    previous_period_arrestable_actions = filter_arrestable_actions(chapters,
+    filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
+    previous_period_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions',
                                                  calculate_days_ago_for_previous_period(date_range_days),
                                                  (DateTime.now - date_range_days.days).beginning_of_day)
 
@@ -164,16 +163,16 @@ class ReportsController < ApplicationController
   def all_countries(date_range_days)
 
     addresses_with_chapters = Chapter.with_addresses.
-                              eager_load(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
                               group_by { |c| c.address.country }
 
     addresses_with_chapters.map do |country|
       chapters = country[1]
 
-      filtered_mobilizations = filter_mobilizations(chapters, date_range_days)
-      filtered_trainings = filter_trainings(chapters, date_range_days)
-      filtered_street_swarms = filter_street_swarms(chapters, date_range_days)
-      filtered_arrestable_actions = filter_arrestable_actions(chapters, date_range_days)
+      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
 
       {
           id: CS.countries.key(country[0]),
@@ -204,10 +203,10 @@ class ReportsController < ApplicationController
 
       region_chapters.map do |country|
         chapters = country[1]
-        filtered_mobilizations = filter_mobilizations(chapters, date_range_days)
-        filtered_trainings = filter_trainings(chapters, date_range_days)
-        filtered_street_swarms = filter_street_swarms(chapters, date_range_days)
-        filtered_arrestable_actions = filter_arrestable_actions(chapters, date_range_days)
+        filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
+        filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
+        filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
+        filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
 
         result[:members] = chapters.sum(&:active_members)
         result[:chapters] = chapters.count
@@ -232,10 +231,10 @@ class ReportsController < ApplicationController
     states_with_chapters.map do |state|
       chapters = state[1]
 
-      filtered_mobilizations = filter_mobilizations(chapters, date_range_days)
-      filtered_trainings = filter_trainings(chapters, date_range_days)
-      filtered_street_swarms = filter_street_swarms(chapters, date_range_days)
-      filtered_arrestable_actions = filter_arrestable_actions(chapters, date_range_days)
+      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
 
       {
           id: state[0],
@@ -261,10 +260,10 @@ class ReportsController < ApplicationController
 
     states_with_chapters.map do |state|
       chapters = state[1]
-      filtered_mobilizations = filter_mobilizations(chapters, date_range_days)
-      filtered_trainings = filter_trainings(chapters, date_range_days)
-      filtered_street_swarms = filter_street_swarms(chapters, date_range_days)
-      filtered_arrestable_actions = filter_arrestable_actions(chapters, date_range_days)
+      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
       {
           id: state[0],
           state: state[0],
@@ -293,10 +292,10 @@ class ReportsController < ApplicationController
       chapter = chapter[1][0]
       chapters = [chapter]
 
-      filtered_mobilizations = filter_mobilizations(chapters, date_range_days)
-      filtered_trainings = filter_trainings(chapters, date_range_days)
-      filtered_street_swarms = filter_street_swarms(chapters, date_range_days)
-      filtered_arrestable_actions = filter_arrestable_actions(chapters, date_range_days)
+      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
       {
           id: chapter.id,
           chapter: chapter.name,
@@ -316,10 +315,10 @@ class ReportsController < ApplicationController
     chapter = Chapter.find(id)
     chapters = [chapter]
 
-    filtered_mobilizations = filter_mobilizations(chapters, date_range_days)
-    filtered_trainings = filter_trainings(chapters, date_range_days)
-    filtered_street_swarms = filter_street_swarms(chapters, date_range_days)
-    filtered_arrestable_actions = filter_arrestable_actions(chapters, date_range_days)
+    filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
+    filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
+    filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
+    filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
 
     { result: {
         id: chapter.id,
@@ -340,40 +339,18 @@ class ReportsController < ApplicationController
     CS.states(country.to_sym)[CS.states(country.to_sym).key(state)]
   end
 
-  def filter_mobilizations(chapters, date_range_days, end_date_range_days=DateTime.now.end_of_day)
+  def filter_chapter_records_by_date_range(chapter, record_type, date_range_days, end_date_range_days=DateTime.now.end_of_day)
+    records = []
+    records.append chapter.send(record_type).select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
+  end
+
+  def filter_records_by_date_range(chapters, record_type, date_range_days, end_date_range_days=DateTime.now.end_of_day)
     filtered_mobilizations = []
     chapters.each do |c|
-      mobilizations = c.mobilizations.select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
+      mobilizations = c.send(record_type).select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
       filtered_mobilizations.append mobilizations
     end
     filtered_mobilizations.flatten
-  end
-
-  def filter_trainings(chapters, date_range_days, end_date_range_days=DateTime.now.end_of_day)
-    result = []
-    chapters.each do |c|
-      trainings = c.trainings.select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
-      result.append trainings
-    end
-    result.flatten
-  end
-
-  def filter_street_swarms(chapters, date_range_days, end_date_range_days=DateTime.now.end_of_day)
-    result = []
-    chapters.each do |c|
-      trainings = c.street_swarms.select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
-      result.append trainings
-    end
-    result.flatten
-  end
-
-  def filter_arrestable_actions(chapters, date_range_days, end_date_range_days=DateTime.now.end_of_day)
-    result = []
-    chapters.each do |c|
-      trainings = c.arrestable_actions.select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
-      result.append trainings
-    end
-    result.flatten
   end
 
   def calculate_actions(name, type)
