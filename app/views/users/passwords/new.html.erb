@@ -6,6 +6,7 @@
       <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12 outer-box">
         <div class="data_form">
           <div class="data_form_title"><p>Forgot password</p></div>
+          <p class="data_form_subtitle">Don't worry, it happens to the best of us.</p>
           <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
             <%= render "devise/shared/error_messages", resource: resource %>
             <div class="field data_field">
@@ -16,8 +17,7 @@
               </div>
             </div>
             <div class="actions login_button_section">
-              <%= link_to 'Cancel', '/users/sign_in', class: "btn btn-outline-danger login_button"%>
-              <%= f.submit "Save", class: 'btn btn-success login_button' %>
+              <%= f.submit "Email me a recovery link", class: 'btn btn-success login_button' %>
             </div>
           <% end %>
         </div>
