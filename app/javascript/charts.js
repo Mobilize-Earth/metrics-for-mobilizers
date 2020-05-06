@@ -29,7 +29,10 @@ const chartOptions = {
             stacked: true,
         }],
         yAxes: [{
-            stacked: true
+            stacked: true,
+            ticks: {
+                suggestedMin: 0
+            }
         }]
     }
 };
@@ -117,7 +120,8 @@ const mobilizationSubscriptions = chartData => {
                 ticks: {
                     callback: function (value) {
                         return '$' + value;
-                    }
+                    },
+                    suggestedMin: 0
                 }
             }]
         }
