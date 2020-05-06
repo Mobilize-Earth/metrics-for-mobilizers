@@ -23,40 +23,50 @@ class ReportsController < ApplicationController
 
     if country.nil?
       chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
+
+      chapter_ids_this_period = Chapter.
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
       chapters_this_period = Chapter.with_addresses.
           includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+                             where(id: chapter_ids_this_period)
+
     elsif country.upcase == 'US' && !region.nil? && state.nil?
       states = Regions.us_regions[region.to_sym][:states]
-      chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-          where(addresses: {country: 'United States', state_province: states})
-      chapters_this_period = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+
+      chapter_ids = Chapter.with_addresses.where(addresses: {country: 'United States', state_province: states}).pluck(:id)
+      chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_ids)
+
+      chapter_ids_this_period = Chapter.with_addresses.
           where(addresses: {country: 'United States', state_province: states}).
           where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+      chapters_this_period = Chapter.where(id: chapter_ids_this_period)
 
     elsif state.nil?
       country = CS.countries[country.to_sym]
-      chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings, :address).where(addresses: {country: country})
-      chapters_this_period = Chapter.
-                             includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings,  :address).
-                             where(addresses: {country: country}).
-                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
+      chapter_ids = Chapter.with_addresses.where(addresses: {country: country}).pluck(:id)
+      chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_ids)
+
+      chapter_ids_this_period = Chapter.with_addresses.where(addresses: {country: country}).
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          pluck(:id)
+      chapters_this_period = Chapter.where(id: chapter_ids_this_period)
 
     elsif chapter_id.nil?
       state = validate_state(country, state)
       country = CS.countries[country.to_sym]
-      chapters = Chapter.with_addresses.
-                 includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                 where(addresses: {state_province: state, country: country})
-      chapters_this_period = Chapter.
-                             with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                             where(addresses: {state_province: state, country: country}).
-                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
+      chapter_ids = Chapter.with_addresses.where(addresses: {state_province: state, country: country}).pluck(:id)
+      chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_ids)
+
+      chapter_ids_this_period = Chapter.with_addresses.
+          where(addresses: {state_province: state, country: country}).
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          pluck(:id)
+      chapters_this_period = Chapter.where(id: chapter_ids_this_period)
     else
-      chapters = Chapter.with_addresses.
-                 includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
-      chapters_this_period = Chapter.with_addresses.
-                             includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id).
+      chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
+      chapters_this_period = Chapter.with_addresses.where(id: chapter_id).
                              where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     end
 
@@ -196,10 +206,13 @@ class ReportsController < ApplicationController
           region: v[:name],
       }
 
+      chapter_ids = Chapter.with_addresses.
+          where(addresses: {country: 'United States', state_province: v[:states]}).pluck(:id)
+
       region_chapters = Chapter.with_addresses.
-                        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                        where(addresses: {country: 'United States', state_province: v[:states]}).
-                        group_by { |c| c.address.country }
+          includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+          where(id: chapter_ids).
+          group_by { |c| c.address.country }
 
       region_chapters.map do |country|
         chapters = country[1]
@@ -223,10 +236,13 @@ class ReportsController < ApplicationController
 
   def us_states(region, date_range_days)
     states = Regions.us_regions[region.to_sym][:states]
+    chapter_ids = Chapter.with_addresses.
+        where(addresses: {country: 'United States', state_province: states}).pluck(:id)
+
     states_with_chapters = Chapter.with_addresses.
-                           includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                           where(addresses: {country: 'United States', state_province: states}).
-                           group_by { |c| c.address.state_province }
+        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        where(id: chapter_ids).
+        group_by { |c| c.address.state_province }
 
     states_with_chapters.map do |state|
       chapters = state[1]
@@ -253,10 +269,11 @@ class ReportsController < ApplicationController
 
   def states(country, date_range_days)
     country = CS.countries[country.to_sym]
+    chapter_ids = Chapter.with_addresses.where(addresses: {country: country}).pluck(:id)
     states_with_chapters = Chapter.with_addresses.
-                           includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                           where(addresses: {country: country}).
-                           group_by { |c| c.address.state_province }
+        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        where(id: chapter_ids).
+        group_by { |c| c.address.state_province }
 
     states_with_chapters.map do |state|
       chapters = state[1]
@@ -282,10 +299,10 @@ class ReportsController < ApplicationController
   def chapters(country, state, date_range_days)
     state = validate_state(country, state)
     country = CS.countries[country.to_sym]
-
+    chapter_ids = Chapter.with_addresses.where(addresses: {country: country, state_province: state}).pluck(:id)
     states_chapters = Chapter.with_addresses.
                       includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                      where(addresses: {country: country, state_province: state}).
+                      where(id: chapter_ids).
                       group_by { |c| c.id }
 
     states_chapters.map do |chapter|
@@ -337,11 +354,6 @@ class ReportsController < ApplicationController
 
   def validate_state(country, state)
     CS.states(country.to_sym)[CS.states(country.to_sym).key(state)]
-  end
-
-  def filter_chapter_records_by_date_range(chapter, record_type, date_range_days, end_date_range_days=DateTime.now.end_of_day)
-    records = []
-    records.append chapter.send(record_type).select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
   end
 
   def filter_records_by_date_range(chapters, record_type, date_range_days, end_date_range_days=DateTime.now.end_of_day)
