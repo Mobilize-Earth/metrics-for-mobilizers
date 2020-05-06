@@ -13,7 +13,8 @@ class SocialMediaBlitzingsController < ApplicationController
         @social_media_blitzing = SocialMediaBlitzing.new(
             user_id: current_user.id,
             chapter_id: current_user.chapter.id,
-            social_media_campaigns: params[:social_media_blitzing][:social_media_campaigns],
+            number_of_posts: params[:social_media_blitzing][:number_of_posts],
+            number_of_people_posting: params[:social_media_blitzing][:number_of_people_posting],
             report_date: report_date
         )
         if @social_media_blitzing.save

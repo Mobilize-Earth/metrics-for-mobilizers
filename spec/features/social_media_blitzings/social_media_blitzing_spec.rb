@@ -58,19 +58,22 @@ feature 'submitting social media blitzing' do
         click_on 'Social Media Blitzing'
     end
 
-    scenario 'should save in database with campaigns greater than 0' do
-        fill_in 'social_media_blitzing_social_media_campaigns', with: '5'
+    scenario 'should save in database with campaigns, posts, and people posting greater than 0' do
+        fill_in 'social_media_blitzing_number_of_posts', with: '10'
+        fill_in 'social_media_blitzing_number_of_people_posting', with: '12'
         find('input[name="commit"]').click
-        expect(SocialMediaBlitzing.last.social_media_campaigns).to eq(5)
+        expect(SocialMediaBlitzing.last.number_of_posts).to eq(10)
+        expect(SocialMediaBlitzing.last.number_of_people_posting).to eq(12)
     end
 
-    scenario 'should show a success message with campaigns greater tnah 0' do
-        fill_in 'social_media_blitzing_social_media_campaigns', with: '5'
+    scenario 'should show a success message with campaigns, posts, and people posting greater than 0' do
+        fill_in 'social_media_blitzing_number_of_posts', with: '10'
+        fill_in 'social_media_blitzing_number_of_people_posting', with: '12'
         find('input[name="commit"]').click
         expect(page).to have_css '.alert-success'
     end
 
-    scenario 'should show a error message without campaigns' do
+    scenario 'should show a error message without campaigns, posts, or people posting' do
         find('input[name="commit"]').click
         expect(page).to have_css '.alert-danger'
     end

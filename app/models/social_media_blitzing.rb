@@ -6,12 +6,13 @@ class SocialMediaBlitzing < ApplicationRecord
         ['Social Media Blitzing']
     end
 
-    validates :social_media_campaigns,
+    validates :number_of_posts, :number_of_people_posting,
         numericality:{
             only_integer: true,
             :greater_than => 0,
             less_than_or_equal_to: 1_000_000_000
         }
+
     validates :user,
         :chapter,
         presence: true
