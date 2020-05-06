@@ -69,9 +69,9 @@ RSpec.describe User, type: :model do
     it 'should have first_name last name phone number password and email' do
       @user_last = User.last
       @user_last.valid?
-      expect(@user.errors[:first_name]).to include('can\'t be blank')
-      expect(@user.errors[:last_name]).to include('can\'t be blank')
-      expect(@user.errors[:phone_number]).to include('can\'t be blank')
+      expect(@user_last.errors[:first_name]).to include('can\'t be blank')
+      expect(@user_last.errors[:last_name]).to include('can\'t be blank')
+      expect(@user_last.errors[:phone_number]).to include('can\'t be blank')
     end
   end
 
