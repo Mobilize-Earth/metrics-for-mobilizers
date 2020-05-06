@@ -24,11 +24,10 @@ class ReportsController < ApplicationController
     if country.nil?
       chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings)
 
-      chapter_ids_this_period = Chapter.
-          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
-      chapters_this_period = Chapter.with_addresses.
-          includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                             where(id: chapter_ids_this_period)
+      chapter_data_this_period = Chapter.
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          pluck(:id, :active_members, :total_subscription_amount)
+
 
     elsif country.upcase == 'US' && !region.nil? && state.nil?
       states = Regions.us_regions[region.to_sym][:states]
@@ -36,10 +35,11 @@ class ReportsController < ApplicationController
       chapter_ids = Chapter.with_addresses.where(addresses: {country: 'United States', state_province: states}).pluck(:id)
       chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_ids)
 
-      chapter_ids_this_period = Chapter.with_addresses.
+      chapter_data_this_period = Chapter.with_addresses.
           where(addresses: {country: 'United States', state_province: states}).
-          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
-      chapters_this_period = Chapter.where(id: chapter_ids_this_period)
+          where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          pluck(:id, :active_members, :total_subscription_amount)
+
 
     elsif state.nil?
       country = CS.countries[country.to_sym]
@@ -47,10 +47,10 @@ class ReportsController < ApplicationController
       chapter_ids = Chapter.with_addresses.where(addresses: {country: country}).pluck(:id)
       chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_ids)
 
-      chapter_ids_this_period = Chapter.with_addresses.where(addresses: {country: country}).
+      chapter_data_this_period = Chapter.with_addresses.where(addresses: {country: country}).
           where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
-          pluck(:id)
-      chapters_this_period = Chapter.where(id: chapter_ids_this_period)
+          pluck(:id, :active_members, :total_subscription_amount)
+
 
     elsif chapter_id.nil?
       state = validate_state(country, state)
@@ -59,16 +59,18 @@ class ReportsController < ApplicationController
       chapter_ids = Chapter.with_addresses.where(addresses: {state_province: state, country: country}).pluck(:id)
       chapters = Chapter.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_ids)
 
-      chapter_ids_this_period = Chapter.with_addresses.
+      chapter_data_this_period = Chapter.with_addresses.
           where(addresses: {state_province: state, country: country}).
           where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
-          pluck(:id)
-      chapters_this_period = Chapter.where(id: chapter_ids_this_period)
+          pluck(:id, :active_members, :total_subscription_amount)
+
 
     else
       chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
-      chapters_this_period = Chapter.with_addresses.where(id: chapter_id).
-                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
+      chapter_data_this_period = Chapter.with_addresses.where(id: chapter_id).
+                             where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+                                     pluck(:id, :active_members, :total_subscription_amount)
     end
 
     mobilizations_this_period = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
@@ -93,11 +95,11 @@ class ReportsController < ApplicationController
 
     report_data = {
         chapters: chapters.count,
-        chapters_growth: chapters_this_period.count,
+        chapters_growth: chapter_data_this_period.count,
         members: chapters.sum(&:active_members),
-        members_growth: get_members_growth(chapters_this_period, mobilizations_this_period),
+        members_growth: get_members_growth(chapter_data_this_period, mobilizations_this_period),
         subscriptions: chapters.sum(&:total_subscription_amount).to_int,
-        subscriptions_growth: get_subscriptions_growth(chapters_this_period, mobilizations_this_period),
+        subscriptions_growth: get_subscriptions_growth(chapter_data_this_period, mobilizations_this_period),
         mobilizations: mobilizations_this_period.length,
         mobilizations_growth: mobilizations_this_period.length - mobilizations_previous_period.length,
         signups: mobilizations_this_period.sum(&:xra_newsletter_sign_ups),
@@ -155,16 +157,24 @@ class ReportsController < ApplicationController
 
   private
 
-  def get_members_growth(chapters_this_period, mobilizations_this_period)
-    mobilizations_this_period.select { |m| chapters_this_period.map(&:id).exclude? m.chapter_id }.sum(&:new_members_sign_ons) +
-        chapters_this_period.sum(&:active_members)
+  def get_members_growth(chapter_data_this_period, mobilizations_this_period)
+    if chapter_data_this_period.empty?
+      return 0
+    end
+    chapter_ids = chapter_data_this_period.map {|row| row[0]}
+    mobilizations_this_period.select { |m| chapter_ids.exclude? m.chapter_id }.sum(&:new_members_sign_ons) +
+        chapter_data_this_period.map{|e| e[1]}.reduce(:+)
   end
 
-  def get_subscriptions_growth(chapters_this_period, mobilizations_this_period)
+  def get_subscriptions_growth(chapter_data_this_period, mobilizations_this_period)
+    if chapter_data_this_period.empty?
+      return 0
+    end
     # TODO - We are currently using mobilizations.total_one_time_donations to calculate new subscriptions in a period.
     # We should update this DB column name to be total_donation_subscriptions instead.
-    mobilizations_this_period.select { |m| chapters_this_period.map(&:id).exclude? m.chapter_id }.sum(&:total_one_time_donations).to_int +
-        chapters_this_period.sum(&:total_subscription_amount).to_int
+    chapter_ids = chapter_data_this_period.map {|row| row[0]}
+    result = mobilizations_this_period.select { |m| chapter_ids.exclude? m.chapter_id }.sum(&:total_one_time_donations).to_int +
+        chapter_data_this_period.map{|e| e[2].to_int}.reduce(:+)
   end
 
   def calculate_days_ago_for_previous_period(date_range_days)
@@ -353,12 +363,12 @@ class ReportsController < ApplicationController
   end
 
   def filter_records_by_date_range(chapters, record_type, date_range_days, end_date_range_days=DateTime.now.end_of_day)
-    filtered_mobilizations = []
+    filtered_records = []
     chapters.each do |c|
-      mobilizations = c.send(record_type).select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
-      filtered_mobilizations.append mobilizations
+      record = c.send(record_type).select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
+      filtered_records.append record
     end
-    filtered_mobilizations.flatten
+    filtered_records.flatten
   end
 
   def calculate_actions(name, type)
