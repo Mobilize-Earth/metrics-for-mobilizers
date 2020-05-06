@@ -64,29 +64,30 @@ class ReportsController < ApplicationController
           where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
           pluck(:id)
       chapters_this_period = Chapter.where(id: chapter_ids_this_period)
+
     else
       chapters = Chapter.with_addresses.includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).where(id: chapter_id)
       chapters_this_period = Chapter.with_addresses.where(id: chapter_id).
                              where('chapters.created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
     end
 
-    mobilizations_this_period = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
-    previous_period_mobilizations = filter_records_by_date_range(chapters, 'mobilizations',
+    mobilizations_this_period = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
+    mobilizations_previous_period = filter_records_by_date_range(chapters, Mobilization.table_name,
                                                          calculate_days_ago_for_previous_period(date_range_days),
                                                          (DateTime.now - date_range_days.days).beginning_of_day)
 
-    filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
-    previous_period_trainings = filter_records_by_date_range(chapters, 'trainings',
+    trainings_this_period = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
+    trainings_previous_period = filter_records_by_date_range(chapters, Training.table_name,
                                                      calculate_days_ago_for_previous_period(date_range_days),
                                                      (DateTime.now - date_range_days.days).beginning_of_day)
 
-    filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
-    previous_period_street_swarms = filter_records_by_date_range(chapters, 'street_swarms',
+    street_swarms_this_period = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
+    street_swarms_previous_period = filter_records_by_date_range(chapters, StreetSwarm.table_name,
                                                  calculate_days_ago_for_previous_period(date_range_days),
                                                  (DateTime.now - date_range_days.days).beginning_of_day)
 
-    filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
-    previous_period_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions',
+    arrestable_actions_this_period = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+    arrestable_actions_previous_period = filter_records_by_date_range(chapters, ArrestableAction.table_name,
                                                  calculate_days_ago_for_previous_period(date_range_days),
                                                  (DateTime.now - date_range_days.days).beginning_of_day)
 
@@ -98,15 +99,15 @@ class ReportsController < ApplicationController
         subscriptions: chapters.sum(&:total_subscription_amount).to_int,
         subscriptions_growth: get_subscriptions_growth(chapters_this_period, mobilizations_this_period),
         mobilizations: mobilizations_this_period.length,
-        mobilizations_growth: mobilizations_this_period.length - previous_period_mobilizations.length,
+        mobilizations_growth: mobilizations_this_period.length - mobilizations_previous_period.length,
         signups: mobilizations_this_period.sum(&:xra_newsletter_sign_ups),
-        signups_growth: mobilizations_this_period.sum(&:xra_newsletter_sign_ups) - previous_period_mobilizations.sum(&:xra_newsletter_sign_ups),
-        trainings: filtered_trainings.length,
-        trainings_growth: filtered_trainings.length - previous_period_trainings.length,
+        signups_growth: mobilizations_this_period.sum(&:xra_newsletter_sign_ups) - mobilizations_previous_period.sum(&:xra_newsletter_sign_ups),
+        trainings: trainings_this_period.length,
+        trainings_growth: trainings_this_period.length - trainings_previous_period.length,
         pledges_arrestable: mobilizations_this_period.sum(&:arrestable_pledges),
-        pledges_arrestable_growth: mobilizations_this_period.sum(&:arrestable_pledges) - previous_period_mobilizations.sum(&:arrestable_pledges),
-        actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
-        actions_growth: (filtered_street_swarms.length + filtered_arrestable_actions.length) - (previous_period_street_swarms.length + previous_period_arrestable_actions.length),
+        pledges_arrestable_growth: mobilizations_this_period.sum(&:arrestable_pledges) - mobilizations_previous_period.sum(&:arrestable_pledges),
+        actions: street_swarms_this_period.length + arrestable_actions_this_period.length,
+        actions_growth: (street_swarms_this_period.length + arrestable_actions_this_period.length) - (street_swarms_previous_period.length + arrestable_actions_previous_period.length),
         start_date: (DateTime.now - date_range_days.days).strftime("%d %B %Y"),
         end_date: DateTime.now.strftime("%d %B %Y")
     }
@@ -179,23 +180,18 @@ class ReportsController < ApplicationController
     addresses_with_chapters.map do |country|
       chapters = country[1]
 
-      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
+      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
 
-      {
-          id: CS.countries.key(country[0]),
-          country: country[0],
-          members: chapters.sum(&:active_members),
-          chapters: chapters.count,
-          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
-          trainings: filtered_trainings.length,
-          arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
-          actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
-          mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.sum(&:total_subscription_amount).to_int
-      }
+      response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
+      response.merge(
+          {
+              id: CS.countries.key(country[0]),
+              country: country[0]
+          }
+      )
     end
   end
 
@@ -216,10 +212,10 @@ class ReportsController < ApplicationController
 
       region_chapters.map do |country|
         chapters = country[1]
-        filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
-        filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
-        filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
-        filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
+        filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
+        filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
+        filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
+        filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
 
         result[:members] = chapters.sum(&:active_members)
         result[:chapters] = chapters.count
@@ -247,23 +243,18 @@ class ReportsController < ApplicationController
     states_with_chapters.map do |state|
       chapters = state[1]
 
-      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
+      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
 
-      {
-          id: state[0],
-          state: state[0],
-          members: chapters.sum(&:active_members),
-          chapters: chapters.count,
-          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
-          trainings: filtered_trainings.length,
-          arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
-          actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
-          mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.sum(&:total_subscription_amount).to_int
-      }
+      response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
+      response.merge(
+          {
+              id: state[0],
+              state: state[0]
+          }
+      )
     end
   end
 
@@ -277,22 +268,18 @@ class ReportsController < ApplicationController
 
     states_with_chapters.map do |state|
       chapters = state[1]
-      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
-      {
-          id: state[0],
-          state: state[0],
-          members: chapters.sum(&:active_members),
-          chapters: chapters.count,
-          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
-          trainings: filtered_trainings.length,
-          arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
-          actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
-          mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.sum(&:total_subscription_amount).to_int
-      }
+      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+
+      response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
+      response.merge(
+          {
+              id: state[0],
+              state: state[0]
+          }
+      )
     end
   end
 
@@ -309,22 +296,18 @@ class ReportsController < ApplicationController
       chapter = chapter[1][0]
       chapters = [chapter]
 
-      filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
-      {
-          id: chapter.id,
-          chapter: chapter.name,
-          members: chapter.active_members,
-          chapters: 1,
-          signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
-          trainings: filtered_trainings.length,
-          arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
-          actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
-          mobilizations: filtered_mobilizations.length,
-          subscriptions: chapters.sum(&:total_subscription_amount).to_int
-      }
+      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
+      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
+      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
+      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+
+      response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
+      response.merge(
+          {
+              id: chapter.id,
+              chapter: chapter.name
+          }
+      )
     end
   end
 
@@ -332,10 +315,10 @@ class ReportsController < ApplicationController
     chapter = Chapter.find(id)
     chapters = [chapter]
 
-    filtered_mobilizations = filter_records_by_date_range(chapters, 'mobilizations', date_range_days)
-    filtered_trainings = filter_records_by_date_range(chapters, 'trainings', date_range_days)
-    filtered_street_swarms = filter_records_by_date_range(chapters, 'street_swarms', date_range_days)
-    filtered_arrestable_actions = filter_records_by_date_range(chapters, 'arrestable_actions', date_range_days)
+    filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
+    filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
+    filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
+    filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
 
     { result: {
         id: chapter.id,
@@ -349,6 +332,19 @@ class ReportsController < ApplicationController
         mobilizations: filtered_mobilizations.length,
         subscriptions: chapter.total_subscription_amount.to_int
     }
+    }
+  end
+
+  def build_table_response(chapters, arrestable_actions, mobilizations, street_swarms, trainings)
+    {
+        members: chapters.sum(&:active_members),
+        chapters: chapters.count,
+        signups: mobilizations.sum(&:xra_newsletter_sign_ups),
+        trainings: trainings.length,
+        arrestable_pledges: mobilizations.sum(&:arrestable_pledges),
+        actions: street_swarms.length + arrestable_actions.length,
+        mobilizations: mobilizations.length,
+        subscriptions: chapters.sum(&:total_subscription_amount).to_int
     }
   end
 
