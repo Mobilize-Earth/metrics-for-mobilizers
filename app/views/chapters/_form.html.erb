@@ -21,6 +21,12 @@
       </div>
       <div class="form-row chapter-row">
         <div class="col-md-4 offset-md-1">
+          <%= f.label :total_arrestable_pledges, "Number of Arrestable Pledges Total *" %>
+          <%= f.text_field :total_arrestable_pledges, class: "form-control" %>
+        </div>
+      </div>
+      <div class="form-row chapter-row">
+        <div class="col-md-4 offset-md-1">
           <%= f.label :total_subscription_amount, "$ Total of Subscriptions *" %>
           <div class="input-group">
             <div class="input-group-prepend">

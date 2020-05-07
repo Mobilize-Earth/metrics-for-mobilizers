@@ -8,8 +8,8 @@ class MobilizationsController < ApplicationController
 
     def create
       date_params = params[:report_date]
-      localTime = DateTime.parse(date_params)
-      report_date = localTime.beginning_of_week
+      local_time = DateTime.parse(date_params)
+      report_date = local_time.beginning_of_week
         @mobilization = Mobilization.new(
             user_id: current_user.id,
             chapter_id: current_user.chapter.id,
@@ -26,7 +26,9 @@ class MobilizationsController < ApplicationController
         if @mobilization.save
             flash[:success] = "#{@mobilization.mobilization_type} activity was successfully reported!"
             redirect_to mobilizations_path
-            update_chapter_members(@mobilization.new_members_sign_ons)
+            chapter = Chapter.find(current_user.chapter.id)
+            update_chapter_members(chapter, @mobilization.new_members_sign_ons)
+            update_chapter_arrestable_pledges(chapter, @mobilization.arrestable_pledges)
         else
             flash[:errors] = @mobilization.errors.full_messages
             @types = Mobilization.mobilization_type_options
@@ -35,9 +37,13 @@ class MobilizationsController < ApplicationController
     end
 
     private
-    def update_chapter_members(new_members_sign_ons)
-        chapter = Chapter.find(current_user.chapter.id)
-        new_active_members = chapter.active_members + new_members_sign_ons
-        chapter.update_attribute(:active_members, new_active_members)
+    def update_chapter_members(chapter, new_members_sign_ons)
+      new_active_members = chapter.active_members + new_members_sign_ons
+      chapter.update_attribute(:active_members, new_active_members)
+    end
+
+    def update_chapter_arrestable_pledges(chapter, arrestable_pledges)
+      new_arrestable_pledges = chapter.total_arrestable_pledges + arrestable_pledges
+      chapter.update_attribute(:total_arrestable_pledges, new_arrestable_pledges)
     end
 end

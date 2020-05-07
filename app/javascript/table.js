@@ -1,7 +1,9 @@
 let country, state, region, chapter, groupByProperty, groupByLabel, queryParams;
 let xhr;
 let data = {};
+
 const stripHash = hash => hash ? hash.substring(1) : '';
+const numberFormatter = new Intl.NumberFormat('en-US');
 
 function init() {
     getContext();
@@ -121,14 +123,14 @@ const record = (obj) => {
 
     return `<tr>
               <td scope="row">${linkElement}</td>
-              <td>${obj.chapters === undefined ? 0 : obj.chapters}</td>
-              <td>${obj.members === undefined ? 0 : obj.members}</td>
-              <td>${obj.mobilizations === undefined ? 0 : obj.mobilizations}</td>
-              <td>${obj.trainings === undefined ? 0 : obj.trainings}</td>
-              <td>$${obj.subscriptions === undefined ? 0 : obj.subscriptions}</td>
-              <td>${obj.signups === undefined ? 0 : obj.signups}</td>
-              <td>${obj.arrestable_pledges === undefined ? 0 : obj.arrestable_pledges}</td>
-              <td>${obj.actions === undefined ? 0 : obj.actions}</td>
+              <td>${obj.chapters === undefined ? 0 : numberFormatter.format(obj.chapters)}</td>
+              <td>${obj.members === undefined ? 0 : numberFormatter.format(obj.members)}</td>
+              <td>${obj.mobilizations === undefined ? 0 : numberFormatter.format(obj.mobilizations)}</td>
+              <td>${obj.trainings === undefined ? 0 : numberFormatter.format(obj.trainings)}</td>
+              <td>$${obj.subscriptions === undefined ? 0 : numberFormatter.format(obj.subscriptions)}</td>
+              <td>${obj.signups === undefined ? 0 : numberFormatter.format(obj.signups)}</td>
+              <td>${obj.arrestable_pledges === undefined ? 0 : numberFormatter.format(obj.arrestable_pledges)}</td>
+              <td>${obj.actions === undefined ? 0 : numberFormatter.format(obj.actions)}</td>
             </tr>`
 };
 

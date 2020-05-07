@@ -29,6 +29,11 @@ $table-padding: 1rem;
 
     margin-bottom: 0;
 
+    .report-table-title {
+      font-size: 1.25rem;
+      border-bottom: 5px $background-green solid;
+    }
+
     td, th {
       border: 0;
     }
@@ -41,9 +46,14 @@ $table-padding: 1rem;
       padding: 2.0rem $table-padding $table-padding;
       text-align: center;
       font-weight: bold;
+
       &:first-child{
         padding-left: 1.5rem;
         text-align: left;
+      }
+
+      &:nth-child(5) {
+        border-right: 5px $background-green solid;
       }
 
       .fa-sort{
@@ -55,10 +65,15 @@ $table-padding: 1rem;
       padding: $table-padding;
       border-bottom: solid 1px #e9eff4;
       text-align: center;
+
       &:first-child{
         text-align: left;
         font-weight: normal;
         padding-left: 1.5rem;
+      }
+
+      &:nth-child(5) {
+        border-right: 5px $background-green solid;
       }
 
       a {

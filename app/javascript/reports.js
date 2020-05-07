@@ -2,6 +2,7 @@ import Charts from './charts';
 import reportTable from './table';
 
 const stripHash = hash => hash ? hash.substring(1) : '';
+const numberFormatter = new Intl.NumberFormat('en-US');
 
 const setDateRange = (start, end) => {
     for (const ele of document.getElementsByClassName('report-page-start-date')) {
@@ -56,35 +57,46 @@ const getReportsTilesData = () => {
         data: queryParams
     }).done(data => {
         stopTurbolinksProgress();
-        $('#members').html(data.members === undefined ? 0 : data.members);
+
+        $('#members').html(data.members === undefined ? 0 : numberFormatter.format(data.members));
         parseTilesGrowthData($('#members-growth'), data.members_growth);
 
-        $('#chapters').html(data.chapters === undefined ? 0 : data.chapters);
+        $('#chapters').html(data.chapters === undefined ? 0 : numberFormatter.format(data.chapters));
         parseTilesGrowthData($('#chapters-growth'), data.chapters_growth);
 
-        $('#mobilizations').html(data.mobilizations === undefined ? 0 : data.mobilizations);
+        $('#mobilizations').html(data.mobilizations === undefined ? 0 : numberFormatter.format(data.mobilizations));
         parseTilesGrowthData($('#mobilizations-growth'), data.mobilizations_growth);
 
-        $('#newsletter-signups').html(data.signups === undefined ? 0 : data.signups);
+        $('#newsletter-signups').html(data.signups === undefined ? 0 : numberFormatter.format(data.signups));
         parseTilesGrowthData($('#newsletter-signups-growth'), data.signups_growth);
 
-        $('#actions').html(data.actions === undefined ? 0 : data.actions);
+        $('#actions').html(data.actions === undefined ? 0 : numberFormatter.format(data.actions));
         parseTilesGrowthData($('#actions-growth'), data.actions_growth);
 
-        $('#trainings').html(data.trainings === undefined ? 0 : data.trainings);
+        $('#trainings').html(data.trainings === undefined ? 0 : numberFormatter.format(data.trainings));
         parseTilesGrowthData($('#trainings-growth'), data.trainings_growth);
 
-        $('#pledges-arrestable').html(data.pledges_arrestable === undefined ? 0 : data.pledges_arrestable);
-        parseTilesGrowthData($('#pledges-arrestable-growth'), data.pledges_arrestable_growth);
+        $('#arrestable-pledges').html(data.arrestable_pledges === undefined ? 0 : numberFormatter.format(data.arrestable_pledges));
+        parseTilesGrowthData($('#arrestable-pledges-growth'), data.arrestable_pledges_growth);
 
-        $('#subscriptions').html(data.subscriptions === undefined ? 0 : data.subscriptions);
-        parseTilesGrowthData($('#subscriptions-growth'), `$${data.subscriptions_growth}`);
+        $('#subscriptions').html(data.subscriptions === undefined ? 0 : numberFormatter.format(data.subscriptions));
+        parseSubscriptionTileGrowthData($('#subscriptions-growth'), data.subscriptions_growth);
 
         setDateRange(data.start_date, data.end_date);
     });
 }
 
 const parseTilesGrowthData = (element, data) => {
+    applyGrowthStyles(element, data);
+    element.html(data === undefined ? 0 : numberFormatter.format(data));
+}
+
+const parseSubscriptionTileGrowthData = (element, data) => {
+    applyGrowthStyles(element, data);
+    element.html(data === undefined ? 0 : `$${numberFormatter.format(data)}`);
+}
+
+const applyGrowthStyles = (element, data) => {
     element.removeClass('number-negative')
     element.parent().find('.fa').removeClass('fa-arrow-down').addClass('fa-arrow-up')
 
@@ -92,8 +104,9 @@ const parseTilesGrowthData = (element, data) => {
         element.addClass('number-negative')
         element.parent().find('.fa').removeClass('fa-arrow-up').addClass('fa-arrow-down')
     }
-    element.html(data === undefined ? 0 : data);
 }
+
+
 
 const getReportsChartsData = (queryParams) => {
     $.ajax({

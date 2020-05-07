@@ -11,8 +11,8 @@ const createMetricsDiv = (label, color, value) => `<div class="metric">
 </div>`;
 const totalParticipantsDiv = () => `<div class="metric total-metric">
     <div class="visual" style="background-color: #a6a6a6;"></div>
-    <div class="subtitle">Total Participants</div>
-    <div class="description">Represents total grouped activity</div>
+    <div class="subtitle">People Engaged</div>
+    <div class="description">Total grouped activity</div>
 </div>`;
 
 const chartOptions = {

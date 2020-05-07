@@ -26,6 +26,7 @@ feature 'create/edit chapter' do
     fill_in 'chapter_name', with: 'Chapter Name'
     fill_in 'chapter_active_members', with: 20
     fill_in 'chapter_total_subscription_amount', with: 2000000000
+    fill_in 'chapter_total_arrestable_pledges', with: 20
     select 'United States', from: 'chapter_address_attributes_country'
     select 'Alaska', from: 'chapter_address_attributes_state_province'
     select 'Akutan', from: 'chapter_address_attributes_city'
@@ -39,6 +40,7 @@ feature 'create/edit chapter' do
     fill_in 'chapter_name', with: 'fdshsajkdfhkjasdhfkasjdhfkajsdhfkajsdhfkasdfkasjdhfkasjdhfkadhfkasdhfaksadfljsadlfjalsdjflasdjflasdjflasdjflasdjflaskdsffa'
     fill_in 'chapter_active_members', with: 20
     fill_in 'chapter_total_subscription_amount', with: 200
+    fill_in 'chapter_total_arrestable_pledges', with: 20
     select 'United States', from: 'chapter_address_attributes_country'
     select 'Alaska', from: 'chapter_address_attributes_state_province'
     select 'Akutan', from: 'chapter_address_attributes_city'

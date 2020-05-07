@@ -27,7 +27,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount")
+      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount").to_int
 
       expect(result["chapters"]).to eq(chapters)
       expect(result["members"]).to eq(active_members)
@@ -52,7 +52,7 @@ RSpec.describe ReportsController, type: :controller do
       pledges = Mobilization.with_addresses.where(addresses: {country: country}).sum("arrestable_pledges")
       actions = StreetSwarm.with_addresses.where(addresses: {country: country}).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).count
-      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount")
+      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount").to_int
 
 
       expect(result["members"]).to eq(active_members)
@@ -85,7 +85,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {state_province: region_states}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Chapter.with_addresses.where(addresses: {state_province: region_states}).sum("total_subscription_amount")
+      subscriptions = Chapter.with_addresses.where(addresses: {state_province: region_states}).sum("total_subscription_amount").to_int
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -116,7 +116,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {state_province: state}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Chapter.with_addresses.where(addresses: {state_province: state}).sum("total_subscription_amount")
+      subscriptions = Chapter.with_addresses.where(addresses: {state_province: state}).sum("total_subscription_amount").to_int
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -146,7 +146,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount")
+      subscriptions = Chapter.with_addresses.where(addresses: {country: country}).sum("total_subscription_amount").to_int
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(chapters)
@@ -179,7 +179,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.where(chapter: chapter).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = chapter.total_subscription_amount
+      subscriptions = chapter.total_subscription_amount.to_int
 
       expect(result["members"]).to eq(active_members)
       expect(result["chapters"]).to eq(1)
@@ -208,7 +208,7 @@ RSpec.describe ReportsController, type: :controller do
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count +
           ArrestableAction.where(chapter: chapter).
               where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
-      subscriptions = chapter.total_subscription_amount
+      subscriptions = chapter.total_subscription_amount.to_int
 
 
       expect(result["members"]).to eq(chapter.active_members)
@@ -240,6 +240,13 @@ RSpec.describe ReportsController, type: :controller do
               where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
               sum("new_members_sign_ons")
 
+      pledges = Chapter.sum("total_arrestable_pledges")
+      pledges_in_this_period = chapters_in_this_period.sum("total_arrestable_pledges") +
+          Mobilization.
+              where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("arrestable_pledges")
+
       subscriptions = Chapter.sum("total_subscription_amount").to_int
 
       # TODO - We are currently using mobilizations.total_one_time_donations to calculate new subscriptions in a period.
@@ -266,12 +273,7 @@ RSpec.describe ReportsController, type: :controller do
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_trainings = Training.
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      pledges = Mobilization.
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("arrestable_pledges")
-      previous_period_pledges = Mobilization.
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("arrestable_pledges")
+
       actions = StreetSwarm.
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
                     .count + ArrestableAction.
@@ -294,7 +296,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["trainings"]).to eq(trainings)
       expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
       expect(result["pledges_arrestable"]).to eq(pledges)
-      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(pledges_in_this_period)
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
@@ -311,6 +313,7 @@ RSpec.describe ReportsController, type: :controller do
       chapters_in_this_period = Chapter.with_addresses.
           where(addresses: {country: country}).
           where('chapters.created_at >= ?', (DateTime.now - 6.days).beginning_of_day)
+
       active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
       members_in_this_period = chapters_in_this_period.sum("active_members") +
           Mobilization.with_addresses.
@@ -322,11 +325,18 @@ RSpec.describe ReportsController, type: :controller do
       subscriptions = Chapter.with_addresses.
           where(addresses: {country: country}).sum("total_subscription_amount").to_int
 
-      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount") +
+      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount").to_int +
           Mobilization.with_addresses.where(addresses: {country: country}).
               where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
               where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
               sum("total_one_time_donations").to_int
+
+      pledges = Chapter.with_addresses.where(addresses: {country: country}).sum("total_arrestable_pledges")
+      pledges_in_this_period = chapters_in_this_period.sum("total_arrestable_pledges") +
+          Mobilization.with_addresses.where(addresses: {country: country}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+          where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+                                    sum("arrestable_pledges")
 
       mobilizations = Mobilization.with_addresses.
           where(addresses: {country: country}).
@@ -348,14 +358,7 @@ RSpec.describe ReportsController, type: :controller do
       previous_period_trainings = Training.
           with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      pledges = Mobilization.
-          with_addresses.where(addresses: {country: country}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("arrestable_pledges")
-      previous_period_pledges = Mobilization.
-          with_addresses.where(addresses: {country: country}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("arrestable_pledges")
+
       actions = StreetSwarm.
           with_addresses.where(addresses: {country: country}).
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
@@ -382,7 +385,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["trainings"]).to eq(trainings)
       expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
       expect(result["pledges_arrestable"]).to eq(pledges)
-      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(pledges_in_this_period)
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
@@ -415,11 +418,19 @@ RSpec.describe ReportsController, type: :controller do
           where(addresses: {state_province: state}).
           sum("total_subscription_amount").to_int
 
-      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount") +
+      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount").to_int +
           Mobilization.with_addresses.where(addresses: {state_province: state}).
               where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
               where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
               sum("total_one_time_donations").to_int
+
+      pledges = Chapter.with_addresses.where(addresses: {state_province: state}).sum("total_arrestable_pledges")
+      pledges_in_this_period = chapters_in_this_period.sum("total_arrestable_pledges") +
+          Mobilization.with_addresses.where(addresses: {state_province: state}).
+              where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("arrestable_pledges")
+
       mobilizations = Mobilization.with_addresses.
           where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
@@ -440,14 +451,7 @@ RSpec.describe ReportsController, type: :controller do
       previous_period_trainings = Training.with_addresses.
           where(addresses: {state_province: state}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      pledges = Mobilization.with_addresses.
-          where(addresses: {state_province: state}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("arrestable_pledges")
-      previous_period_pledges = Mobilization.with_addresses.
-          where(addresses: {state_province: state}).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("arrestable_pledges")
+
       actions = StreetSwarm.with_addresses.
           where(addresses: {state_province: state}).
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
@@ -472,7 +476,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["trainings"]).to eq(trainings)
       expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
       expect(result["pledges_arrestable"]).to eq(pledges)
-      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(pledges_in_this_period)
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
       expect(result["subscriptions"]).to eq(subscriptions)
@@ -502,12 +506,6 @@ RSpec.describe ReportsController, type: :controller do
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
-      pledges = Mobilization.where(chapter: chapter).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("arrestable_pledges")
-      previous_period_pledges = Mobilization.where(chapter: chapter).
-          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("arrestable_pledges")
       actions = StreetSwarm.where(chapter: chapter).
           where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
                     .count + ArrestableAction.where(chapter: chapter).
@@ -526,12 +524,12 @@ RSpec.describe ReportsController, type: :controller do
       expect(result["signups_growth"]).to eq(signups - previous_period_signups)
       expect(result["trainings"]).to eq(trainings)
       expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
-      expect(result["pledges_arrestable"]).to eq(pledges)
-      expect(result["pledges_arrestable_growth"]).to eq(pledges - previous_period_pledges)
+      expect(result["pledges_arrestable"]).to eq(chapter.total_arrestable_pledges)
+      expect(result["pledges_arrestable_growth"]).to eq(chapter.total_arrestable_pledges)
       expect(result["actions"]).to eq(actions)
       expect(result["actions_growth"]).to eq(actions - previous_period_actions)
-      expect(result["subscriptions"]).to eq(chapter.total_subscription_amount)
-      expect(result["subscriptions_growth"]).to eq(chapter.total_subscription_amount)
+      expect(result["subscriptions"]).to eq(chapter.total_subscription_amount.to_int)
+      expect(result["subscriptions_growth"]).to eq(chapter.total_subscription_amount.to_int)
       expect(actual_date_range).to eq(6)
 
       old_chapter_id = 4
