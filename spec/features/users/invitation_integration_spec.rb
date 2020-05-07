@@ -131,8 +131,9 @@ feature 'send mail'do
     it "when new data reviewer is registered" do
         click_button 'Submit'
       
-        email_content = UserMailer.deliveries[0].body.encoded
-        #expect(email_content).to include '<a href=3D"http://localhost:3000/users/invitation/accept?invitation_token='
+        email_content = get_email_html
+        link_url = email_content.xpath("//a")[0][:href]
+        expect(link_url).to include 'http://localhost:3000/users/invitation/accept?invitation_token='
         expect(email_content).to have_content("Accept Invitation")
         expect(email_content).to have_content("Data Reviewer")
     end
@@ -144,4 +145,8 @@ feature 'send mail'do
         email_content = UserMailer.deliveries[0].body.encoded
         expect(email_content).to have_content("Administrator")
     end
+
+    def get_email_html
+        Nokogiri::HTML.parse(Devise::Mailer.deliveries[0].body.encoded).document
+      end
   end

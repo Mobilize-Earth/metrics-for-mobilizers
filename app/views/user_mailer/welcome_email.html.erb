@@ -1,5 +1,5 @@
 <p style="font-size: 14px; font-weight: 500; letter-spacing: 1.05px; color: #000000;">
-    <strong>Welcome to ‘Truth in Numbers,’ <%= @user.email %></strong>
+    <strong>Welcome to  'Metrics for Mobilizers', <%= @user.email %></strong>
 </p>
 
 <p  style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 10px;">
@@ -12,13 +12,13 @@
 </p>
 <% if @user.role == "admin" %>
     <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000;">
-        You can now add other users and view reports.
+        You can now create users and chapters and view reports.
     </p>
 <% end %>
 <% if @user.role == "external" %>
     <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 10px;">
         You can now enter your weekly reports and see the results of the movement.<br/>
-        You belong to <%= @user.chapter.name %> Chapter
+        You belong to <%= @user.chapter.name %> chapter
         <% if @user.chapter.has_address? %>
              located in <%= @user.chapter.address.state_province %>, <%= @user.chapter.address.city %>, <%= @user.chapter.address.country %>.
         <% end %>
@@ -31,10 +31,9 @@
 <% end %>
 
 <p style="font-size: 12px; letter-spacing: 0.9px; color: #4a90e2;">
-    <%= link_to "Accept Invitation", @user.invitation_link%>
+    <%= link_to 'Accept Invitation', @user.invitation_link%>
 </p>
 
 <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 25px;">
-    If you have any questions reach out to... <br/>
     Do not reply to this email.
 </p>
