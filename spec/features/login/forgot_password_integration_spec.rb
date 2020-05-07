@@ -13,9 +13,15 @@ feature 'forgot password', :devise do
 
     click_button "Email me a recovery link"
 
-    email_content = UserMailer.deliveries[0].body.encoded
-    expect(email_content).to have_content('Change my password')
-    #expect(email_content).to include '<a href="http://localhost:3000/users/password/edit">Change my password</a>'
-    #expect(email_content).to include '<img alt="MOBILIZE EARTH" src="data:image/png;base64,'  # Followed by long base64 content
+    email_content = get_email_html
+    link_url = email_content.xpath("//a")[0][:href]
+    img_src = email_content.xpath("//img")[0][:src]
+
+    expect(link_url).to include 'http://localhost:3000/users/password/edit'
+    expect(img_src).to include 'data:image/png;base64,'  # Followed by long base64 content
   end
+end
+
+def get_email_html
+  Nokogiri::HTML.parse(Devise::Mailer.deliveries[0].body.encoded).document
 end
