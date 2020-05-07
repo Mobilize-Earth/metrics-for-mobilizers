@@ -50,6 +50,11 @@ en:
               blank: "$ Total of Subscriptions is required"
               not_a_number: "$ Total of Subscriptions must be a number"
               less_than_or_equal_to: "$ Total of Subscriptions is too long"
+            total_arrestable_pledges:
+              blank: "Arrestable Pledges total is required"
+              not_a_number: "Arrestable Pledges total must be a number"
+              not_an_integer: "Arrestable Pledges total must be a number"
+              less_than_or_equal_to: "Arrestable Pledges total is too long"
         address:
           attributes:
             country:

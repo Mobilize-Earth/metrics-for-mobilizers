@@ -14,7 +14,7 @@ describe Chapter, type: :model do
     end
 
     it "should have a unique chapter name" do
-      Chapter.create(name: "chapter", active_members: 10, total_subscription_amount: 100)
+      Chapter.create(name: "chapter", active_members: 10, total_subscription_amount: 100, total_arrestable_pledges: 100)
       chapter = Chapter.new
       chapter.name = "chapter"
       chapter.valid?
@@ -26,9 +26,15 @@ describe Chapter, type: :model do
     end
 
     it "should not save if active members is greater than 1,000,000,000" do
-      chapter = Chapter.create(name: "chapter 45", active_members: 2_000_000_000, total_subscription_amount: 0.00)
+      chapter = Chapter.create(name: "chapter 45", active_members: 2_000_000_000, total_subscription_amount: 0.00, total_arrestable_pledges: 100)
       chapter.valid?
       expect(chapter.errors[:active_members]).to include("Members total is too long")
+    end
+
+    it "should not save if total arrestable pledges is greater than 1,000,000,000" do
+      chapter = Chapter.create(name: "chapter 45", active_members: 100, total_subscription_amount: 0.00, total_arrestable_pledges: 2_000_000_000)
+      chapter.valid?
+      expect(chapter.errors[:total_arrestable_pledges]).to include("Arrestable Pledges total is too long")
     end
 
     it "should not save if total subscription amount is greater than 1,000,000,000" do
@@ -41,7 +47,8 @@ describe Chapter, type: :model do
       chapter = Chapter.create(name: "fdshsajkdfhkjasdhfkasjdhfkajsdhfkajsdhfkasdfkasjdhfkasjdhfka
                                       dhfkasdhfaksadfljsadlfjalsdjflasdjflasdjflasdjflasdjflaskdsffah",
                                active_members: 10,
-                               total_subscription_amount: 2_000_000_000)
+                               total_subscription_amount: 2_000_000_000,
+                               total_arrestable_pledges: 100)
       chapter.valid?
       expect(chapter.errors[:name]).to include("Chapter Name is too long")
     end
@@ -72,7 +79,7 @@ describe Chapter, type: :model do
 
   describe "has address" do
     it "should return true if chapter has an address" do
-      chapter = Chapter.create(name: 'New Chapter', active_members: 10, total_subscription_amount: 1000)
+      chapter = Chapter.create(name: 'New Chapter', active_members: 10, total_subscription_amount: 1000, total_arrestable_pledges: 100)
       address = Address.create(country: 'United State', state_province: 'Kansas', zip_code: '12456')
       chapter.address = address
       chapter.save

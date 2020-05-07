@@ -271,7 +271,7 @@ class ReportsController < ApplicationController
         result[:chapters] = chapters.count
         result[:signups] = filtered_mobilizations.sum(&:xra_newsletter_sign_ups)
         result[:trainings] = filtered_trainings.length
-        result[:arrestable_pledges] = filtered_mobilizations.sum(&:arrestable_pledges)
+        result[:arrestable_pledges] = chapters.sum(&:total_arrestable_pledges)
         result[:actions] = filtered_street_swarms.length + filtered_arrestable_actions.length
         result[:mobilizations] = filtered_mobilizations.length
         result[:subscriptions] =  chapters.sum(&:total_subscription_amount).to_int
@@ -438,7 +438,7 @@ class ReportsController < ApplicationController
         chapters: 1,
         signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
         trainings: filtered_trainings.length,
-        arrestable_pledges: filtered_mobilizations.sum(&:arrestable_pledges),
+        arrestable_pledges: chapter.total_arrestable_pledges,
         actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
         mobilizations: filtered_mobilizations.length,
         subscriptions: chapter.total_subscription_amount.to_int

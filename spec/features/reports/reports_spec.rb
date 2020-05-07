@@ -76,27 +76,26 @@ feature 'report tiles' do
   end
 
   scenario 'should contain corresponding data from the tiles api' do
-    expect(find('#members')).to have_content 5
+    expect(find('#members')).to have_content @user.chapter.active_members
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
     expect(find('#mobilizations')).to have_content 0
-    expect(find('#subscriptions')).to have_content 0
-    expect(find('#pledges-arrestable')).to have_content 0
+    expect(find('#subscriptions')).to have_content @user.chapter.total_subscription_amount.to_int
+    expect(find('#arrestable-pledges')).to have_content @user.chapter.total_arrestable_pledges
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 6.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
 
   scenario 'should filter data by month' do
     find('#filter-month').click
-
-    expect(find('#members')).to have_content 5
+    expect(find('#members')).to have_content @user.chapter.active_members
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
     expect(find('#mobilizations')).to have_content 0
-    expect(find('#subscriptions')).to have_content 0
-    expect(find('#pledges-arrestable')).to have_content 0
+    expect(find('#subscriptions')).to have_content @user.chapter.total_subscription_amount.to_int
+    expect(find('#arrestable-pledges')).to have_content @user.chapter.total_arrestable_pledges
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 29.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
@@ -104,13 +103,13 @@ feature 'report tiles' do
   scenario 'should filter data by quarter' do
     find('#filter-quarter').click
 
-    expect(find('#members')).to have_content 5
+    expect(find('#members')).to have_content @user.chapter.active_members
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
     expect(find('#mobilizations')).to have_content 0
-    expect(find('#subscriptions')).to have_content 0
-    expect(find('#pledges-arrestable')).to have_content 0
+    expect(find('#subscriptions')).to have_content @user.chapter.total_subscription_amount.to_int
+    expect(find('#arrestable-pledges')).to have_content @user.chapter.total_arrestable_pledges
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 89.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
@@ -118,13 +117,13 @@ feature 'report tiles' do
   scenario 'should filter data by half year' do
     find('#filter-half-year').click
 
-    expect(find('#members')).to have_content 5
+    expect(find('#members')).to have_content @user.chapter.active_members
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
     expect(find('#mobilizations')).to have_content 0
-    expect(find('#subscriptions')).to have_content 0
-    expect(find('#pledges-arrestable')).to have_content 0
+    expect(find('#subscriptions')).to have_content @user.chapter.total_subscription_amount.to_int
+    expect(find('#arrestable-pledges')).to have_content @user.chapter.total_arrestable_pledges
     expect(find('.report-page-subtitle .report-page-start-date')).to have_content (DateTime.now - 179.days).strftime("%d %B %Y")
     expect(find('.report-page-subtitle .report-page-end-date')).to have_content DateTime.now.strftime("%d %B %Y")
   end
