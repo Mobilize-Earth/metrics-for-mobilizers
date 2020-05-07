@@ -47,6 +47,20 @@ feature 'create user' do
         click_button 'Submit'
         expect(page).to have_css '.alert-success'
     end
+
+    scenario 'should show error if assigned chapter has 2 coordinators already' do
+        # setup
+        chapter = FactoryBot.create :chapter, name: 'Test chapter'
+        FactoryBot.create :coordinator, chapter: chapter
+        FactoryBot.create :coordinator, chapter: chapter
+
+        # execute
+        fill_in 'user_email', with: 'test1@test.com'
+        select 'External Coordinator', from: 'user_role'
+        select 'Test chapter'
+        click_button 'Submit'
+        expect(page).to have_css '.alert-danger'
+    end
 end
 
 feature 'edit user' do

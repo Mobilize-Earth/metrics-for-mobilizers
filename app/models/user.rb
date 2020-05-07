@@ -12,6 +12,7 @@ class User < ApplicationRecord
   validates :phone_number, format: { without: /(000000000)/, message: "invalid" }, on: :update
   validate :check_role_dashboard
   validates :email, :email => true
+  validate :chapter_limit_of_two_users
 
   def check_role_dashboard
     if role != 'external' and chapter_id != nil then
@@ -25,6 +26,12 @@ class User < ApplicationRecord
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def chapter_limit_of_two_users
+    if !chapter.nil? && chapter.users.size >= 2
+      errors.add(:chapter, :external_user_limit)
+    end
   end
 
   protected

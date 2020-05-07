@@ -73,6 +73,24 @@ RSpec.describe User, type: :model do
       expect(@user_last.errors[:last_name]).to include('can\'t be blank')
       expect(@user_last.errors[:phone_number]).to include('can\'t be blank')
     end
+
+    it 'should validate that assigned chapter does not have more than two coordinators' do
+      # setup
+      chapter = FactoryBot.create :chapter
+      FactoryBot.create :coordinator, chapter: chapter
+      FactoryBot.create :coordinator, chapter: chapter
+      chapter.reload
+
+      # execute
+      @user.role = 'external'
+      @user.chapter = chapter
+      @user.valid?
+
+      # assert
+      expect(@user.errors[:chapter])
+          .to include('Two external coordinators have been already associated with this chapter. A chapter cannot have more than 2 coordinators.')
+    end
+
   end
 
   describe 'user aditional functions' do

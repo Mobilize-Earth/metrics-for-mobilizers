@@ -36,8 +36,9 @@ class UsersController < ApplicationController
 
     def update
       @user = User.find(params[:id])
-      @user.update_attributes(:email => params[:user][:email], :chapter_id => params[:user][:chapter_id], :role => params[:user][:role])
+      @user.assign_attributes(:email => params[:user][:email], :chapter_id => params[:user][:chapter_id], :role => params[:user][:role])
       if @user.valid?
+        @user.save
         flash[:success] = "The user #{@user.full_name} was successfully updated!"
         redirect_to admins_index_path
       else

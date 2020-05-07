@@ -141,6 +141,7 @@ en:
           attributes:
             chapter:
               blank: "must be assigned to External Coordinators"
+              external_user_limit: "Two external coordinators have been already associated with this chapter. A chapter cannot have more than 2 coordinators."
         social_media_blitzing:
           attributes:
             number_of_posts:
