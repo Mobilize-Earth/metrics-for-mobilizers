@@ -12,9 +12,11 @@ Unit Tests:
     - npm install yarn -g
     - gem install bundler --no-document
     - bundle install
+    - export RAILS_ENV=test
   tags:
     - docker
   script:
+    - rake db:migrate
     - bundle exec rspec spec/unit
 
 Intergration Tests:
@@ -31,7 +33,7 @@ Intergration Tests:
     - docker
   script:
     - yarn
-    - rails db:migrate
+    - rake db:migrate
     - rake assets:precompile
     - bundle exec rspec spec/features
 
