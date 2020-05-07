@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_04_131022) do
+ActiveRecord::Schema.define(version: 2020_05_07_160257) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "country"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2020_05_04_131022) do
     t.decimal "total_subscription_amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "total_arrestable_pledges"
   end
 
   create_table "mobilizations", force: :cascade do |t|
@@ -67,12 +68,13 @@ ActiveRecord::Schema.define(version: 2020_05_04_131022) do
   end
 
   create_table "social_media_blitzings", force: :cascade do |t|
-    t.integer "social_media_campaigns"
+    t.integer "number_of_posts"
     t.integer "chapter_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.datetime "report_date"
+    t.integer "number_of_people_posting"
     t.index ["chapter_id"], name: "index_social_media_blitzings_on_chapter_id"
     t.index ["user_id"], name: "index_social_media_blitzings_on_user_id"
   end
