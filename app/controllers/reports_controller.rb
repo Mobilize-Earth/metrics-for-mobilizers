@@ -137,20 +137,24 @@ class ReportsController < ApplicationController
     region = params[:region]
     chapter = params[:chapter]
     date_range_days = DATE_RANGE_MAPPING[params[:period].to_sym]
-    response = if country.nil?
-                 all_countries(date_range_days)
-               elsif country.upcase == 'US' && region.nil?
-                 us_regions(date_range_days)
-               elsif country.upcase == 'US' && !region.nil? && state.nil?
-                 us_states(region, date_range_days)
-               elsif state.nil?
-                 states(country, date_range_days)
-               elsif chapter.nil?
-                 chapters(country, state, date_range_days)
-               else
-                 chapter_report(chapter, date_range_days)
-               end
-    render json: response
+    begin
+      response = if country.nil?
+                   all_countries(date_range_days)
+                 elsif country.upcase == 'US' && region.nil?
+                   us_regions(date_range_days)
+                 elsif country.upcase == 'US' && !region.nil? && state.nil?
+                   us_states(region, date_range_days)
+                 elsif state.nil?
+                   states(country, date_range_days)
+                 elsif chapter.nil?
+                   chapters(country, state, date_range_days)
+                 else
+                   chapter_report(chapter, date_range_days)
+                 end
+      render json: response
+    rescue
+      render json: {error: true}
+    end
   end
 
   private
