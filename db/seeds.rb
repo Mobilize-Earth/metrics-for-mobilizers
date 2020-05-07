@@ -9,7 +9,7 @@ require 'faker'
 
 NUMBER_OF_US_CHAPTERS = 5
 NUMBER_OF_GLOBAL_CHAPTERS = 5
-NUMBER_OF_FORMS_SUBMISSIONS = 7
+NUMBER_OF_FORMS_SUBMISSIONS = 10000
 
 NUMBER_OF_PAST_US_CHAPTERS = 5
 NUMBER_OF_PAST_GLOBAL_CHAPTERS = 5
@@ -81,6 +81,7 @@ def create_chapters(chapter_id, type, days_offset)
         chapter: chapter,
         user: user,
         created_at: Date.today - days_offset.days
+        report_comment: ""
     )
 
     participants = Faker::Number.number(digits: 2)
