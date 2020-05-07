@@ -9,7 +9,7 @@ require 'faker'
 
 NUMBER_OF_US_CHAPTERS = 5
 NUMBER_OF_GLOBAL_CHAPTERS = 5
-NUMBER_OF_FORMS_SUBMISSIONS = 5
+NUMBER_OF_FORMS_SUBMISSIONS = 7
 
 NUMBER_OF_PAST_US_CHAPTERS = 5
 NUMBER_OF_PAST_GLOBAL_CHAPTERS = 5
@@ -110,6 +110,14 @@ def create_chapters(chapter_id, type, days_offset)
 
     StreetSwarm.create!(
         xr_members_attended: Faker::Number.number(digits: 2),
+        chapter: chapter,
+        user: user,
+        created_at: Date.today - days_offset.days
+    )
+
+    SocialMediaBlitzing.create!(
+        number_of_posts: Faker::Number.number(digits: 2),
+        number_of_people_posting: Faker::Number.number(digits: 2),
         chapter: chapter,
         user: user,
         created_at: Date.today - days_offset.days

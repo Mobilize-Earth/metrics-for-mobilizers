@@ -39,13 +39,13 @@ class Mobilization < ApplicationRecord
     }
 
     def self.to_csv
-      attributes = %w{created_at report_date chapter_name coordinator_email mobilization_type event_type participants new_members_sign_ons xra_donation_suscriptions arrestable_pledges xra_newsletter_sign_ups }
+      attributes = %w{chapter_name coordinator_email mobilization_type event_type participants new_members_sign_ons xra_donation_suscriptions arrestable_pledges xra_newsletter_sign_ups report_date created_at}
 
       CSV.generate(headers: true) do |csv|
         csv << attributes
 
         all.includes(:chapter, :user).find_each do |m|
-          csv << [ m.created_at, m.report_date, m.chapter.name, m.user.email, m.mobilization_type, m.event_type, m.participants, m.new_members_sign_ons, m.xra_donation_suscriptions, m.arrestable_pledges, m.xra_newsletter_sign_ups ]
+          csv << [m.chapter.name, m.user.email, m.mobilization_type, m.event_type, m.participants, m.new_members_sign_ons, m.xra_donation_suscriptions, m.arrestable_pledges, m.xra_newsletter_sign_ups, m.report_date, m.created_at]
         end
       end
     end

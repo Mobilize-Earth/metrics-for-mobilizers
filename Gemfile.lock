@@ -308,6 +308,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-i18n
   rspec-rails (~> 4.pre.0.pre.maintenance)
+  rubyzip
   sass-rails (>= 6)
   spring
   spring-watcher-listen (~> 2.0.0)

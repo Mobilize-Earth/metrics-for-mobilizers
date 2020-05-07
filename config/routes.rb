@@ -54,5 +54,5 @@ Rails.application.routes.draw do
   get '/locations/states', to: 'locations#states'
   get '/locations/cities', to: 'locations#cities'
 
-  get '/csvs', to: 'csvs#index'
+  get '/csvs/download', to: 'csvs#download', as: 'csv_download'
 end

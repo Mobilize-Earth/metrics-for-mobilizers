@@ -34,13 +34,22 @@
 </div>
 <div class="report-filter-container">
   <div class="row">
-    <div class="report-page-header col-12">
+    <div class="report-page-header col-8">
       <h2 id="report-page-title">Global</h2>
       <h2 class="report-page-subtitle">
         <span class="report-page-start-date">30 February 2020</span>
         -
         <span class="report-page-end-date">32 February 2020</span>
       </h2>
+    </div>
+    <div class="col-4 csv-download">
+      <% if current_user.role == 'admin' %>
+        <%= link_to csv_download_path do %>
+          <h3 id="csv-download">
+            CSV <span class="fa fa-arrow-down"></span>
+          </h3>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </div>

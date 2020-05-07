@@ -68,6 +68,29 @@ feature 'reports breadcrumbs' do
   end
 end
 
+feature 'reports csv download' do
+  scenario 'should not render for coordinator' do
+    @user = FactoryBot.create(:coordinator)
+    sign_in(@user.email, @user.password)
+    visit reports_path
+    expect(page).not_to have_selector("#csv-download")
+  end
+
+  scenario 'should not render for reviewer' do
+    @user = FactoryBot.create(:reviewer)
+    sign_in(@user.email, @user.password)
+    visit reports_path
+    expect(page).not_to have_selector("#csv-download")
+  end
+
+  scenario 'should render for admin' do
+    @user = FactoryBot.create(:administrator)
+    sign_in(@user.email, @user.password)
+    visit reports_path
+    expect(page).to have_selector("#csv-download")
+  end
+end
+
 feature 'report tiles' do
   before(:each) do
     @user = FactoryBot.create(:coordinator)

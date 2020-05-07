@@ -17,6 +17,7 @@ gem 'devise'
 gem 'cancancan'
 gem 'city-state'
 gem 'devise_invitable', '~> 2.0.0'
+gem 'rubyzip'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

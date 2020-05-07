@@ -80,4 +80,16 @@
   .nav-link.active {
     background-color: #a6a6a6;
   }
+
+  .csv-download {
+    text-align: right;
+    padding-right: 40px;
+    a {
+      color: $green;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
 }
