@@ -1,6 +1,12 @@
 <div class="container-fluid">
   <div class="nav col-md-12 action-form">
     <div class="nav flex-column nav-pills col-md-5 col-lg-4 col-xl-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <% if current_page?(controller: :arrestable_actions, action: :new)%>
+        <a class="nav-link action-btn-active" id="v-pills-home-tab" data-toggle="pill"
+           href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Social Media Blitzing</a>
+        <a class="nav-link action-btn-active" id="v-pills-home-tab" data-toggle="pill"
+           href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Street Swarms</a>
+      <% end %>
       <% @types.each do |type| %>
         <a class="nav-link action-btn-active" id="v-pills-home-tab" data-toggle="pill"
           href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false"><%= type %></a>
@@ -11,9 +17,14 @@
         <div class="report-form-body" id="hide-when-type-selected">
           <div class="default-tab-text">Form will appear here</div>
         </div>
-        <div class="report-form-body" id="hide-until-type-selected">
+        <% if current_page?(controller: :arrestable_actions, action: :new)%>
+          <h2 id="form-title"></h2>
           <%= yield %>
-        </div>
+        <% else %>
+          <div class="report-form-body" id="hide-until-type-selected">
+            <%= yield %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
@@ -29,7 +40,7 @@
     shouldClearForm && clearFormFields();
     unselectAllNavLinks();
     selectNavLink(navLink);
-    showForm();
+    showForm(navLink.textContent);
   };
 
   const setFormType = type => {
@@ -55,11 +66,41 @@
     navLink.setAttribute('aria-selected', true);
   };
 
-  const showForm = () => {
-    document.getElementById('hide-until-type-selected').style.display = 'block';
-    document.getElementById('tab-container').style.display = 'block';
-    document.getElementById('hide-when-type-selected').style.display = 'none';
+  const showForm = (navLink) => {
+      const swarmForm = document.getElementById('swarm-form-body')
+      const blitzForm = document.getElementById('blitz-form-body')
+      const arrestableForm = document.getElementById('arrestable-form-body')
+
+      document.getElementById('tab-container').style.display = 'block';
+      document.getElementById('hide-when-type-selected').style.display = 'none';
+
+      if(window.location.href.includes('forms/arrestable')) {
+          switch(navLink) {
+              case "Street Swarms":
+                  swarmForm.style.display = "block";
+                  blitzForm.style.display = "none";
+                  arrestableForm.style.display = "none";
+
+                  break;
+              case "Social Media Blitzing":
+                  swarmForm.style.display = "none";
+                  blitzForm.style.display = "block";
+                  arrestableForm.style.display = "none";
+
+                  break;
+              default:
+                  swarmForm.style.display = "none";
+                  blitzForm.style.display = "none";
+                  arrestableForm.style.display = "block";
+          }
+      } else {
+          document.getElementById('hide-until-type-selected').style.display = 'block';
+      }
   };
+
+  const chooseForm = navLink => {
+
+  }
 
   for(const navLink of navLinks) {
     navLink.addEventListener('click', e => {
