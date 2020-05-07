@@ -452,7 +452,7 @@ class ReportsController < ApplicationController
         chapters: chapters.count,
         signups: mobilizations.sum(&:xra_newsletter_sign_ups),
         trainings: trainings.length,
-        arrestable_pledges: mobilizations.sum(&:arrestable_pledges),
+        arrestable_pledges: chapters.sum(&:total_arrestable_pledges),
         actions: street_swarms.length + arrestable_actions.length,
         mobilizations: mobilizations.length,
         subscriptions: chapters.sum(&:total_subscription_amount).to_int

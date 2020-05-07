@@ -125,11 +125,11 @@ const record = (obj) => {
               <td scope="row">${linkElement}</td>
               <td>${obj.chapters === undefined ? 0 : numberFormatter.format(obj.chapters)}</td>
               <td>${obj.members === undefined ? 0 : numberFormatter.format(obj.members)}</td>
+              <td>$${obj.subscriptions === undefined ? 0 : numberFormatter.format(obj.subscriptions)}</td>
+              <td>${obj.arrestable_pledges === undefined ? 0 : numberFormatter.format(obj.arrestable_pledges)}</td>
               <td>${obj.mobilizations === undefined ? 0 : numberFormatter.format(obj.mobilizations)}</td>
               <td>${obj.trainings === undefined ? 0 : numberFormatter.format(obj.trainings)}</td>
-              <td>$${obj.subscriptions === undefined ? 0 : numberFormatter.format(obj.subscriptions)}</td>
               <td>${obj.signups === undefined ? 0 : numberFormatter.format(obj.signups)}</td>
-              <td>${obj.arrestable_pledges === undefined ? 0 : numberFormatter.format(obj.arrestable_pledges)}</td>
               <td>${obj.actions === undefined ? 0 : numberFormatter.format(obj.actions)}</td>
             </tr>`
 };
