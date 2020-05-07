@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
     it 'should validate chapter when role is external' do
       @user.role = 'external'
       @user.valid?
-      expect(@user.errors[:chapter]).to include('must be assigned to External Coordinators')
+      expect(@user.errors[:chapter]).to include('Chapter must be assigned to External Coordinators')
     end
   end
 
