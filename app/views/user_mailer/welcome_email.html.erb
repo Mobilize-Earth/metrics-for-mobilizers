@@ -1,10 +1,14 @@
 <p style="font-size: 14px; font-weight: 500; letter-spacing: 1.05px; color: #000000;">
-    <strong>Welcome to ‘Truth in Numbers,’</strong>
+    <strong>Welcome to ‘Truth in Numbers,’ <%= @user.email %></strong>
 </p>
 
 <p  style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 10px;">
     You have successfully been added to <strong>reporting.organise.earth</strong><br/>
-    You are categorized as an <%= Role.roles[@user.role] %>
+    <% if @user.role == "reviewer" %>
+        You are categorized as a <%= Role.roles[@user.role] %>
+    <% else %>
+        You are categorized as an <%= Role.roles[@user.role] %>
+    <% end %>
 </p>
 <% if @user.role == "admin" %>
     <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000;">
@@ -14,7 +18,10 @@
 <% if @user.role == "external" %>
     <p style="font-size: 12px; letter-spacing: 0.9px; color: #000000; padding-bottom: 10px;">
         You can now enter your weekly reports and see the results of the movement.<br/>
-        You belong to <%= @user.chapter.name %> Chapter located in Blank State, Region, Country.
+        You belong to <%= @user.chapter.name %> Chapter
+        <% if @user.chapter.has_address? %>
+             located in <%= @user.chapter.address.state_province %>, <%= @user.chapter.address.city %>, <%= @user.chapter.address.country %>.
+        <% end %>
     </p>
 <% end %>
 <% if @user.role == "reviewer" %>

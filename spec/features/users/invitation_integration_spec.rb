@@ -105,3 +105,29 @@ feature 'navigation' do
         expect(page).to have_current_path "/users/sign_in", ignore_query: true
     end
 end
+
+feature 'send mail'do
+    before :each do
+        @admin_user = FactoryBot.create(:administrator)
+        sign_in(@admin_user.email, @admin_user.password)
+        find_link('link-users').click
+        fill_in 'user_email', with: 'test1@test.com'
+    end
+  
+    it "when new data reviewer is registered" do
+        click_button 'Submit'
+      
+        email_content = UserMailer.deliveries[0].body.encoded
+        #expect(email_content).to include '<a href=3D"http://localhost:3000/users/invitation/accept?invitation_token='
+        expect(email_content).to have_content("Accept Invitation")
+        expect(email_content).to have_content("Data Reviewer")
+    end
+
+    it "when new admin is registered" do
+        select 'Administrator', from: 'user_role'
+        click_button 'Submit'
+      
+        email_content = UserMailer.deliveries[0].body.encoded
+        expect(email_content).to have_content("Administrator")
+    end
+  end
