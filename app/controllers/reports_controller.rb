@@ -68,7 +68,7 @@ class ReportsController < ApplicationController
 
     mobilizations_this_period = Mobilization.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
-        pluck(:xra_newsletter_sign_ups, :arrestable_pledges, :new_members_sign_ons, :chapter_id)
+        pluck(:xra_newsletter_sign_ups, :arrestable_pledges, :new_members_sign_ons, :total_one_time_donations, :chapter_id)
     mobilizations_previous_period = Mobilization.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - calculate_days_ago_for_previous_period(date_range_days).days).beginning_of_day, (DateTime.now - date_range_days.days).beginning_of_day).
         pluck(:xra_newsletter_sign_ups, :arrestable_pledges)
@@ -166,7 +166,7 @@ class ReportsController < ApplicationController
 
   def get_members_growth(chapter_data_this_period, mobilizations_this_period)
     chapter_ids = chapter_data_this_period.map {|row| row[0]}
-    mobilizations_growth = sum_data(mobilizations_this_period.select { |m| chapter_ids.exclude? m[3] }, 2)
+    mobilizations_growth = sum_data(mobilizations_this_period.select { |m| chapter_ids.exclude? m[4] }, 2)
     mobilizations_growth + sum_data(chapter_data_this_period, 1)
   end
 
@@ -174,7 +174,7 @@ class ReportsController < ApplicationController
     # TODO - We are currently using mobilizations.total_one_time_donations to calculate new subscriptions in a period.
     # We should update this DB column name to be total_donation_subscriptions instead.
     chapter_ids = chapter_data_this_period.map {|row| row[0]}
-    mobilizations_growth = sum_data(mobilizations_this_period.select { |m| chapter_ids.exclude? m[3] }, 3).to_int
+    mobilizations_growth = sum_data(mobilizations_this_period.select { |m| chapter_ids.exclude? m[4] }, 3).to_int
     mobilizations_growth + sum_data(chapter_data_this_period, 2).to_int
   end
 
