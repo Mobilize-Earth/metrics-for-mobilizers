@@ -1,6 +1,6 @@
 <div class="default-background">
   <%= render 'layouts/messages', flash: flash %>
-  <%= render 'forms/form_header', title: 'Actions', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one Action.' %>
+  <%= render 'forms/form_header', title: 'Actions', subtitle: 'Click on tabs below to complete a form <strong>for each instance</strong> of an ‘Action’ your chapter completed this week.'.html_safe %>
   <%= render "forms/form", arrestable_action: @arrestable_action, street_swarm: @street_swarm, social_media_blitzing: @social_media_blitzing do |f| %>
     <div class="report-form-body" id="arrestable-form-body">
       <%= render 'arrestable_actions/form_body' %>

@@ -1,6 +1,6 @@
 <%= form_for @arrestable_action do |f| %>
     <%= hidden_field_tag :type_arrestable_action , "", id: "training-type-input" %>
-    <%= hidden_field_tag :report_date %>
+    <%= hidden_field_tag :report_date, "", id: "arrestable-report-date"%>
     <div class="form-group">
         <div>
             <%= f.label :xra_members, "Number of members *", class: "action-form-label" %>
@@ -47,5 +47,5 @@
 <% end %>
 <script>
     var localTime = new Date();
-    $('#report_date').val(localTime)
+    $('#arrestable-report-date').val(localTime)
 </script>

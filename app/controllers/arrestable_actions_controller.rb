@@ -25,12 +25,12 @@ class ArrestableActionsController < ApplicationController
             report_date: report_date
         )
         if @arrestable_action.save
-            flash[:success] = "Arrestable Action data successfully entered"
+            flash[:success] = "Arrestable Action data successfully reported"
             redirect_to arrestable_actions_path
         else
-            flash.now[:errors] = @arrestable_action.errors.messages.values.flatten
+            flash[:errors] = @arrestable_action.errors.messages.values.flatten
             @types = ArrestableAction.options
-            render "new"
+            redirect_to arrestable_actions_path(params.permit(:type_arrestable_action))
         end
     end
 end

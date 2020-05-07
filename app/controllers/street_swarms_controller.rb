@@ -18,11 +18,11 @@ class StreetSwarmsController < ApplicationController
     )
     if @street_swarm.save
       flash[:success] = "Street Swarm data successfully entered"
-      redirect_to street_swarms_path
+      redirect_to arrestable_actions_path
     else
-      flash.now[:errors] = @street_swarm.errors.full_messages
+      flash[:errors] = @street_swarm.errors.full_messages
       @types = StreetSwarm.options
-      render "new"
+      redirect_to arrestable_actions_path(params.permit(:street_swarm_type))
     end
   end
 end

@@ -1,6 +1,6 @@
 <%= form_for @street_swarm do |f| %>
-  <%= hidden_field_tag :type, "", id: "training-type-input" %>
-  <%= hidden_field_tag :report_date %>
+  <%= hidden_field_tag :street_swarm_type, "", id: "street-type-input" %>
+  <%= hidden_field_tag :report_date, "", id: "swarm-report-date" %>
   <div class="form-group">
     <div>
       <%= f.label :xr_members_attended, "Number of Participants*", class: "action-form-label" %>
@@ -10,7 +10,7 @@
   <div class="form-group">
     <div>
       <%= f.submit "Submit Section", class: "btn action-submit-btn"%>
-      <%= link_to 'Cancel', street_swarms_path, class: "btn btn-danger"%>
+      <%= link_to 'Cancel', arrestable_actions_path, class: "btn btn-danger"%>
     </div>
     <p class="warning">Cannot undo this action</p>
   </div>
@@ -18,5 +18,5 @@
 
 <script>
     var localTime = new Date();
-    $('#report_date').val(localTime)
+    $('#swarm-report-date').val(localTime)
 </script>

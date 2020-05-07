@@ -6,7 +6,7 @@ feature 'submitting street swarm' do
     @user = FactoryBot.create(:coordinator)
     sign_in(@user.email, @user.password)
     visit_home_page
-    visit street_swarms_path
+    visit arrestable_actions_path
     click_on 'Street Swarms'
   end
 
@@ -43,7 +43,7 @@ feature 'navigation' do
     @user = FactoryBot.create(:coordinator)
     sign_in(@user.email, @user.password)
     visit_home_page
-    visit street_swarms_path
+    visit arrestable_actions_path
   end
 
   scenario 'should navigate to forms index when user clicks finish street swarm' do
@@ -54,7 +54,7 @@ feature 'navigation' do
   scenario 'should navigate to forms index when user clicks cancel street swarm' do
     click_on 'Street Swarms'
     click_on 'Cancel'
-    expect(page).to have_current_path street_swarms_path, ignore_query: true
+    expect(page).to have_current_path arrestable_actions_path, ignore_query: true
   end
 
 end

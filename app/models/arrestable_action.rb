@@ -5,9 +5,9 @@ class ArrestableAction < ApplicationRecord
     scope :with_addresses, -> { includes(:address) }
 
     def self.options
-        ['Local (50+)',
-        'Regional (500+)',
-        'National (5000+)']
+        ['Local Arrestable Action',
+        'Regional Arrestable Action',
+        'National Arrestable Action']
     end
 
     validates :user,

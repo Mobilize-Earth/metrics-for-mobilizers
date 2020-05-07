@@ -1,6 +1,7 @@
 <div class="default-background">
     <%= render 'layouts/messages', flash: flash %>
-    <%= render 'forms/form_header', title: 'Growth Activities', subtitle: 'Click the tab below to complete your form. Repeat if you did more than one activity.' %>
+    <%= render 'forms/form_header', title: 'Growth Activities',
+               subtitle: 'Click on tabs below to complete a form <strong>for each instance</strong> of a ‘Growth Activity’ your chapter completed this week.'.html_safe %>
     <%= render "forms/form", mobilization: @mobilization do |f| %>
         <%= render 'mobilizations/form_body' %>
     <% end %>
