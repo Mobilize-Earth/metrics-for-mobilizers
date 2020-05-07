@@ -20,9 +20,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # PUT /resource
-  # def update
-  #   super
-  # end
+  def update
+    super
+    flash[:success] = 'Password was successfully changed!'
+  end
 
   # DELETE /resource
   # def destroy

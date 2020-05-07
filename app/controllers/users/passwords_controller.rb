@@ -7,9 +7,10 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # POST /resource/password
-  # def create
-  #   super
-  # end
+  def create
+    super
+    flash[:success] = 'An email has been sent with instructions for creating a new password. Please check your email.'
+  end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   # def edit
@@ -17,9 +18,10 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # PUT /resource/password
-  # def update
-  #   super
-  # end
+  def update
+    super
+    flash[:success] = 'Password was successfully changed!'
+  end
 
   # protected
 

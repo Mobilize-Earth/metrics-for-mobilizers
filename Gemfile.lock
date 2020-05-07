@@ -204,7 +204,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rb-readline (0.5.5)
     regexp_parser (1.7.0)
     responders (3.0.0)
       actionpack (>= 5.0)
@@ -308,7 +307,6 @@ DEPENDENCIES
   rails (~> 6.0.2, >= 6.0.2.2)
   rails-controller-testing
   rails-i18n
-  rb-readline
   rspec-rails (~> 4.pre.0.pre.maintenance)
   sass-rails (>= 6)
   spring
