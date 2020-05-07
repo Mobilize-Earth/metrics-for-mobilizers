@@ -137,24 +137,20 @@ class ReportsController < ApplicationController
     region = params[:region]
     chapter = params[:chapter]
     date_range_days = DATE_RANGE_MAPPING[params[:period].to_sym]
-    begin
-      response = if country.nil?
-                   all_countries(date_range_days)
-                 elsif country.upcase == 'US' && region.nil?
-                   us_regions(date_range_days)
-                 elsif country.upcase == 'US' && !region.nil? && state.nil?
-                   us_states(region, date_range_days)
-                 elsif state.nil?
-                   states(country, date_range_days)
-                 elsif chapter.nil?
-                   chapters(country, state, date_range_days)
-                 else
-                   chapter_report(chapter, date_range_days)
-                 end
-      render json: response
-    rescue
-      render json: {error: true}
-    end
+    response = if country.nil?
+                 all_countries(date_range_days)
+               elsif country.upcase == 'US' && region.nil?
+                 us_regions(date_range_days)
+               elsif country.upcase == 'US' && !region.nil? && state.nil?
+                 us_states(region, date_range_days)
+               elsif state.nil?
+                 states(country, date_range_days)
+               elsif chapter.nil?
+                 chapters(country, state, date_range_days)
+               else
+                 chapter_report(chapter, date_range_days)
+               end
+    render json: response
   end
 
   private
@@ -183,18 +179,31 @@ class ReportsController < ApplicationController
   end
 
   def all_countries(date_range_days)
+    addresses_with_chapters = Chapter.with_addresses.group_by { |c| c.address.country }
 
-    addresses_with_chapters = Chapter.with_addresses.
-        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
-                              group_by { |c| c.address.country }
+    mobilizations_this_period = Mobilization.with_addresses.
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.country }
+
+    trainings_this_period = Training.with_addresses.
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.country }
+
+    street_swarms_this_period = StreetSwarm.with_addresses.
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.country }
+
+    arrestable_actions_this_period = ArrestableAction.with_addresses.
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.country }
 
     addresses_with_chapters.map do |country|
       chapters = country[1]
 
-      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+      filtered_mobilizations = mobilizations_this_period[country[0]] || []
+      filtered_trainings = trainings_this_period[country[0]] || []
+      filtered_street_swarms = street_swarms_this_period[country[0]] || []
+      filtered_arrestable_actions = arrestable_actions_this_period[country[0]] || []
 
       response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
       response.merge(
@@ -221,12 +230,29 @@ class ReportsController < ApplicationController
           where(id: chapter_ids).
           group_by { |c| c.address.country }
 
+      mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+          where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          group_by { |c| c.chapter.address.country }
+
+      trainings_this_period = Training.with_addresses.where(chapter_id: chapter_ids).
+          where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          group_by { |c| c.chapter.address.country }
+
+      street_swarms_this_period = StreetSwarm.with_addresses.where(chapter_id: chapter_ids).
+          where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          group_by { |c| c.chapter.address.country }
+
+      arrestable_actions_this_period = ArrestableAction.with_addresses.where(chapter_id: chapter_ids).
+          where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+          group_by { |c| c.chapter.address.country }
+
+
       region_chapters.map do |country|
         chapters = country[1]
-        filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
-        filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
-        filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
-        filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+        filtered_mobilizations = mobilizations_this_period[country[0]] || []
+        filtered_trainings = trainings_this_period[country[0]] || []
+        filtered_street_swarms = street_swarms_this_period[country[0]] || []
+        filtered_arrestable_actions = arrestable_actions_this_period[country[0]] || []
 
         result[:members] = chapters.sum(&:active_members)
         result[:chapters] = chapters.count
@@ -251,13 +277,29 @@ class ReportsController < ApplicationController
         where(id: chapter_ids).
         group_by { |c| c.address.state_province }
 
+    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
+    trainings_this_period = Training.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
+    street_swarms_this_period = StreetSwarm.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
+    arrestable_actions_this_period = ArrestableAction.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
     states_with_chapters.map do |state|
       chapters = state[1]
 
-      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+      filtered_mobilizations = mobilizations_this_period[state[0]] || []
+      filtered_trainings = trainings_this_period[state[0]] || []
+      filtered_street_swarms = street_swarms_this_period[state[0]] || []
+      filtered_arrestable_actions = arrestable_actions_this_period[state[0]] || []
 
       response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
       response.merge(
@@ -277,12 +319,29 @@ class ReportsController < ApplicationController
         where(id: chapter_ids).
         group_by { |c| c.address.state_province }
 
+    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
+    trainings_this_period = Training.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
+    street_swarms_this_period = StreetSwarm.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
+    arrestable_actions_this_period = ArrestableAction.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.address.state_province }
+
     states_with_chapters.map do |state|
       chapters = state[1]
-      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+
+      filtered_mobilizations = mobilizations_this_period[state[0]] || []
+      filtered_trainings = trainings_this_period[state[0]] || []
+      filtered_street_swarms = street_swarms_this_period[state[0]] || []
+      filtered_arrestable_actions = arrestable_actions_this_period[state[0]] || []
 
       response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
       response.merge(
@@ -303,14 +362,31 @@ class ReportsController < ApplicationController
                       where(id: chapter_ids).
                       group_by { |c| c.id }
 
+    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.id }
+
+    trainings_this_period = Training.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.id }
+
+    street_swarms_this_period = StreetSwarm.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.id }
+
+    arrestable_actions_this_period = ArrestableAction.with_addresses.where(chapter_id: chapter_ids).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
+        group_by { |c| c.chapter.id }
+
+
     states_chapters.map do |chapter|
       chapter = chapter[1][0]
       chapters = [chapter]
 
-      filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
-      filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
-      filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
-      filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+      filtered_mobilizations = mobilizations_this_period[chapter.id] || []
+      filtered_trainings = trainings_this_period[chapter.id] || []
+      filtered_street_swarms = street_swarms_this_period[chapter.id] || []
+      filtered_arrestable_actions = arrestable_actions_this_period[chapter.id] || []
 
       response = build_table_response(chapters, filtered_arrestable_actions, filtered_mobilizations, filtered_street_swarms, filtered_trainings)
       response.merge(
@@ -324,12 +400,23 @@ class ReportsController < ApplicationController
 
   def chapter_report(id, date_range_days)
     chapter = Chapter.find(id)
-    chapters = [chapter]
 
-    filtered_mobilizations = filter_records_by_date_range(chapters, Mobilization.table_name, date_range_days)
-    filtered_trainings = filter_records_by_date_range(chapters, Training.table_name, date_range_days)
-    filtered_street_swarms = filter_records_by_date_range(chapters, StreetSwarm.table_name, date_range_days)
-    filtered_arrestable_actions = filter_records_by_date_range(chapters, ArrestableAction.table_name, date_range_days)
+    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter.id).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
+    trainings_this_period = Training.with_addresses.where(chapter_id: chapter.id).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
+    street_swarms_this_period = StreetSwarm.with_addresses.where(chapter_id: chapter.id).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
+    arrestable_actions_this_period = ArrestableAction.with_addresses.where(chapter_id: chapter.id).
+        where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
+
+    filtered_mobilizations = mobilizations_this_period || []
+    filtered_trainings = trainings_this_period || []
+    filtered_street_swarms = street_swarms_this_period || []
+    filtered_arrestable_actions = arrestable_actions_this_period || []
 
     { result: {
         id: chapter.id,
@@ -361,15 +448,6 @@ class ReportsController < ApplicationController
 
   def validate_state(country, state)
     CS.states(country.to_sym)[CS.states(country.to_sym).key(state)]
-  end
-
-  def filter_records_by_date_range(chapters, record_type, date_range_days, end_date_range_days=DateTime.now.end_of_day)
-    filtered_records = []
-    chapters.each do |c|
-      record = c.send(record_type).select { |m| m.created_at >= (DateTime.now - date_range_days.days).beginning_of_day && m.created_at <= end_date_range_days }
-      filtered_records.append record
-    end
-    filtered_records.flatten
   end
 
   def calculate_actions(name, type)
