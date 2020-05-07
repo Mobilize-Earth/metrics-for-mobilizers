@@ -140,14 +140,14 @@ feature 'mobilization chart' do
   scenario 'should render metrics' do
     page.assert_selector('.metric', count: 9)
 
-    expected = Mobilization.mobilization_type_options.push('Total Participants')
+    expected = Mobilization.mobilization_type_options.push('People Engaged')
     expect(page.all('.metric').map{ |metric| metric.find('.subtitle').native.text }.sort).to eq(expected.sort)
 
     page.all('.metric').each do |metric|
       metric_label = metric.find('.subtitle').native.text
 
-      if metric_label == "Total Participants"
-        expect(metric).to have_content "Represents total grouped activity"
+      if metric_label == "People Engaged"
+        expect(metric).to have_content "Total grouped activity"
       elsif metric_label == "House Meetings"
         expect(metric).to have_content 3
       else
