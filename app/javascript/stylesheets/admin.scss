@@ -132,6 +132,21 @@ $content-height: $page-height - $page-padding-top - $header-height -
     }
   }
 
+  #link-users,
+  #link-chapters {
+    font-size: 1.2em;
+
+    span {
+      vertical-align: middle;
+    }
+
+    .fa {
+      font-size: 1.5em;
+      padding-top: 0;
+      vertical-align: middle;
+    }
+  }
+
   #content-chapters,
   #link-chapters {
     display: none;
