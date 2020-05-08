@@ -378,6 +378,98 @@ RSpec.describe ReportsController, type: :controller do
       expect(actual_date_range).to eq(6)
     end
 
+
+    it "should return US Region data" do
+      country = 'United States'
+      get :tiles, params: {country: 'US', region: 'region_1', dateRange: 'week'}
+      states = Regions.us_regions[:region_1][:states]
+      result = JSON.parse(response.body)
+
+      chapters = Chapter.with_addresses.where(addresses: {country: country}).count
+      chapters_in_this_period = Chapter.with_addresses.
+          where(addresses: {country: country, state_province: states}).
+          where('chapters.created_at >= ?', (DateTime.now - 6.days).beginning_of_day)
+
+      active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
+      members_in_this_period = chapters_in_this_period.sum("active_members") +
+          Mobilization.with_addresses.
+              where(addresses: {country: country, state_province: states}).
+              where('mobilizations.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("new_members_sign_ons")
+
+      subscriptions = Chapter.with_addresses.
+          where(addresses: {country: country, state_province: states}).sum("total_subscription_amount").to_int
+
+      subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount").to_int +
+          Mobilization.with_addresses.where(addresses: {country: country, state_province: states}).
+              where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("total_donation_subscriptions").to_int
+
+      pledges = Chapter.with_addresses.where(addresses: {country: country, state_province: states}).sum("total_arrestable_pledges")
+      pledges_in_this_period = chapters_in_this_period.sum("total_arrestable_pledges") +
+          Mobilization.with_addresses.where(addresses: {country: country, state_province: states}).
+              where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
+              where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
+              sum("arrestable_pledges")
+
+      mobilizations = Mobilization.with_addresses.
+          where(addresses: {country: country, state_province: states}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_mobilizations = Mobilization.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+      signups = Mobilization.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .sum("newsletter_sign_ups")
+      previous_period_signups = Mobilization.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .sum("newsletter_sign_ups")
+      trainings = Training.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_trainings = Training.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+
+      actions = StreetSwarm.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
+                    .count + ArrestableAction.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
+      previous_period_actions = StreetSwarm.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('street_swarms.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
+                                    .count + ArrestableAction.
+          with_addresses.where(addresses: {country: country, state_province: states}).
+          where('arrestable_actions.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
+
+      actual_date_range = (result["end_date"].to_date - result["start_date"].to_date).to_int
+
+      expect(result["members"]).to eq(active_members)
+      expect(result["members_growth"]).to eq(members_in_this_period)
+      expect(result["chapters"]).to eq(chapters)
+      expect(result["chapters_growth"]).to eq(chapters_in_this_period.count)
+      expect(result["mobilizations"]).to eq(mobilizations)
+      expect(result["mobilizations_growth"]).to eq(mobilizations - previous_period_mobilizations)
+      expect(result["signups"]).to eq(signups)
+      expect(result["signups_growth"]).to eq(signups - previous_period_signups)
+      expect(result["trainings"]).to eq(trainings)
+      expect(result["trainings_growth"]).to eq(trainings - previous_period_trainings)
+      expect(result["arrestable_pledges"]).to eq(pledges)
+      expect(result["arrestable_pledges_growth"]).to eq(pledges_in_this_period)
+      expect(result["actions"]).to eq(actions)
+      expect(result["actions_growth"]).to eq(actions - previous_period_actions)
+      expect(result["subscriptions"]).to eq(subscriptions)
+      expect(result["subscriptions_growth"]).to eq(subscriptions_in_this_period)
+      expect(actual_date_range).to eq(6)
+    end
+
+
     it "should return New York data" do
       state = 'New York'
       get :tiles, params: {country: 'US', state: 'New York', dateRange: 'week'}

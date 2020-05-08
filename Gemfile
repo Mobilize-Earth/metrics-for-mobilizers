@@ -33,6 +33,7 @@ group :test do
   gem 'webdrivers'
   gem 'capybara-selenium'
   gem 'rails-controller-testing'
+  gem 'simplecov'
 end
 
 group :development do

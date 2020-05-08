@@ -42,3 +42,6 @@ yarn-debug.log*
 
 # Mac OSX
 .DS_Store
+
+# Test coverage
+/coverage
