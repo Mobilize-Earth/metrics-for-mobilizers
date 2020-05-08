@@ -11,7 +11,6 @@ $content-height: $page-height - $page-padding-top - $header-height -
 }
 
 .admin-page {
-  padding-top: $page-padding-top;
 
   @include media-breakpoint-up(lg) {
     height: $page-height;
@@ -26,21 +25,34 @@ $content-height: $page-height - $page-padding-top - $header-height -
     margin-bottom: 50px;
   }
 
+  .admin-title {
+    color: $green;
+    text-align: left;
+    padding-bottom: 10px;
+  }
+
+  .admin-description {
+    text-align: left;
+  }
+
+  .admin-description-coordinator-limit {
+    color: $green;
+  }
+
   .left-nav,
   .content {
     box-shadow: $standard-box-shadow;
-    border: $border;
+    border: $background-green;
     background: $white;
     height: 100%;
     z-index: 1;
   }
 
-  h2 {
-    color: $grey;
+  .nav-title {
     text-align: center;
     padding: 1rem 0 0.75rem 0;
     letter-spacing: 1.35px;
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .left-nav-item {

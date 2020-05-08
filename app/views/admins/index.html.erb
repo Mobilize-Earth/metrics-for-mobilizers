@@ -1,10 +1,14 @@
 <div class="default-background">
   <%= render 'layouts/messages', flash: flash %>
   <div class="admin-page container">
+    <h1 class="admin-title">Hello, Admin</h1>
+    <h5 class="admin-description">This is where you help build the ‘Metrics for Mobilizers’ database and manage permissions. You must onboard a chapter before you can assign a User to it. </h5>
+    <p class="admin-description-coordinator-limit">*Each chapter has a limit of 2 Coordinator.</p>
+    <p></p>
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 outer-box">
         <div class="left-nav">
-          <h2>Navigation</h2>
+          <h5 class="nav-title">Onboarding</h5>
           <a class="left-nav-item selected" id="users-nav-link">
             <div class="left-nav-icon extra-padding"><span class="fa fa-user"></span></div>
             <div class="left-nav-text">User</div>
