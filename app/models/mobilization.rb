@@ -47,7 +47,7 @@ class Mobilization < ApplicationRecord
         csv << attributes
 
         all.includes(:chapter, :user).find_each do |m|
-          csv << [m.chapter.name, m.user.email, m.mobilization_type, m.event_type, m.participants, m.new_members_sign_ons, "$#{m.total_donation_subscriptions}", m.donation_subscriptions "$#{m.total_one_time_donations}", m.arrestable_pledges, m.newsletter_sign_ups, m.report_date, m.created_at]
+          csv << [m.chapter.name, m.user.email, m.mobilization_type, m.event_type, m.participants, m.new_members_sign_ons, "$#{m.total_donation_subscriptions}", m.donation_subscriptions, "$#{m.total_one_time_donations}", m.arrestable_pledges, m.newsletter_sign_ups, m.report_date, m.created_at]
         end
       end
     end
