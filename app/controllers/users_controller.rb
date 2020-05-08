@@ -36,7 +36,14 @@ class UsersController < ApplicationController
 
     def update
       @user = User.find(params[:id])
-      @user.assign_attributes(:email => params[:user][:email], :chapter_id => params[:user][:chapter_id], :role => params[:user][:role])
+      @user.assign_attributes(
+        :first_name => params[:user][:first_name],
+        :last_name => params[:user][:last_name],
+        :phone_number => params[:user][:phone_number],
+        :email => params[:user][:email],
+        :chapter_id => params[:user][:chapter_id],
+        :role => params[:user][:role]
+        )
       if @user.valid?
         @user.save
         flash[:success] = "The user #{@user.full_name} was successfully updated!"

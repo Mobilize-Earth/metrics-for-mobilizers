@@ -72,9 +72,23 @@ feature 'edit user' do
     end
 
     scenario 'should edit user' do
+        fill_in 'user_first_name', with: 'Name edit'
+        fill_in 'user_last_name', with: 'Last edit'
+        fill_in 'user_phone_number', with: '123456789'
         fill_in 'user_email', with: 'test1_edited@test.com'
+
         click_button 'Submit'
+        expect(User.last.first_name).to eq('Name edit')
+        expect(User.last.last_name).to eq('Last edit')
+        expect(User.last.phone_number).to eq('123456789')
         expect(User.last.email).to eq('test1_edited@test.com')
+        expect(User.last.role).to eq('admin')
+    end
+
+    scenario 'should change to data reviewer role for a user saved' do
+        select 'Data Reviewer', from: 'user_role'
+        click_button 'Submit'
+        expect(User.last.role).to eq('reviewer')
     end
 end
 
