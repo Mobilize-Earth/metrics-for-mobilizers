@@ -1,41 +1,41 @@
 image: "ruby:2.7.0-alpine"
 
 stages:
-  - Unit Tests
-  - Integration Tests
+  # - Unit Tests
+  # - Integration Tests
   - Build and Push Image
 
-Unit Tests:
-  stage: Unit Tests
-  before_script:
-    - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm
-    - npm install yarn -g
-    - gem install bundler --no-document
-    - bundle install
-    - export RAILS_ENV=test
-  tags:
-    - docker
-  script:
-    - rake db:migrate
-    - bundle exec rspec spec/unit
-
-Intergration Tests:
-  stage: Integration Tests
-  before_script:
-    - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
-    - npm install yarn -g
-    - gem install bundler --no-document
-    - bundle install
-    - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
-    - export RUBYOPT='-W:no-deprecated -W:no-experimental'
-    - export RAILS_ENV=test
-  tags:
-    - docker
-  script:
-    - yarn
-    - rake db:migrate
-    - rake assets:precompile
-    - bundle exec rspec spec/features
+# Unit Tests:
+#   stage: Unit Tests
+#   before_script:
+#     - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm
+#     - npm install yarn -g
+#     - gem install bundler --no-document
+#     - bundle install
+#     - export RAILS_ENV=test
+#   tags:
+#     - docker
+#   script:
+#     - rake db:migrate
+#     - bundle exec rspec spec/unit
+#
+# Intergration Tests:
+#   stage: Integration Tests
+#   before_script:
+#     - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
+#     - npm install yarn -g
+#     - gem install bundler --no-document
+#     - bundle install
+#     - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
+#     - export RUBYOPT='-W:no-deprecated -W:no-experimental'
+#     - export RAILS_ENV=test
+#   tags:
+#     - docker
+#   script:
+#     - yarn
+#     - rake db:migrate
+#     - rake assets:precompile
+#     - bundle exec rspec spec/features
 
 Build and Push Image:
   stage: Build and Push Image
