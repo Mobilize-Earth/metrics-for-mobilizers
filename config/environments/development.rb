@@ -37,13 +37,20 @@ Rails.application.configure do
   # config.action_mailer.delivery_method = :smtp
   # config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 
-  # DEFAULT CONFIGS FOR SENDMAIL
-  config.action_mailer.delivery_method = :sendmail
-  # Defaults to:
+  # config.action_mailer.delivery_method = :sendmail
+  # # Defaults to:
   # config.action_mailer.sendmail_settings = {
   #   location: '/usr/sbin/sendmail',
   #   arguments: '-i'
   # }
+
+
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  address:              '185.203.114.191',
+  port:                 25,
+  domain:               'organise.earth',
+ }
 
   config.action_mailer.perform_deliveries = true
   # Don't care if the mailer can't send if false.
@@ -77,5 +84,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   #Development environment url
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: 'reporting.dev.organise.earth' }
 end

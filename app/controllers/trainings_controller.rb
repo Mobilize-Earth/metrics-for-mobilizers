@@ -22,6 +22,7 @@ class TrainingsController < ApplicationController
     )
 
     if @training.save
+      TrainingMailer.success_mailer(current_user).deliver_now
       flash[:success] = "#{@training.training_type} training was successfully created!"
       redirect_to trainings_path
     else
