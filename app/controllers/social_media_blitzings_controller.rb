@@ -19,11 +19,11 @@ class SocialMediaBlitzingsController < ApplicationController
         )
         if @social_media_blitzing.save
             flash[:success] = "Social Media Blitzing data was successfully reported!"
-            redirect_to arrestable_actions_path
+            redirect_to mobilizations_path
         else
             flash[:errors] = @social_media_blitzing.errors.full_messages
             @types = SocialMediaBlitzing.social_media_blitzing_type_options
-            redirect_to arrestable_actions_path(params.permit(:social_media_blitzing_type))
+            redirect_to mobilizations_path(params.permit(:social_media_blitzing_type))
         end
     end
 end

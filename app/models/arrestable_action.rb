@@ -5,7 +5,8 @@ class ArrestableAction < ApplicationRecord
     scope :with_addresses, -> { includes(:address) }
 
     def self.options
-        ['Local Arrestable Action',
+        ['Street Swarms',
+         'Local Arrestable Action',
         'Regional Arrestable Action',
         'National Arrestable Action']
     end

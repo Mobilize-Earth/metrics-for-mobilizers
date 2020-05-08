@@ -3,7 +3,6 @@ class ArrestableActionsController < ApplicationController
     def new
         @arrestable_action = ArrestableAction.new
         @street_swarm = StreetSwarm.new
-        @social_media_blitzing = SocialMediaBlitzing.new
         @types = ArrestableAction.options
         authorize! :new, ArrestableActionsController
     end

@@ -15,7 +15,8 @@ class Mobilization < ApplicationRecord
         'Fly Posting / Chalking',
         'Door Knocking',
         'Street Stalls',
-        'Leafleting','1:1 Recruiting / Other']
+        'Leafleting',
+         '1:1 Recruiting / Other']
     end
 
     validates :user,

@@ -5,11 +5,11 @@ feature 'navigation' do
         @user = FactoryBot.create(:coordinator)
         sign_in(@user.email, @user.password)
         visit_home_page
-        visit arrestable_actions_path
+        visit mobilizations_path
     end
 
     scenario 'should access with external role' do
-        expect(page).to have_current_path arrestable_actions_path, ignore_query: true
+        expect(page).to have_current_path mobilizations_path, ignore_query: true
     end
 
     scenario 'should navigate to forms index when user clicks back to action' do
@@ -17,10 +17,10 @@ feature 'navigation' do
         expect(page).to have_current_path forms_index_path, ignore_query: true
     end
 
-    scenario 'should navigate to social media blitzing page when user clicks cancel' do
+    scenario 'should navigate to moblization page when user clicks cancel' do
         click_on 'Social Media Blitzing'
         click_on 'Cancel'
-        expect(page).to have_current_path arrestable_actions_path, ignore_query: true
+        expect(page).to have_current_path mobilizations_path, ignore_query: true
     end
 
     scenario 'should not access with admin role' do
@@ -29,7 +29,7 @@ feature 'navigation' do
         find('#log-out-link').click
         sign_in(@admin_user.email, @admin_user.password)
         visit_home_page
-        visit arrestable_actions_path
+        visit mobilizations_path
         expect(page).to have_current_path admins_index_path, ignore_query: true
         expect(page).to have_css '.alert-danger'
     end
@@ -41,7 +41,7 @@ feature 'content' do
         @user = FactoryBot.create(:coordinator)
         sign_in(@user.email, @user.password)
         visit_home_page
-        visit arrestable_actions_path
+        visit mobilizations_path
     end
 
     scenario 'should have tabs' do
@@ -54,7 +54,7 @@ feature 'submitting social media blitzing' do
         @user = FactoryBot.create(:coordinator)
         sign_in(@user.email, @user.password)
         visit_home_page
-        visit arrestable_actions_path
+        visit mobilizations_path
         click_on 'Social Media Blitzing'
     end
 

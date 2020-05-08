@@ -3,6 +3,7 @@ class MobilizationsController < ApplicationController
     def new
         @types = Mobilization.mobilization_type_options
         @mobilization = Mobilization.new
+        @social_media_blitzing = SocialMediaBlitzing.new
         authorize! :new, MobilizationsController
     end
 
@@ -34,7 +35,7 @@ class MobilizationsController < ApplicationController
         else
             flash[:errors] = @mobilization.errors.full_messages
             @types = Mobilization.mobilization_type_options
-            render "new"
+            redirect_to mobilizations_path(params.permit(:mobilization_type))
         end
     end
 
@@ -45,8 +46,12 @@ class MobilizationsController < ApplicationController
     end
 
     def update_chapter_arrestable_pledges(chapter, arrestable_pledges)
-      new_arrestable_pledges = chapter.total_arrestable_pledges + arrestable_pledges
-      chapter.update_attribute(:total_arrestable_pledges, new_arrestable_pledges)
+      if chapter.total_arrestable_pledges.nil?
+        chapter.update_attribute(:total_arrestable_pledges, arrestable_pledges)
+      else
+        new_arrestable_pledges = chapter.total_arrestable_pledges + arrestable_pledges
+        chapter.update_attribute(:total_arrestable_pledges, new_arrestable_pledges)
+      end
     end
 
     def update_chapter_subscriptions(chapter, donation_subscriptions)
