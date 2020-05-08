@@ -21,6 +21,10 @@
       &.number-negative {
         color: $dark-red;
       }
+
+      &.number-zero {
+        color: $grey;
+      }
     }
 
     .growth-description {

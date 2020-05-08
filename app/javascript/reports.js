@@ -97,16 +97,19 @@ const parseSubscriptionTileGrowthData = (element, data) => {
 }
 
 const applyGrowthStyles = (element, data) => {
-    element.removeClass('number-negative')
-    element.parent().find('.fa').removeClass('fa-arrow-down').addClass('fa-arrow-up')
+    element.removeClass('number-negative').removeClass('number-zero');
+    element.parent().find('.fa').removeClass('fa-arrow-down').addClass('fa-arrow-up');
+
+    if (data === 0) {
+        element.addClass('number-zero');
+        element.parent().find('.fa').removeClass('fa-arrow-up').removeClass('fa-arrow-down');
+    }
 
     if (data < 0) {
-        element.addClass('number-negative')
-        element.parent().find('.fa').removeClass('fa-arrow-up').addClass('fa-arrow-down')
+        element.addClass('number-negative');
+        element.parent().find('.fa').removeClass('fa-arrow-up').addClass('fa-arrow-down');
     }
 }
-
-
 
 const getReportsChartsData = (queryParams) => {
     $.ajax({
