@@ -29,14 +29,23 @@ class User < ApplicationRecord
   end
 
   def chapter_limit_of_two_users
-    if !chapter.nil? && chapter.users.size >= 2
+    if !chapter.nil? &&
+       user_not_assigned_to_this_chapter &&
+       chapter.users.size >= 2
       errors.add(:chapter, :external_user_limit)
     end
   end
 
   protected
+
   def password_required?
     return false if skip_password_validation
     super
+  end
+
+  private
+
+  def user_not_assigned_to_this_chapter
+    !(chapter.users.map(&:id).include? id)
   end
 end

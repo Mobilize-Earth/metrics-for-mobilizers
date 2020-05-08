@@ -30,7 +30,7 @@ RSpec.describe User, type: :model do
     it 'should validate chapter when role is external' do
       @user.role = 'external'
       @user.valid?
-      expect(@user.errors[:chapter]).to include('must be assigned to External Coordinators')
+      expect(@user.errors[:chapter]).to include('Chapter must be assigned to External Coordinators')
     end
   end
 
@@ -80,15 +80,34 @@ RSpec.describe User, type: :model do
       FactoryBot.create :coordinator, chapter: chapter
       FactoryBot.create :coordinator, chapter: chapter
       chapter.reload
-
-      # execute
       @user.role = 'external'
       @user.chapter = chapter
+
+      # execute
       @user.valid?
 
       # assert
       expect(@user.errors[:chapter])
           .to include('Two external coordinators have been already associated with this chapter. A chapter cannot have more than 2 coordinators.')
+    end
+
+    it 'the user should be valid when the user is one of the two coordinators assigned' do
+      # setup
+      chapter = FactoryBot.create :chapter
+      FactoryBot.create :coordinator, chapter: chapter
+      @user.role = 'external'
+      @user.chapter = chapter
+      @user.first_name = "charlie"
+      @user.last_name = "brown"
+      @user.phone_number = "2"
+      @user.save
+      chapter.reload
+
+      # execute
+      is_valid = @user.valid?
+
+      # assert
+      expect(is_valid).to be true
     end
 
   end
