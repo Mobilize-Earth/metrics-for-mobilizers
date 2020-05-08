@@ -84,5 +84,8 @@ config.action_mailer.smtp_settings = {
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   #Development environment url
+  #USE THIS FOR LOCAL ENVIRONMENTS
+  #config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
   config.action_mailer.default_url_options = { host: 'reporting.dev.organise.earth' }
 end
