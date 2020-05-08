@@ -19,7 +19,7 @@ RSpec.describe ReportsController, type: :controller do
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       signups = Mobilization.with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_newsletter_sign_ups")
+          sum("newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       actions = StreetSwarm.with_addresses.where(addresses: {country: country}).
@@ -47,7 +47,7 @@ RSpec.describe ReportsController, type: :controller do
       active_members = Chapter.with_addresses.where(addresses: {country: country}).sum("active_members")
       chapters = Chapter.with_addresses.where(addresses: {country: country}).count
       pledges = Chapter.with_addresses.where(addresses: {country: country}).sum("total_arrestable_pledges")
-      signups = Mobilization.with_addresses.where(addresses: {country: country}).sum("xra_newsletter_sign_ups")
+      signups = Mobilization.with_addresses.where(addresses: {country: country}).sum("newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {country: country}).count
       actions = StreetSwarm.with_addresses.where(addresses: {country: country}).count +
           ArrestableAction.with_addresses.where(addresses: {country: country}).count
@@ -74,7 +74,7 @@ RSpec.describe ReportsController, type: :controller do
       pledges = Chapter.with_addresses.where(addresses: {state_province: region_states}).sum("total_arrestable_pledges")
       signups = Mobilization.with_addresses.where(addresses: {state_province: region_states}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_newsletter_sign_ups")
+          sum("newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {state_province: region_states}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
           count
@@ -104,7 +104,7 @@ RSpec.describe ReportsController, type: :controller do
       pledges = Chapter.with_addresses.where(addresses: {state_province: state}).sum("total_arrestable_pledges")
       signups = Mobilization.with_addresses.where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_newsletter_sign_ups")
+          sum("newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {state_province: state}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       actions = StreetSwarm.with_addresses.where(addresses: {state_province: state}).
@@ -133,7 +133,7 @@ RSpec.describe ReportsController, type: :controller do
       pledges = Chapter.with_addresses.where(addresses: {country: country}).sum("total_arrestable_pledges")
       signups = Mobilization.with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_newsletter_sign_ups")
+          sum("newsletter_sign_ups")
       trainings = Training.with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       actions = StreetSwarm.with_addresses.where(addresses: {country: country}).
@@ -163,7 +163,7 @@ RSpec.describe ReportsController, type: :controller do
       active_members = chapter.active_members
       signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum("xra_newsletter_sign_ups")
+          sum("newsletter_sign_ups")
       pledges = chapter.total_arrestable_pledges
       trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
@@ -190,7 +190,7 @@ RSpec.describe ReportsController, type: :controller do
 
       signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
-          sum('xra_newsletter_sign_ups')
+          sum('newsletter_sign_ups')
       trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       actions = StreetSwarm.where(chapter: chapter).
@@ -237,14 +237,10 @@ RSpec.describe ReportsController, type: :controller do
               sum("arrestable_pledges")
 
       subscriptions = Chapter.sum("total_subscription_amount").to_int
-
-      # TODO - We are currently using mobilizations.total_one_time_donations to calculate new subscriptions in a period.
-      # We should update this DB column name to be total_donation_subscriptions instead. This applies to the tests below too.
-
       subscriptions_in_this_period = chapters_in_this_period.sum("total_subscription_amount").to_int +
           Mobilization.where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
               where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
-              sum("total_one_time_donations").to_int
+              sum("total_donation_subscriptions").to_int
 
       chapters = Chapter.count
 
@@ -254,10 +250,10 @@ RSpec.describe ReportsController, type: :controller do
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       signups = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("xra_newsletter_sign_ups")
+                    .sum("newsletter_sign_ups")
       previous_period_signups = Mobilization.
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("xra_newsletter_sign_ups")
+                                    .sum("newsletter_sign_ups")
       trainings = Training.
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_trainings = Training.
@@ -318,7 +314,7 @@ RSpec.describe ReportsController, type: :controller do
           Mobilization.with_addresses.where(addresses: {country: country}).
               where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
               where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
-              sum("total_one_time_donations").to_int
+              sum("total_donation_subscriptions").to_int
 
       pledges = Chapter.with_addresses.where(addresses: {country: country}).sum("total_arrestable_pledges")
       pledges_in_this_period = chapters_in_this_period.sum("total_arrestable_pledges") +
@@ -336,11 +332,11 @@ RSpec.describe ReportsController, type: :controller do
       signups = Mobilization.
           with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("xra_newsletter_sign_ups")
+                    .sum("newsletter_sign_ups")
       previous_period_signups = Mobilization.
           with_addresses.where(addresses: {country: country}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("xra_newsletter_sign_ups")
+                                    .sum("newsletter_sign_ups")
       trainings = Training.
           with_addresses.where(addresses: {country: country}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
@@ -411,7 +407,7 @@ RSpec.describe ReportsController, type: :controller do
           Mobilization.with_addresses.where(addresses: {state_province: state}).
               where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).
               where('mobilizations.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
-              sum("total_one_time_donations").to_int
+              sum("total_donation_subscriptions").to_int
 
       pledges = Chapter.with_addresses.where(addresses: {state_province: state}).sum("total_arrestable_pledges")
       pledges_in_this_period = chapters_in_this_period.sum("total_arrestable_pledges") +
@@ -429,11 +425,11 @@ RSpec.describe ReportsController, type: :controller do
       signups = Mobilization.with_addresses.
           where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("xra_newsletter_sign_ups")
+                    .sum("newsletter_sign_ups")
       previous_period_signups = Mobilization.with_addresses.
           where(addresses: {state_province: state}).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("xra_newsletter_sign_ups")
+                                    .sum("newsletter_sign_ups")
       trainings = Training.with_addresses.
           where(addresses: {state_province: state}).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
@@ -487,10 +483,10 @@ RSpec.describe ReportsController, type: :controller do
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day).count
       signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day)
-                    .sum("xra_newsletter_sign_ups")
+                    .sum("newsletter_sign_ups")
       previous_period_signups = Mobilization.where(chapter: chapter).
           where('mobilizations.created_at BETWEEN ? AND ?', (DateTime.now - 13.days).beginning_of_day, (DateTime.now - 6.days).beginning_of_day)
-                                    .sum("xra_newsletter_sign_ups")
+                                    .sum("newsletter_sign_ups")
       trainings = Training.where(chapter: chapter).
           where('trainings.created_at BETWEEN ? AND ?', (DateTime.now - 6.days).beginning_of_day, DateTime.now.end_of_day).count
       previous_period_trainings = Training.where(chapter: chapter).
@@ -533,7 +529,7 @@ RSpec.describe ReportsController, type: :controller do
       new_subscriptions_in_this_period = Mobilization.with_addresses.
           where(chapter: old_chapter).
           where('mobilizations.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
-          sum("total_one_time_donations").to_int
+          sum("total_donation_subscriptions").to_int
 
       expect(new_result["members_growth"]).to eq(new_members_in_this_period)
       expect(new_result["subscriptions_growth"]).to eq(new_subscriptions_in_this_period)
@@ -546,8 +542,8 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns global weekly data by default" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_one_time_donations: 99, arrestable_pledges: 6})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 6})
 
       get :mobilizations, params: {}
       json_response = JSON.parse(response.body)
@@ -555,13 +551,13 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0], [0], [0], [0], [3], [0], [0], [0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0], [0], [0], [0], [7], [0], [0], [0]])
-      expect(json_response["data"].map { |actual| actual["total_one_time_donations"] }).to eq([[0], [0], [0], [0], ["0.01"], [0], [0], [0]])
+      expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0], [0], [0], [0], ["0.01"], [0], [0], [0]])
       expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0], [0], [0], [0], [5], [0], [0], [0]])
     end
 
     it "returns monthly data" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_one_time_donations: 99, arrestable_pledges: 1})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 1})
 
       get :mobilizations, params: {dateRange: 'month'}
       json_response = JSON.parse(response.body)
@@ -572,14 +568,14 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 5, 0, 3], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 8, 0, 7], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
-      expect(json_response["data"].map { |actual| actual["total_one_time_donations"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, "99.0", 0, "0.01"], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
+      expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, "99.0", 0, "0.01"], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 0, 5], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
     end
 
     it "returns quarterly data" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_one_time_donations: 99, arrestable_pledges: 7})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_one_time_donations: 103.99, arrestable_pledges: 9})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
 
       get :mobilizations, params: {dateRange: 'quarter'}
       json_response = JSON.parse(response.body)
@@ -589,14 +585,14 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [4, 0, 3], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [8, 0, 7], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
-      expect(json_response["data"].map { |actual| actual["total_one_time_donations"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], ["99.0", 0, "0.01"], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
+      expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], ["99.0", 0, "0.01"], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [7, 0, 5], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
     end
 
     it "returns bi-annual data" do
-      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_one_time_donations: 99, arrestable_pledges: 7})
-      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_one_time_donations: 103.99, arrestable_pledges: 9})
+      FactoryBot.create(:mobilization, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
+      FactoryBot.create(:mobilization, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
 
       get :mobilizations, params: {dateRange: 'half-year'}
       json_response = JSON.parse(response.body)
@@ -609,7 +605,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(Mobilization.mobilization_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 5, 0, 4, 0, 3], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 9, 0, 8, 0, 7], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
-      expect(json_response["data"].map { |actual| actual["total_one_time_donations"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, "103.99", 0, "99.0", 0, "0.01"], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
+      expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, "103.99", 0, "99.0", 0, "0.01"], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["arrestable_pledges"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 9, 0, 7, 0, 5], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
     end
 
@@ -620,6 +616,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 101,
+                          total_donation_subscriptions: 101.00,
                           total_one_time_donations: 101.00,
                           arrestable_pledges: 111)
       end
@@ -629,6 +626,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 102,
+                          total_donation_subscriptions: 102.00,
                           total_one_time_donations: 102.00,
                           arrestable_pledges: 112)
       end
@@ -639,7 +637,7 @@ RSpec.describe ReportsController, type: :controller do
       # assert
       json_response = JSON.parse(response.body)
       expect(json_response['data'][0]["participants"][0]).to eq 102
-      expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "102.0"
+      expect(json_response['data'][0]["total_donation_subscriptions"][0]).to eq "102.0"
       expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 112
     end
 
@@ -650,6 +648,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 105,
+                          total_donation_subscriptions: 105.00,
                           total_one_time_donations: 105.00,
                           arrestable_pledges: 115)
       end
@@ -659,6 +658,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 101,
+                          total_donation_subscriptions: 101.00,
                           total_one_time_donations: 101.00,
                           arrestable_pledges: 111)
       end
@@ -669,7 +669,7 @@ RSpec.describe ReportsController, type: :controller do
       # assert
       json_response = JSON.parse(response.body)
       expect(json_response['data'][0]["participants"][0]).to eq 105
-      expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "105.0"
+      expect(json_response['data'][0]["total_donation_subscriptions"][0]).to eq "105.0"
       expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 115
     end
 
@@ -680,6 +680,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 77,
+                          total_donation_subscriptions: 77.77,
                           total_one_time_donations: 77.77,
                           arrestable_pledges: 77)
       end
@@ -689,6 +690,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 87,
+                          total_donation_subscriptions: 87.77,
                           total_one_time_donations: 87.77,
                           arrestable_pledges: 87)
       end
@@ -699,7 +701,7 @@ RSpec.describe ReportsController, type: :controller do
       # assert
       json_response = JSON.parse(response.body)
       expect(json_response['data'][0]["participants"][0]).to eq 77
-      expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "77.77"
+      expect(json_response['data'][0]["total_donation_subscriptions"][0]).to eq "77.77"
       expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 77
     end
 
@@ -712,6 +714,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 77,
+                          total_donation_subscriptions: 77.77,
                           total_one_time_donations: 77.77,
                           arrestable_pledges: 77)
       end
@@ -721,6 +724,7 @@ RSpec.describe ReportsController, type: :controller do
         FactoryBot.create(:mobilization, chapter: chapter,
                           mobilization_type: '1:1 Recruiting / Other',
                           participants: 87,
+                          total_donation_subscriptions:87.77,
                           total_one_time_donations: 87.77,
                           arrestable_pledges: 87)
       end
@@ -731,7 +735,7 @@ RSpec.describe ReportsController, type: :controller do
       # assert
       json_response = JSON.parse(response.body)
       expect(json_response['data'][0]["participants"][0]).to eq 77
-      expect(json_response['data'][0]["total_one_time_donations"][0]).to eq "77.77"
+      expect(json_response['data'][0]["total_donation_subscriptions"][0]).to eq "77.77"
       expect(json_response['data'][0]["arrestable_pledges"][0]).to eq 77
     end
 

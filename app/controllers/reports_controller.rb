@@ -72,10 +72,10 @@ class ReportsController < ApplicationController
 
     mobilizations_this_period = Mobilization.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
-        pluck(:xra_newsletter_sign_ups, :arrestable_pledges, :new_members_sign_ons, :total_one_time_donations, :chapter_id)
+        pluck(:newsletter_sign_ups, :arrestable_pledges, :new_members_sign_ons, :total_donation_subscriptions, :chapter_id)
     mobilizations_previous_period = Mobilization.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - calculate_days_ago_for_previous_period(date_range_days).days).beginning_of_day, (DateTime.now - date_range_days.days).beginning_of_day).
-        pluck(:xra_newsletter_sign_ups, :arrestable_pledges)
+        pluck(:newsletter_sign_ups, :arrestable_pledges)
 
     trainings_this_period = Training.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
@@ -180,8 +180,6 @@ class ReportsController < ApplicationController
   end
 
   def get_subscriptions_growth(chapter_data_this_period, mobilizations_this_period)
-    # TODO - We are currently using mobilizations.total_one_time_donations to calculate new subscriptions in a period.
-    # We should update this DB column name to be total_donation_subscriptions instead.
     chapter_ids = chapter_data_this_period.map {|row| row[0]}
     mobilizations_growth = sum_data(mobilizations_this_period.select { |m| chapter_ids.exclude? m[4] }, 3).to_int
     mobilizations_growth + sum_data(chapter_data_this_period, 2).to_int
@@ -269,7 +267,7 @@ class ReportsController < ApplicationController
 
         result[:members] = chapters.sum(&:active_members)
         result[:chapters] = chapters.count
-        result[:signups] = filtered_mobilizations.sum(&:xra_newsletter_sign_ups)
+        result[:signups] = filtered_mobilizations.sum(&:newsletter_sign_ups)
         result[:trainings] = filtered_trainings.length
         result[:arrestable_pledges] = chapters.sum(&:total_arrestable_pledges)
         result[:actions] = filtered_street_swarms.length + filtered_arrestable_actions.length
@@ -436,7 +434,7 @@ class ReportsController < ApplicationController
         chapter: chapter.name,
         members: chapter.active_members,
         chapters: 1,
-        signups: filtered_mobilizations.sum(&:xra_newsletter_sign_ups),
+        signups: filtered_mobilizations.sum(&:newsletter_sign_ups),
         trainings: filtered_trainings.length,
         arrestable_pledges: chapter.total_arrestable_pledges,
         actions: filtered_street_swarms.length + filtered_arrestable_actions.length,
@@ -450,7 +448,7 @@ class ReportsController < ApplicationController
     {
         members: chapters.sum(&:active_members),
         chapters: chapters.count,
-        signups: mobilizations.sum(&:xra_newsletter_sign_ups),
+        signups: mobilizations.sum(&:newsletter_sign_ups),
         trainings: trainings.length,
         arrestable_pledges: chapters.sum(&:total_arrestable_pledges),
         actions: street_swarms.length + arrestable_actions.length,
@@ -507,7 +505,7 @@ class ReportsController < ApplicationController
       new: get_array_of_empty_values(period),
       participants: get_array_of_empty_values(period),
       arrestable_pledges: get_array_of_empty_values(period),
-      total_one_time_donations: get_array_of_empty_values(period),
+      total_donation_subscriptions: get_array_of_empty_values(period),
     }}
 
     today = DateTime.now.end_of_day
@@ -554,7 +552,7 @@ class ReportsController < ApplicationController
           chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons
           chart_line[:participants][index] = chart_line[:participants][index] + mobilization.participants
           chart_line[:arrestable_pledges][index] = chart_line[:arrestable_pledges][index] + mobilization.arrestable_pledges
-          chart_line[:total_one_time_donations][index] = chart_line[:total_one_time_donations][index] + mobilization.total_one_time_donations
+          chart_line[:total_donation_subscriptions][index] = chart_line[:total_donation_subscriptions][index] + mobilization.total_donation_subscriptions
         end
       end
     end

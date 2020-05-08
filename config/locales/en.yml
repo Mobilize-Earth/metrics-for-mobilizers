@@ -106,13 +106,13 @@ en:
               not_a_number: "Attendees must be a number"
         mobilization:
           attributes:
-            xra_donation_suscriptions:
+            donation_subscriptions:
               format: "Donor subscriptions %{message}"
               greater_than_or_equal_to: "must be greater than or equal to 0"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"
               not_a_number: "must be a number"
-            xra_newsletter_sign_ups:
+            newsletter_sign_ups:
               format: "Newsletter sign ups %{message}"
               greater_than_or_equal_to: "must be greater than or equal to 0"
               not_an_integer: "must be a number"
@@ -126,6 +126,12 @@ en:
               not_a_number: "must be a number"
             participants:
               format: "People Engaged %{message}"
+              greater_than_or_equal_to: "must be greater than or equal to 0"
+              not_an_integer: "must be a number"
+              less_than_or_equal_to: "is too big"
+              not_a_number: "must be a number"
+            total_donation_subscriptions:
+              format: "Total one time donations %{message}"
               greater_than_or_equal_to: "must be greater than or equal to 0"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"

@@ -214,10 +214,11 @@ def create_mobilizations
       event_type: 'Virtual',
       participants: 7,
       new_members_sign_ons: 3,
+      total_donations_subscriptions: 10,
       total_one_time_donations: 10,
-      xra_donation_suscriptions: 10,
+      donation_subscriptions: 10,
       arrestable_pledges: 10,
-      xra_newsletter_sign_ups: 10
+      newsletter_sign_ups: 10
   )
 
   Mobilization.create!(
@@ -227,10 +228,11 @@ def create_mobilizations
       event_type: 'Virtual',
       participants: 1,
       new_members_sign_ons: 7,
+      total_donations_subscriptions: 10,
       total_one_time_donations: 10,
-      xra_donation_suscriptions: 10,
+      donation_subscriptions: 10,
       arrestable_pledges: 10,
-      xra_newsletter_sign_ups: 10,
+      newsletter_sign_ups: 10,
       created_at: (DateTime.now - 14.days)
   )
 
@@ -241,10 +243,11 @@ def create_mobilizations
       event_type: 'Virtual',
       participants: 2,
       new_members_sign_ons: 4,
+      total_donations_subscriptions: 10,
       total_one_time_donations: 10,
-      xra_donation_suscriptions: 10,
+      donation_subscriptions: 10,
       arrestable_pledges: 10,
-      xra_newsletter_sign_ups: 10,
+      newsletter_sign_ups: 10,
       created_at: ((DateTime.now - 2.months) - 1.days)
   )
 
@@ -255,10 +258,11 @@ def create_mobilizations
       event_type: 'Virtual',
       participants: 1,
       new_members_sign_ons: 3,
+      total_donations_subscriptions: 10,
       total_one_time_donations: 10,
-      xra_donation_suscriptions: 10,
+      donation_subscriptions: 10,
       arrestable_pledges: 10,
-      xra_newsletter_sign_ups: 10,
+      newsletter_sign_ups: 10,
       created_at: ((DateTime.now - 4.months) - 1.days)
   )
 end

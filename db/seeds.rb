@@ -89,12 +89,13 @@ def create_chapters(chapter_id, type, days_offset)
     Mobilization.create!(
         participants: participants,
         new_members_sign_ons: participants / 2,
-        xra_donation_suscriptions: Faker::Number.number(digits: 2),
+        donation_subscriptions: Faker::Number.number(digits: 2),
         arrestable_pledges: Faker::Number.number(digits: 2),
         mobilization_type: Mobilization.mobilization_type_options.sample,
         event_type: ['Virtual', 'In Person'].sample,
         total_one_time_donations: Faker::Number.decimal(l_digits: 2, r_digits: 2),
-        xra_newsletter_sign_ups: participants / 2,
+        total_donation_subscriptions: Faker::Number.decimal(l_digits: 2, r_digits: 2),
+        newsletter_sign_ups: participants / 2,
         chapter: chapter,
         user: user,
         created_at: Faker::Date.between(from: 5.months.ago, to: Date.today).strftime("%Y-%m-%d 07:00:00.00000")

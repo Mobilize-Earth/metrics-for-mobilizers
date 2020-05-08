@@ -17,10 +17,11 @@ class MobilizationsController < ApplicationController
             event_type: params[:mobilization][:event_type],
             participants: params[:mobilization][:participants],
             new_members_sign_ons: params[:mobilization][:new_members_sign_ons],
+            total_donation_subscriptions: params[:mobilization][:total_donation_subscriptions],
             total_one_time_donations: params[:mobilization][:total_one_time_donations],
-            xra_donation_suscriptions: params[:mobilization][:xra_donation_suscriptions],
+            donation_subscriptions: params[:mobilization][:donation_subscriptions],
             arrestable_pledges: params[:mobilization][:arrestable_pledges],
-            xra_newsletter_sign_ups: params[:mobilization][:xra_newsletter_sign_ups],
+            newsletter_sign_ups: params[:mobilization][:newsletter_sign_ups],
             report_date: report_date
         )
         if @mobilization.save

@@ -68,29 +68,32 @@ feature 'submitting mobilization' do
         choose('mobilization_event_type_in_person')
         fill_in 'mobilization_participants', with: '1'
         fill_in 'mobilization_new_members_sign_ons', with: '2'
+        fill_in 'mobilization_total_donation_subscriptions', with: '7.25'
         fill_in 'mobilization_total_one_time_donations', with: '3.25'
-        fill_in 'mobilization_xra_donation_suscriptions', with: '4'
+        fill_in 'mobilization_donation_subscriptions', with: '4'
         fill_in 'mobilization_arrestable_pledges', with: '5'
-        fill_in 'mobilization_xra_newsletter_sign_ups', with: '6'
+        fill_in 'mobilization_newsletter_sign_ups', with: '6'
         find('input[name="commit"]').click
         expect(Mobilization.last.event_type).to eq('in_person')
         expect(Mobilization.last.mobilization_type).to eq('House Meetings')
         expect(Mobilization.last.participants).to eq(1)
         expect(Mobilization.last.new_members_sign_ons).to eq(2)
+        expect(Mobilization.last.total_donation_subscriptions).to eq(7.25)
         expect(Mobilization.last.total_one_time_donations).to eq(3.25)
-        expect(Mobilization.last.xra_donation_suscriptions).to eq(4)
+        expect(Mobilization.last.donation_subscriptions).to eq(4)
         expect(Mobilization.last.arrestable_pledges).to eq(5)
-        expect(Mobilization.last.xra_newsletter_sign_ups).to eq(6)
+        expect(Mobilization.last.newsletter_sign_ups).to eq(6)
     end
 
     scenario 'should show a success message' do
         choose('mobilization_event_type_virtual')
         fill_in 'mobilization_participants', with: '1'
         fill_in 'mobilization_new_members_sign_ons', with: '2'
+        fill_in 'mobilization_total_donation_subscriptions', with: '3'
         fill_in 'mobilization_total_one_time_donations', with: '3'
-        fill_in 'mobilization_xra_donation_suscriptions', with: '4'
+        fill_in 'mobilization_donation_subscriptions', with: '4'
         fill_in 'mobilization_arrestable_pledges', with: '5'
-        fill_in 'mobilization_xra_newsletter_sign_ups', with: '6'
+        fill_in 'mobilization_newsletter_sign_ups', with: '6'
         find('input[name="commit"]').click
         expect(page).to have_css '.alert-success'
     end
@@ -99,10 +102,11 @@ feature 'submitting mobilization' do
         choose('mobilization_event_type_virtual')
         fill_in 'mobilization_participants', with: '1,1'
         fill_in 'mobilization_new_members_sign_ons', with: 's'
+        fill_in 'mobilization_total_donation_subscriptions', with: '3'
         fill_in 'mobilization_total_one_time_donations', with: '3'
-        fill_in 'mobilization_xra_donation_suscriptions', with: '4'
+        fill_in 'mobilization_donation_subscriptions', with: '4'
         fill_in 'mobilization_arrestable_pledges', with: '5'
-        fill_in 'mobilization_xra_newsletter_sign_ups', with: '6'
+        fill_in 'mobilization_newsletter_sign_ups', with: '6'
         find('input[name="commit"]').click
         expect(page).to have_css '.alert-danger'
     end
@@ -112,10 +116,11 @@ feature 'submitting mobilization' do
         choose('mobilization_event_type_virtual')
         fill_in 'mobilization_participants', with: '1,1'
         fill_in 'mobilization_new_members_sign_ons', with: 's'
+        fill_in 'mobilization_total_donation_subscriptions', with: '3'
         fill_in 'mobilization_total_one_time_donations', with: '3'
-        fill_in 'mobilization_xra_donation_suscriptions', with: '4'
+        fill_in 'mobilization_donation_subscriptions', with: '4'
         fill_in 'mobilization_arrestable_pledges', with: '5'
-        fill_in 'mobilization_xra_newsletter_sign_ups', with: '6'
+        fill_in 'mobilization_newsletter_sign_ups', with: '6'
         find('input[name="commit"]').click
         actual_records = Mobilization.count
         expect(actual_records).to eq(expected_records)
@@ -127,10 +132,11 @@ feature 'submitting mobilization' do
         choose('mobilization_event_type_in_person')
         fill_in 'mobilization_participants', with: '1'
         fill_in 'mobilization_new_members_sign_ons', with: random_new_members
+        fill_in 'mobilization_total_donation_subscriptions', with: '3.25'
         fill_in 'mobilization_total_one_time_donations', with: '3.25'
-        fill_in 'mobilization_xra_donation_suscriptions', with: '4'
+        fill_in 'mobilization_donation_subscriptions', with: '4'
         fill_in 'mobilization_arrestable_pledges', with: '5'
-        fill_in 'mobilization_xra_newsletter_sign_ups', with: '6'
+        fill_in 'mobilization_newsletter_sign_ups', with: '6'
         find('input[name="commit"]').click
         expect(Chapter.last.active_members).to eq(expected_chapter_members)
     end
