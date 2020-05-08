@@ -100,7 +100,7 @@ feature 'navigation' do
     end
 
     scenario 'homepage should be admins/index' do
-        expect(page).to have_content 'Navigation'
+        expect(page).to have_content 'Onboarding'
     end
 
     scenario 'should access create user page with correct credentials' do
@@ -117,12 +117,12 @@ feature 'navigation' do
         click_on "View Reports"
         expect(page).to have_current_path '/reports', ignore_query: true
         click_on "Onboarding"
-        expect(page).to have_content 'Navigation'
+        expect(page).to have_content 'Onboarding'
     end
 
     scenario 'should redirect to admin dashboard when visiting forms/index' do
         visit "/forms/index"
-        expect(page).to have_content "Navigation"
+        expect(page).to have_content "Onboarding"
         expect(page).to have_content "You are not authorized to access this page."
     end
 end
