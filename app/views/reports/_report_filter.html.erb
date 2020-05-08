@@ -44,7 +44,7 @@
     </div>
     <div class="col-4 csv-download">
       <% if current_user.role == 'admin' %>
-        <%= link_to csv_download_path do %>
+        <%= link_to csv_download_path, :target => "_blank" do %>
           <h3 id="csv-download">
             CSV <span class="fa fa-arrow-down"></span>
           </h3>
