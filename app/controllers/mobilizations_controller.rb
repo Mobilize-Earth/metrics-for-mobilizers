@@ -30,6 +30,7 @@ class MobilizationsController < ApplicationController
             chapter = Chapter.find(current_user.chapter.id)
             update_chapter_members(chapter, @mobilization.new_members_sign_ons)
             update_chapter_arrestable_pledges(chapter, @mobilization.arrestable_pledges)
+            update_chapter_subscriptions(chapter, @mobilization.total_donation_subscriptions)
         else
             flash[:errors] = @mobilization.errors.full_messages
             @types = Mobilization.mobilization_type_options
@@ -46,5 +47,10 @@ class MobilizationsController < ApplicationController
     def update_chapter_arrestable_pledges(chapter, arrestable_pledges)
       new_arrestable_pledges = chapter.total_arrestable_pledges + arrestable_pledges
       chapter.update_attribute(:total_arrestable_pledges, new_arrestable_pledges)
+    end
+
+    def update_chapter_subscriptions(chapter, donation_subscriptions)
+      new_donation_subscriptions = chapter.total_subscription_amount + donation_subscriptions
+      chapter.update_attribute(:total_subscription_amount, new_donation_subscriptions)
     end
 end

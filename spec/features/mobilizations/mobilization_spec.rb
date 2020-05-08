@@ -140,4 +140,32 @@ feature 'submitting mobilization' do
         find('input[name="commit"]').click
         expect(Chapter.last.active_members).to eq(expected_chapter_members)
     end
+    scenario 'should update total donation subscriptions in chapters when mobilization is reported' do
+        random_new_members = rand(20)
+        expected_chapter_members = Chapter.last.total_subscription_amount + random_new_members
+        choose('mobilization_event_type_in_person')
+        fill_in 'mobilization_participants', with: '1'
+        fill_in 'mobilization_new_members_sign_ons', with: '3'
+        fill_in 'mobilization_total_donation_subscriptions', with: random_new_members
+        fill_in 'mobilization_total_one_time_donations', with: '3.25'
+        fill_in 'mobilization_donation_subscriptions', with: '4'
+        fill_in 'mobilization_arrestable_pledges', with: '5'
+        fill_in 'mobilization_newsletter_sign_ups', with: '6'
+        find('input[name="commit"]').click
+        expect(Chapter.last.total_subscription_amount).to eq(expected_chapter_members)
+    end
+    scenario 'should update total arrestable pledges number in chapters when mobilization is reported' do
+        random_new_members = rand(20)
+        expected_chapter_members = Chapter.last.total_arrestable_pledges + random_new_members
+        choose('mobilization_event_type_in_person')
+        fill_in 'mobilization_participants', with: '1'
+        fill_in 'mobilization_new_members_sign_ons', with: '0'
+        fill_in 'mobilization_total_donation_subscriptions', with: '3.25'
+        fill_in 'mobilization_total_one_time_donations', with: '3.25'
+        fill_in 'mobilization_donation_subscriptions', with: '4'
+        fill_in 'mobilization_arrestable_pledges', with: random_new_members
+        fill_in 'mobilization_newsletter_sign_ups', with: '6'
+        find('input[name="commit"]').click
+        expect(Chapter.last.total_arrestable_pledges).to eq(expected_chapter_members)
+    end
 end
