@@ -1,5 +1,4 @@
 class UserMailer < ApplicationMailer
-  include Devise::Mailers::Helpers
   before_action :add_inline_attachment!
 
   def welcome_email(user)
