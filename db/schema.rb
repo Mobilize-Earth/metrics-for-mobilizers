@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_07_160257) do
+ActiveRecord::Schema.define(version: 2020_05_08_201316) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "country"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2020_05_07_160257) do
   create_table "chapters", force: :cascade do |t|
     t.string "name"
     t.integer "active_members"
-    t.decimal "total_subscription_amount"
+    t.decimal "total_subscription_amount", precision: 10, scale: 2
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "total_arrestable_pledges"
