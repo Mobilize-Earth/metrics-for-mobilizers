@@ -9,7 +9,9 @@ class Users::PasswordsController < Devise::PasswordsController
   # POST /resource/password
   def create
     super
-    flash[:success] = 'An email has been sent with instructions for creating a new password. Please check your email.'
+    unless resource.errors.present?
+      flash[:success] = 'An email has been sent with instructions for creating a new password. Please check your email.'
+    end
   end
 
   # GET /resource/password/edit?reset_password_token=abcdef

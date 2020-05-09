@@ -1,11 +1,11 @@
 <div class="default-background">
   <%= render 'layouts/messages', flash: flash %>
   <div class="container-fluid">
+    <%= render "users/errors/error_messages", resource: resource %>
     <div class="row">
       <div class="col-xl-4 offset-xl-4 col-lg-6 offset-lg-3 col-md-6 offset-md-3 col-sm-8 offset-sm-2 col-xs-12 outer-box">
         <div class="data_form">
           <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-            <%= render "devise/shared/error_messages", resource: resource %>
 
             <div class="data_form_title">
               <p>Reset Password</p>
