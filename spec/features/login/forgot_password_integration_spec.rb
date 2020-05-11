@@ -3,10 +3,11 @@ require 'rails_helper'
 feature 'forgot password', :devise do
   before :each do
     @user = FactoryBot.create(:user)
-    visit_sign_in_page
   end
 
   it "sends email for forgot password" do
+    visit_sign_in_page
+
     click_link "Forgot your password?"
 
     fill_in 'user_email', with: @user.email
@@ -19,6 +20,44 @@ feature 'forgot password', :devise do
 
     expect(link_url).to include 'http://localhost:3000/users/password/edit'
     expect(img_src).to include 'data:image/png;base64,'  # Followed by long base64 content
+  end
+
+  it "does not reset password when current password is wrong" do
+    sign_in(@user.email, @user.password)
+
+    click_on @user.full_name
+
+    click_on "Reset Password"
+
+    fill_in 'user_current_password', with: 'hello1'
+    fill_in 'user_password', with: 'hello2'
+    fill_in 'user_password_confirmation', with: 'hello2'
+    click_button "Save"
+
+    expect(page).to have_content 'Current password is invalid'
+
+    fill_in 'user_current_password', with: 'hello2'
+    fill_in 'user_password', with: 'hello3'
+    fill_in 'user_password_confirmation', with: 'hello3'
+    click_button "Save"
+
+    expect(page).to have_content 'Current password is invalid'
+  end
+
+  it "resets password for logged in users" do
+    @user = FactoryBot.create(:user, password: 'hello1', password_confirmation: 'hello1', role: 'reviewer')
+    sign_in(@user.email, @user.password)
+
+    click_on @user.full_name
+
+    click_on "Reset Password"
+
+    fill_in 'user_current_password', with: 'hello1'
+    fill_in 'user_password', with: 'hello2'
+    fill_in 'user_password_confirmation', with: 'hello2'
+    click_button "Save"
+
+    expect(page).to have_content 'Global'
   end
 end
 
