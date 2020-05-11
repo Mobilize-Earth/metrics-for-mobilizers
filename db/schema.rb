@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_08_201316) do
+ActiveRecord::Schema.define(version: 2020_05_11_163742) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "country"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 2020_05_08_201316) do
     t.string "event_type"
     t.datetime "report_date"
     t.decimal "total_donation_subscriptions", precision: 10, scale: 2
+    t.integer "mobilizers_involved", default: 0
     t.index ["chapter_id"], name: "index_mobilizations_on_chapter_id"
     t.index ["user_id"], name: "index_mobilizations_on_user_id"
   end
