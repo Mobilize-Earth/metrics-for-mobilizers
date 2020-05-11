@@ -14,6 +14,7 @@ $content-height: $page-height - $page-padding-top - $header-height -
 
   @include media-breakpoint-up(lg) {
     height: $page-height;
+    max-width: 1400px;
   }
 
   .row {
