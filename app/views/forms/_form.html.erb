@@ -34,6 +34,9 @@
   const type = '<%= params[:training_type] || params[:type] || params[:type_arrestable_action] || params[:growth_activity_type] || params[:social_media_blitzing_type] || params[:street_swarm_type]  ||'' %>';
 
   const startFormWithType = (navLink, shouldClearForm) => {
+      document.getElementsByClassName('tab-content')[0].style.display = 'block';
+      document.getElementsByClassName('tab-content')[0].style.backgroundColor = 'white';
+
     setFormType(navLink.textContent);
     updateParticipantsLabel(navLink.textContent);
     shouldClearForm && clearFormFields();

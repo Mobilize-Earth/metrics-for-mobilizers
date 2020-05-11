@@ -44,7 +44,7 @@
     border-radius: 0.25rem;
     padding: 1.25rem;
     z-index: 1;
-    min-height: 300px;
+    min-height: 490px;
   }
 
   .warning {
@@ -93,4 +93,12 @@
 
 #mobilization-form-body {
   display: none;
+}
+
+@media (max-width: 375px) {
+  .tab-content {
+    display: none;
+    background-color: transparent;
+    position: absolute;
+  }
 }
