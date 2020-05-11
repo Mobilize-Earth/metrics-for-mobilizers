@@ -1,4 +1,4 @@
-<nav>
+<nav class="hide-on-mobile">
   <% if current_user %>
     <% if current_user.role == 'admin' %>
       <%= link_to "Onboarding", admins_root_path, {class: controller_name == 'admins' && action_name == 'index' ? 'selected' : '', id: 'onboarding-nav-link'} %>

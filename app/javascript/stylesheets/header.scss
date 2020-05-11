@@ -1,3 +1,9 @@
+@media (max-width: 770px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
 .header {
   height: $header-height;
   display: flex;
@@ -10,6 +16,15 @@
     height: $header-height * 1.5;
     margin-top: -($header-height / 2);
     margin-left: -0.5rem;
+  }
+
+  @media (max-width: 375px) {
+    .header-logo {
+      width: $header-height * 2;
+      height: 7.375rem;
+      margin-top: -1.125rem;
+      margin-left: -4.5rem;
+    }
   }
 
   nav {
@@ -29,6 +44,9 @@
 
     .selected {
       border-bottom: 2px solid $green;
+    }
+    .hide-on-mobile {
+      display: block;
     }
   }
 
@@ -75,6 +93,16 @@
         border: 0;
         z-index: 3;
 
+        .show-on-mobile {
+          display: none;
+        }
+
+        @media (max-width: 770px) {
+          .show-on-mobile {
+            display: block;
+          }
+        }
+
         a {
           @include standard-hover-state();
 
@@ -94,3 +122,4 @@
     }
   }
 }
+

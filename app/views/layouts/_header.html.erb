@@ -17,6 +17,17 @@
 
         <div class="dropdown-menu" aria-labelledby="dropdown-menu-link">
           <% unless current_user.nil? %>
+            <% if current_user.role == 'admin' %>
+              <%= link_to "Onboarding", admins_root_path, {class: controller_name == 'admins' && action_name == 'index' ? 'selected' : '', class: "show-on-mobile"} %>
+            <% end %>
+
+            <% if current_user.role == 'external' %>
+              <%= link_to "Report Entry", admins_root_path, {class: controller_name == 'forms' && action_name == 'index' ? 'selected' : '', class: "show-on-mobile"} %>
+            <% end %>
+
+            <% if current_user.role == 'admin' || current_user.role == 'external' || current_user.role == 'reviewer' %>
+              <%= link_to "View Reports", reports_path, {class: controller_name == 'reports' && action_name == 'index' ? 'selected' : '', class: "show-on-mobile"} %>
+            <% end %>
             <%= link_to "Reset Password", edit_user_registration_path %>
 
             <%= link_to "Log Out", destroy_user_session_path, method: :delete, id: "log-out-link" %>

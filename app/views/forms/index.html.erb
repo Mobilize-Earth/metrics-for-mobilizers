@@ -25,16 +25,22 @@
   <div class="reporting-tiles-container">
     <div class="row">
       <%= link_to mobilizations_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
-        <p class="tile-title">Growth Activities</p>
-        <p class="tile-desc">All activities that help you grow the movement</p>
+        <div>
+          <p class="tile-title">Growth Activities</p>
+          <p class="tile-desc">All activities that help you grow the movement</p>
+        </div>
       <% end %>
       <%= link_to trainings_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
-        <p class="tile-title">Trainings</p>
-        <p class="tile-desc">All activities conducted to develop the movement</p>
+        <div>
+          <p class="tile-title">Trainings</p>
+          <p class="tile-desc">All activities conducted to develop the movement</p>
+        </div>
       <% end %>
       <%= link_to arrestable_actions_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
-        <p class="tile-title">Actions</p>
-        <p class="tile-desc">All the actions that increase the pressure</p>
+        <div>
+          <p class="tile-title">Actions</p>
+          <p class="tile-desc">All the actions that increase the pressure</p>
+        </div>
       <% end %>
     </div>
   </div>
