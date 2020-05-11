@@ -33,24 +33,18 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # USE THESE CONFIGS TO POINT AT MAILCATCHER
-  # config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              '185.203.114.191',
+    port:                 25,
+    domain:               'organise.earth',
+   }
+
+  # Use these configs to point at a local mailcatcher
   # config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 
-  # config.action_mailer.delivery_method = :sendmail
-  # # Defaults to:
-  # config.action_mailer.sendmail_settings = {
-  #   location: '/usr/sbin/sendmail',
-  #   arguments: '-i'
-  # }
-
-
-config.action_mailer.delivery_method = :smtp
-config.action_mailer.smtp_settings = {
-  address:              '185.203.114.191',
-  port:                 25,
-  domain:               'organise.earth',
- }
+  # Remove email content from dev logs (THEY WILL STILL SHOW IN PRODUCTION)
+  config.action_mailer.logger = nil
 
   config.action_mailer.perform_deliveries = true
   # Don't care if the mailer can't send if false.
