@@ -17,6 +17,7 @@ class MobilizationsController < ApplicationController
             mobilization_type: params[:mobilization_type],
             event_type: params[:mobilization][:event_type],
             participants: params[:mobilization][:participants],
+            mobilizers_involved: params[:mobilization][:mobilizers_involved],
             new_members_sign_ons: params[:mobilization][:new_members_sign_ons],
             total_donation_subscriptions: params[:mobilization][:total_donation_subscriptions],
             total_one_time_donations: params[:mobilization][:total_one_time_donations],

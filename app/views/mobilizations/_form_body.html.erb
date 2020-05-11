@@ -16,6 +16,12 @@
         </div>
     </div>
     <div class="form-group">
+      <div>
+        <%= f.label :mobilizers_involved, "Number of Mobilizers Involved *", class: "action-form-label" %>
+        <%= f.text_field :mobilizers_involved, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10 %>
+      </div>
+    </div>
+    <div class="form-group">
         <div>
             <%= f.label :new_members_sign_ons, "Number of New Member Sign Ons *", class: "action-form-label" %>
             <%= f.text_field :new_members_sign_ons, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>

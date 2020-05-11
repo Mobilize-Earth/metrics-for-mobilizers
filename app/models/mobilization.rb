@@ -24,6 +24,7 @@ class Mobilization < ApplicationRecord
         :event_type,
         presence: true
     validates :participants,
+        :mobilizers_involved,
         :new_members_sign_ons,
         :donation_subscriptions,
         :arrestable_pledges,

@@ -67,6 +67,7 @@ feature 'submitting mobilization' do
     scenario 'should save in database with right values' do
         choose('mobilization_event_type_in_person')
         fill_in 'mobilization_participants', with: '1'
+        fill_in 'mobilization_mobilizers_involved', with: '8'
         fill_in 'mobilization_new_members_sign_ons', with: '2'
         fill_in 'mobilization_total_donation_subscriptions', with: '7.25'
         fill_in 'mobilization_total_one_time_donations', with: '3.25'
@@ -77,6 +78,7 @@ feature 'submitting mobilization' do
         expect(Mobilization.last.event_type).to eq('in_person')
         expect(Mobilization.last.mobilization_type).to eq('House Meetings')
         expect(Mobilization.last.participants).to eq(1)
+        expect(Mobilization.last.mobilizers_involved).to eq(8)
         expect(Mobilization.last.new_members_sign_ons).to eq(2)
         expect(Mobilization.last.total_donation_subscriptions).to eq(7.25)
         expect(Mobilization.last.total_one_time_donations).to eq(3.25)
@@ -88,6 +90,7 @@ feature 'submitting mobilization' do
     scenario 'should show a success message' do
         choose('mobilization_event_type_virtual')
         fill_in 'mobilization_participants', with: '1'
+        fill_in 'mobilization_mobilizers_involved', with: '8'
         fill_in 'mobilization_new_members_sign_ons', with: '2'
         fill_in 'mobilization_total_donation_subscriptions', with: '3'
         fill_in 'mobilization_total_one_time_donations', with: '3'
@@ -101,6 +104,7 @@ feature 'submitting mobilization' do
     scenario 'should show a error message' do
         choose('mobilization_event_type_virtual')
         fill_in 'mobilization_participants', with: '1,1'
+        fill_in 'mobilization_mobilizers_involved', with: '1,2'
         fill_in 'mobilization_new_members_sign_ons', with: 's'
         fill_in 'mobilization_total_donation_subscriptions', with: '3'
         fill_in 'mobilization_total_one_time_donations', with: '3'
@@ -115,6 +119,7 @@ feature 'submitting mobilization' do
         expected_records = Mobilization.count
         choose('mobilization_event_type_virtual')
         fill_in 'mobilization_participants', with: '1,1'
+        fill_in 'mobilization_mobilizers_involved', with: '1,2'
         fill_in 'mobilization_new_members_sign_ons', with: 's'
         fill_in 'mobilization_total_donation_subscriptions', with: '3'
         fill_in 'mobilization_total_one_time_donations', with: '3'
@@ -131,6 +136,7 @@ feature 'submitting mobilization' do
         expected_chapter_members = Chapter.last.active_members + random_new_members
         choose('mobilization_event_type_in_person')
         fill_in 'mobilization_participants', with: '1'
+        fill_in 'mobilization_mobilizers_involved', with: '8'
         fill_in 'mobilization_new_members_sign_ons', with: random_new_members
         fill_in 'mobilization_total_donation_subscriptions', with: '3.25'
         fill_in 'mobilization_total_one_time_donations', with: '3.25'
@@ -145,6 +151,7 @@ feature 'submitting mobilization' do
         expected_chapter_members = Chapter.last.total_subscription_amount + random_new_members
         choose('mobilization_event_type_in_person')
         fill_in 'mobilization_participants', with: '1'
+        fill_in 'mobilization_mobilizers_involved', with: '8'
         fill_in 'mobilization_new_members_sign_ons', with: '3'
         fill_in 'mobilization_total_donation_subscriptions', with: random_new_members
         fill_in 'mobilization_total_one_time_donations', with: '3.25'
@@ -159,6 +166,7 @@ feature 'submitting mobilization' do
         expected_chapter_members = Chapter.last.total_arrestable_pledges + random_new_members
         choose('mobilization_event_type_in_person')
         fill_in 'mobilization_participants', with: '1'
+        fill_in 'mobilization_mobilizers_involved', with: '8'
         fill_in 'mobilization_new_members_sign_ons', with: '0'
         fill_in 'mobilization_total_donation_subscriptions', with: '3.25'
         fill_in 'mobilization_total_one_time_donations', with: '3.25'
