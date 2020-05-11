@@ -53,9 +53,9 @@ ActiveRecord::Schema.define(version: 2020_05_08_201316) do
     t.integer "participants", default: 0
     t.integer "new_members_sign_ons", default: 0
     t.decimal "total_one_time_donations", precision: 10, scale: 2, default: "0.0"
-    t.integer "xra_donation_suscriptions", default: 0
+    t.integer "donation_subscriptions", default: 0
     t.integer "arrestable_pledges", default: 0
-    t.integer "xra_newsletter_sign_ups", default: 0
+    t.integer "newsletter_sign_ups", default: 0
     t.integer "chapter_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 2020_05_08_201316) do
     t.string "mobilization_type"
     t.string "event_type"
     t.datetime "report_date"
+    t.decimal "total_donation_subscriptions", precision: 10, scale: 2
     t.index ["chapter_id"], name: "index_mobilizations_on_chapter_id"
     t.index ["user_id"], name: "index_mobilizations_on_user_id"
   end

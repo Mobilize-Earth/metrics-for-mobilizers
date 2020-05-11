@@ -8,9 +8,16 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # POST /resource/password
   def create
-    super
-    unless resource.errors.present?
-      flash[:success] = 'An email has been sent with instructions for creating a new password. Please check your email.'
+    alert_body_text = 'If the email address provided exists in our system, an email has been sent with instructions for creating a new password. Please check your email.'
+
+    if User.find_by_email(params[:user][:email]).blank?
+      flash[:success] = alert_body_text
+      respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
+    else
+      super
+      unless resource.errors.present?
+        flash[:success] = alert_body_text
+      end
     end
   end
 
