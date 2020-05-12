@@ -22,6 +22,8 @@ stages:
 test:unit:
   extends: .base
   stage: Tests
+  cache:
+    policy: pull-push
   tags:
     - docker
   script:
@@ -31,6 +33,8 @@ test:unit:
 test:integration:
   extends: .base
   stage: Tests
+  cache:
+    policy: pull
   tags:
     - docker
   script:
