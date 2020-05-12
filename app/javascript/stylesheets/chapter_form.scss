@@ -7,30 +7,3 @@
   padding-top: 20px;
   padding-bottom: 10px;
 }
-
-.submit-btn {
-  background-color: $green;
-  color: $lighter-grey;
-
-  &:hover {
-    color: $lighter-grey;
-    background-color: $lighter-green;
-  }
-}
-
-.cancel-btn {
-  border: 2px solid $green;
-  background-color: $white;
-
-  &:hover {
-    background-color: $mid-light-grey;
-  }
-}
-
-.chapter-submit-btn {
-  margin-left: 20px;
-}
-
-.chapter-form-btn {
-  margin-top: 50px;
-}

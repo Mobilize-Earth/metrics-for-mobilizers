@@ -1,3 +1,28 @@
-.btn-padding-md {
-  padding: 10px 30px;
+.submit-button, .cancel-button {
+  padding: 0.5rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+.submit-button {
+  background-color: $green;
+  color: $white;
+  border: none;
+  margin-left: 20px;
+
+  &:hover {
+    color: $white;
+    background-color: $darker-green;
+    border: none;
+  }
+}
+
+.cancel-button {
+  border: 1px solid $dark-red;
+  background-color: rgba(0,0,0,0);
+  color: $dark-red;
+
+  &:hover {
+    background-color: $dark-red;
+    color: $white;
+  }
 }

@@ -18,6 +18,7 @@ ArrestableAction.destroy_all
 Mobilization.destroy_all
 Training.destroy_all
 StreetSwarm.destroy_all
+SocialMediaBlitzing.destroy_all
 Address.destroy_all
 User.destroy_all
 Chapter.destroy_all

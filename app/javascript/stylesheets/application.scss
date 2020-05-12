@@ -1,7 +1,6 @@
 @import "./bootstrap_custom.scss";
 @import "./constants.scss";
 @import "./header.scss";
-@import "./footer.scss";
 @import "./landing.scss";
 @import "./login.scss";
 @import "./fonts.scss";
@@ -22,4 +21,8 @@
 
 body {
   font-family: Poppins, sans-serif;
+  background-color: $background-green;
+  font-size: 16px;
+  margin-bottom: 40px;
+  color: $black;
 }

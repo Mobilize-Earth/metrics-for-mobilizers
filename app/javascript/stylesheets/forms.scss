@@ -7,7 +7,7 @@
 }
 
 .form-tile {
-  padding: 0px 2rem;
+  padding: 0 2rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -95,10 +95,9 @@ a:hover.form-tile {
   height: 575px;
   position: absolute;
   top: 200px;
-  right: 0px;
-  z-index: 0;
+  right: 0;
+  z-index: -1;
 }
-
 
 .form-index-header {
   margin-left: 35px;
@@ -119,8 +118,6 @@ a:hover.form-tile {
     }
   }
 }
-
-
 
 .form-label-description {
   color: $grey;

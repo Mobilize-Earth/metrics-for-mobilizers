@@ -1,19 +1,9 @@
-$border: 0.1rem solid $grey;
-$page-padding-top: 4rem;
-$page-height: 50rem;
-$header-height: 3.75rem;
-$title-row-height: 2.5rem;
-$content-height: $page-height - $page-padding-top - $header-height -
-  $title-row-height;
-
 .admin-title {
   text-align: center;
 }
 
 .admin-page {
-
   @include media-breakpoint-up(lg) {
-    height: $page-height;
     max-width: 1400px;
   }
 
@@ -34,6 +24,7 @@ $content-height: $page-height - $page-padding-top - $header-height -
 
   .admin-description {
     text-align: left;
+    background-color: $background-green;
   }
 
   .admin-description-coordinator-limit {
@@ -83,11 +74,11 @@ $content-height: $page-height - $page-padding-top - $header-height -
   }
 
   .content-top-row {
-    height: $header-height;
+    height: 3.75rem;
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
-    padding-right: 0.8rem;
+    padding-right: 0.25rem;
 
     a {
       @include standard-hover-state();
@@ -104,13 +95,12 @@ $content-height: $page-height - $page-padding-top - $header-height -
 
   .content-header {
     background-color: $grey;
-    border-bottom: $border;
-    height: $title-row-height;
+    height: 2.5rem;
 
     .column {
-      line-height: $title-row-height;
-      font-weight: 600;
-      color: #fff;
+      line-height: 2.5rem;
+      font-weight: bold;
+      color: $white;
       overflow: hidden;
       white-space: nowrap;
     }
@@ -118,13 +108,13 @@ $content-height: $page-height - $page-padding-top - $header-height -
 
   .content-row-container {
     overflow: scroll;
-    height: $content-height;
+    height: 40rem;
     padding: 0 0.5em;
     margin: 0 -15px 0 -15px;
   }
 
   .content-row {
-    border-bottom: $border;
+    border-bottom: 1px solid $grey;
     height: 3rem;
 
     .column {
@@ -148,6 +138,7 @@ $content-height: $page-height - $page-padding-top - $header-height -
   #link-users,
   #link-chapters {
     font-size: 1.2em;
+    padding: 0.5rem;
 
     span {
       vertical-align: middle;

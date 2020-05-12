@@ -1,23 +1,19 @@
 .action-form {
   .action-btn-active {
-    height: 44px;
-    border-radius: 3px;
-    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.5);
-    border: solid 1px #f4f5f0;
-  }
-
-  .nav-pills .nav-link {
     @include standard-hover-state();
 
+    background-color: $white;
+    border-radius: 0.25rem;
+    box-shadow: $standard-box-shadow;
     color: $black;
-    margin-bottom: 10px;
-    background-color: #fff;
+    height: 2.75rem;
+    margin-bottom: 0.625rem;
     text-align: center;
     white-space: nowrap;
   }
 
   .nav-pills .nav-link.active {
-    background-color: #b8b8b8;
+    background-color: $mid-light-grey;
   }
 
   #hide-until-type-selected {
@@ -44,24 +40,13 @@
 
   .action-form-content {
     background-color: $white;
-    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.5);
-    border: solid 1px #f4f5f0;
-    padding: 20px;
+    box-shadow: $standard-box-shadow;
+    border-radius: 0.25rem;
+    padding: 1.25rem;
     z-index: 1;
     min-height: 300px;
   }
 
-  .action-submit-btn {
-    background-color: $green;
-    font-size: 1rem;
-    font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 1.35px;
-    text-align: center;
-    color: white;
-  }
   .warning {
     color: red;
     font-size: 12px;
@@ -69,17 +54,24 @@
     margin-top: 10px;
     font-style: italic;
   }
+
   .action-form-label {
     color: $grey;
-    font-size: 15px;
+    font-size: 0.9rem;
   }
+
   .action-form-input {
     max-width: 140px;
   }
+
   .action-form-option-button {
     color: $black;
     font-size: 13px;
     padding: 5px;
+
+    input {
+      margin-right: 0.25rem;
+    }
   }
 }
 

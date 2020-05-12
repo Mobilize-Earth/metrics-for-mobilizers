@@ -30,8 +30,8 @@
                 <%= f.collection_select :chapter_id, Chapter.order(:name),:id,:name, {include_blank: true}, {class: "form-control"} %>
             </div>
             <div class="form-row options-form-div">
-              <%= link_to "Cancel", admins_index_path, class: "btn btn-outline-danger btn-padding-md" %>
-              <%= f.submit "Submit", class: "btn btn-success chapter-submit-btn btn-padding-md"%>
+              <%= link_to 'Cancel', admins_index_path, class: "btn cancel-button"%>
+              <%= f.submit 'Submit', class: "btn submit-button"%>
             </div>
           <% end %>
       </div>
@@ -40,9 +40,9 @@
 
 <script>
   (()=>{
-    let role_select = $('#user_role');
-    let chapter_select = $('#user_chapter_id');
-    let chapter_label = $('#chapter-label');
+    const role_select = $('#user_role');
+    const chapter_select = $('#user_chapter_id');
+    const chapter_label = $('#chapter-label');
 
     role_changed();
 
