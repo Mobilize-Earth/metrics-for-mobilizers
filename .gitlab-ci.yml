@@ -1,20 +1,29 @@
-image: "ruby:2.7.0-alpine"
-
 .base:
+  image: "ruby:2.7.0-alpine"
+  cache:
+    key: gems_and_packages
+    paths:
+      - etc/apk/cache/
+      - vendor/ruby
+    policy: pull
   before_script:
-    - apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
+    - setup-apkcache && apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
     - npm install yarn -g
     - gem install bundler --no-document
     - bundle install
     - export RAILS_ENV=test
+    - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
+    - export RUBYOPT='-W:no-deprecated -W:no-experimental'
 
 stages:
   - Tests
   - Build and Push Image
 
 test:unit:
-  stage: Tests
   extends: .base
+  stage: Tests
+  cache:
+    policy: pull-push
   tags:
     - docker
   script:
@@ -22,12 +31,10 @@ test:unit:
     - bundle exec rspec spec/unit
 
 test:integration:
-  stage: Tests
   extends: .base
-  before_script:
-    - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
-    - export RUBYOPT='-W:no-deprecated -W:no-experimental'
-    - export RAILS_ENV=test
+  stage: Tests
+  cache:
+    policy: pull-push
   tags:
     - docker
   script:
