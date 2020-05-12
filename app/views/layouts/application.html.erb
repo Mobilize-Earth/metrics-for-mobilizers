@@ -13,5 +13,6 @@
   <%= content_tag :body, data: {action: action_name, controller: controller_name}, class: "site-wrapper" do %>
     <%= render "layouts/header" %>
     <%= yield %>
+  <%= render "layouts/footer" %>
   <% end %>
 </html>

@@ -1,11 +1,23 @@
 .default-background {
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 160px);
   padding-top: 40px;
 }
 
 .intro {
-  margin-top: 110px;
+  margin-top: 50px;
   font-size: 20px;
+  text-align: justify;
+  padding-bottom: 40px;
+}
+
+.intro-join {
+  color: $green;
+  font-size: 26px;
+  text-align: center;
+}
+
+.intro-small {
+  font-size: 16px;
 }
 
 .write-to {
@@ -20,14 +32,12 @@
   font-size: 25px;
 }
 
-@media (max-width: 760px) {
-  .intro {
-    font-size: 15px;
-  }
-  .write-to {
-    font-size: 25px;
-  }
-  .email-to {
-    font-size: 20px;
+.intro-development-question {
+  text-align: center;
+}
+
+@media (max-width: 576px) {
+  .intro-join-email {
+    font-size: 18px;
   }
 }
