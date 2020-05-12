@@ -3,14 +3,14 @@
   cache:
     key: gems_and_packages
     paths:
-      - etc/apk/cache/
-      - vendor/ruby
+      - cache/bundler
+      - node_modules/
     policy: pull
   before_script:
     - apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
     - npm install yarn -g
     - gem install bundler --no-document
-    - bundle install
+    - bundle install --jobs $(nproc) "${FLAGS[@]}" --path=cache/bundler
     - export RAILS_ENV=test
     - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
     - export RUBYOPT='-W:no-deprecated -W:no-experimental'
@@ -22,8 +22,6 @@ stages:
 test:unit:
   extends: .base
   stage: Tests
-  cache:
-    policy: pull-push
   tags:
     - docker
   script:
@@ -33,8 +31,6 @@ test:unit:
 test:integration:
   extends: .base
   stage: Tests
-  cache:
-    policy: pull-push
   tags:
     - docker
   script:
