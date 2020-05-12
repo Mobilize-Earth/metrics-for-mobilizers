@@ -77,6 +77,7 @@
 .action-form-finish-container {
   margin-left: 5px;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 #blitz-form-body {
@@ -107,5 +108,16 @@
   }
   .action-submit-btn {
     margin-bottom: 5px;
+  }
+}
+
+
+.show-on-mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .show-on-mobile {
+    display: block;
   }
 }

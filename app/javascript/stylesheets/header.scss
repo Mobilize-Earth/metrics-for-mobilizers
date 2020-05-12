@@ -94,16 +94,6 @@
         border: 0;
         z-index: 3;
 
-        .show-on-mobile {
-          display: none;
-        }
-
-        @media (max-width: 767px) {
-          .show-on-mobile {
-            display: block;
-          }
-        }
-
         a {
           @include standard-hover-state();
 

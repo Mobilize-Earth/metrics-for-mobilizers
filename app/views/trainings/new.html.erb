@@ -1,9 +1,16 @@
-<div class="default-background">
-  <%= render "forms/form_footer", title: "Training" %>
-  <%= render 'layouts/messages', flash: flash %>
-  <%= render 'forms/form_header', title: 'Trainings',
-             subtitle: 'Click on tabs below to complete a form <strong>for each instance</strong> of a ‘Training’ your chapter completed this week.'.html_safe %>
-  <%= render "forms/form", training: @training do |f| %>
-    <%= render 'trainings/form_body' %>
-  <% end %>
+<div class="container-fluid">
+  <div class="default-background">
+    <div class="text-left col-md-8 show-on-mobile" style="margin-bottom: 20px">
+      <%= link_to forms_index_path, :action => 'go', :class => "test-cancel-street-swarm" do %>
+        < Back to forms
+      <% end %>
+    </div>
+    <%= render 'layouts/messages', flash: flash %>
+    <%= render 'forms/form_header', title: 'Trainings',
+               subtitle: 'Click on tabs below to complete a form <strong>for each instance</strong> of a ‘Training’ your chapter completed this week.'.html_safe %>
+    <%= render "forms/form", training: @training do |f| %>
+      <%= render 'trainings/form_body' %>
+    <% end %>
+    <%= render "forms/form_footer", title: "Training" %>
+  </div>
 </div>
