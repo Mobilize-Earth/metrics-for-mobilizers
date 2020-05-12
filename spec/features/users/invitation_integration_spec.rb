@@ -161,6 +161,8 @@ feature 'send mail'do
     end
 
     def get_email_html
-        Nokogiri::HTML.parse(Devise::Mailer.deliveries[0].body.encoded).document
-      end
-  end
+        sleep 5 # Prevent flaky failures due to mail not being delivered yet
+        email_body = Devise::Mailer.deliveries[0].body.encoded
+        Nokogiri::HTML.parse(email_body).document
+    end
+end
