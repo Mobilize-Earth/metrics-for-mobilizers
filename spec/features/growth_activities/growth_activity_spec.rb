@@ -133,7 +133,7 @@ feature 'submitting mobilization' do
 
     scenario 'should update active number in chapters when mobilization is reported' do
         random_new_members = rand(20)
-        expected_chapter_members = Chapter.last.active_members + random_new_members
+        expected_chapter_members = Chapter.last.total_mobilizers + random_new_members
         choose('growth_activity_event_type_in_person')
         fill_in 'growth_activity_participants', with: '1'
         fill_in 'growth_activity_mobilizers_involved', with: '8'
@@ -144,7 +144,7 @@ feature 'submitting mobilization' do
         fill_in 'growth_activity_arrestable_pledges', with: '5'
         fill_in 'growth_activity_newsletter_sign_ups', with: '6'
         find('input[name="commit"]').click
-        expect(Chapter.last.active_members).to eq(expected_chapter_members)
+        expect(Chapter.last.total_mobilizers).to eq(expected_chapter_members)
     end
     scenario 'should update total donation subscriptions in chapters when mobilization is reported' do
         random_new_members = rand(20)

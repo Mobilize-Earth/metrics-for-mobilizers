@@ -24,7 +24,7 @@ User.destroy_all
 Chapter.destroy_all
 
 chapter = Chapter.create!(
-  name: "Chapter 1", active_members: 10, total_subscription_amount: 100, total_arrestable_pledges: 25
+  name: "Chapter 1", total_mobilizers: 10, total_subscription_amount: 100, total_arrestable_pledges: 25
 )
 chapter.create_address(country: "United States", state_province: "New York", city: "Flushing", zip_code: "11040")
 #Admin and Consumer without chapters
@@ -44,7 +44,7 @@ def create_chapters(chapter_id, type, days_offset)
 
   chapter = Chapter.create!(
       name: "#{state} #{type} #{chapter_id}",
-      active_members: Faker::Number.number(digits: 3),
+      total_mobilizers: Faker::Number.number(digits: 3),
       total_arrestable_pledges: Faker::Number.number(digits: 3),
       total_subscription_amount: Faker::Number.decimal(l_digits: 3, r_digits: 2),
       created_at: Date.today - days_offset.days
@@ -146,7 +146,7 @@ end
 
 chapter = Chapter.create!(
     name: "Global Chapter Test",
-    active_members: Faker::Number.number(digits: 3),
+    total_mobilizers: Faker::Number.number(digits: 3),
     total_subscription_amount: Faker::Number.decimal(l_digits: 3, r_digits: 2),
     total_arrestable_pledges: Faker::Number.number(digits: 3),
 )

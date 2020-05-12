@@ -66,7 +66,7 @@ class ChaptersController < ApplicationController
 
   def chapter_params
     params.require(:chapter).permit(:name,
-                                    :active_members,
+                                    :total_mobilizers,
                                     :total_arrestable_pledges,
                                     :total_subscription_amount,
                                     address_attributes: [:id, :country, :state_province, :city, :zip_code])

@@ -99,7 +99,7 @@ feature 'report tiles' do
   end
 
   scenario 'should contain corresponding data from the tiles api' do
-    expect(find('#members')).to have_content @user.chapter.active_members
+    expect(find('#members')).to have_content @user.chapter.total_mobilizers
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
@@ -112,7 +112,7 @@ feature 'report tiles' do
 
   scenario 'should filter data by month' do
     find('#filter-month').click
-    expect(find('#members')).to have_content @user.chapter.active_members
+    expect(find('#members')).to have_content @user.chapter.total_mobilizers
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
@@ -126,7 +126,7 @@ feature 'report tiles' do
   scenario 'should filter data by quarter' do
     find('#filter-quarter').click
 
-    expect(find('#members')).to have_content @user.chapter.active_members
+    expect(find('#members')).to have_content @user.chapter.total_mobilizers
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0
@@ -140,7 +140,7 @@ feature 'report tiles' do
   scenario 'should filter data by half year' do
     find('#filter-half-year').click
 
-    expect(find('#members')).to have_content @user.chapter.active_members
+    expect(find('#members')).to have_content @user.chapter.total_mobilizers
     expect(find('#chapters')).to have_content 1
     expect(find('#actions')).to have_content 0
     expect(find('#trainings')).to have_content 0

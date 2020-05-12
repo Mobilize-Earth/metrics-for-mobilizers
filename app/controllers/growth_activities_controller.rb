@@ -42,8 +42,8 @@ class GrowthActivitiesController < ApplicationController
 
     private
     def update_chapter_members(chapter, new_mobilizer_sign_ons)
-      new_active_members = chapter.active_members + new_mobilizer_sign_ons
-      chapter.update_attribute(:active_members, new_active_members)
+      new_total_mobilizers = chapter.total_mobilizers + new_mobilizer_sign_ons
+      chapter.update_attribute(:total_mobilizers, new_total_mobilizers)
     end
 
     def update_chapter_arrestable_pledges(chapter, arrestable_pledges)
