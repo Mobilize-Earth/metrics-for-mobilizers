@@ -1,7 +1,7 @@
 class GrowthActivitiesController < ApplicationController
 
     def new
-        @types = GrowthActivity.mobilization_type_options
+        @types = GrowthActivity.growth_activity_type_options
         @growth_activity = GrowthActivity.new
         @social_media_blitzing = SocialMediaBlitzing.new
         authorize! :new, GrowthActivitiesController
@@ -14,7 +14,7 @@ class GrowthActivitiesController < ApplicationController
         @growth_activity = GrowthActivity.new(
             user_id: current_user.id,
             chapter_id: current_user.chapter.id,
-            mobilization_type: params[:mobilization_type],
+            growth_activity_type: params[:growth_activity_type],
             event_type: params[:growth_activity][:event_type],
             participants: params[:growth_activity][:participants],
             mobilizers_involved: params[:growth_activity][:mobilizers_involved],
@@ -27,7 +27,7 @@ class GrowthActivitiesController < ApplicationController
             report_date: report_date
         )
         if @growth_activity.save
-            flash[:success] = "#{@growth_activity.mobilization_type} activity was successfully reported!"
+            flash[:success] = "#{@growth_activity.growth_activity_type} activity was successfully reported!"
             redirect_to growth_activities_path
             chapter = Chapter.find(current_user.chapter.id)
             update_chapter_members(chapter, @growth_activity.new_members_sign_ons)
@@ -35,8 +35,8 @@ class GrowthActivitiesController < ApplicationController
             update_chapter_subscriptions(chapter, @growth_activity.total_donation_subscriptions)
         else
             flash[:errors] = @growth_activity.errors.full_messages
-            @types = GrowthActivity.mobilization_type_options
-            redirect_to growth_activities_path(params.permit(:mobilization_type))
+            @types = GrowthActivity.growth_activity_type_options
+            redirect_to growth_activities_path(params.permit(:growth_activity_type))
         end
     end
 

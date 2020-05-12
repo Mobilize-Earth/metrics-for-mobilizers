@@ -76,7 +76,7 @@ feature 'submitting mobilization' do
         fill_in 'growth_activity_newsletter_sign_ups', with: '6'
         find('input[name="commit"]').click
         expect(GrowthActivity.last.event_type).to eq('in_person')
-        expect(GrowthActivity.last.mobilization_type).to eq('House Meetings')
+        expect(GrowthActivity.last.growth_activity_type).to eq('House Meetings')
         expect(GrowthActivity.last.participants).to eq(1)
         expect(GrowthActivity.last.mobilizers_involved).to eq(8)
         expect(GrowthActivity.last.new_members_sign_ons).to eq(2)

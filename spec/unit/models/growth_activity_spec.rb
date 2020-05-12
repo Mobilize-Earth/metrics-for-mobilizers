@@ -86,7 +86,7 @@ RSpec.describe GrowthActivity, type: :model do
             @growth_activity.valid?
             expect(@growth_activity.errors[:user]).to include('can\'t be blank')
             expect(@growth_activity.errors[:chapter]).to include('can\'t be blank')
-            expect(@growth_activity.errors[:mobilization_type]).to include('can\'t be blank')
+            expect(@growth_activity.errors[:growth_activity_type]).to include('can\'t be blank')
             expect(@growth_activity.errors[:event_type]).to include('can\'t be blank')
         end
     end

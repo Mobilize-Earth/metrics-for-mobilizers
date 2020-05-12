@@ -92,7 +92,7 @@ def create_chapters(chapter_id, type, days_offset)
         new_members_sign_ons: participants / 2,
         donation_subscriptions: Faker::Number.number(digits: 2),
         arrestable_pledges: Faker::Number.number(digits: 2),
-        mobilization_type: GrowthActivity.mobilization_type_options.sample,
+        growth_activity_type: GrowthActivity.growth_activity_type_options.sample,
         event_type: ['Virtual', 'In Person'].sample,
         total_one_time_donations: Faker::Number.decimal(l_digits: 2, r_digits: 2),
         total_donation_subscriptions: Faker::Number.decimal(l_digits: 2, r_digits: 2),

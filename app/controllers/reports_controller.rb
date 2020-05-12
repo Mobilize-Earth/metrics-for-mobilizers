@@ -500,7 +500,7 @@ class ReportsController < ApplicationController
   end
 
   def get_chart_data(period, country_id, region_id, state, chapter_id)
-    result = GrowthActivity.mobilization_type_options.map { |type| {
+    result = GrowthActivity.growth_activity_type_options.map { |type| {
       label: type,
       new: get_array_of_empty_values(period),
       participants: get_array_of_empty_values(period),
@@ -548,7 +548,7 @@ class ReportsController < ApplicationController
                 .where(chapter_filter, chapter_id)
                 .where(state_filter).each do |mobilization|
       output.each do |chart_line|
-        if chart_line[:label] == mobilization.mobilization_type
+        if chart_line[:label] == mobilization.growth_activity_type
           chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons
           chart_line[:participants][index] = chart_line[:participants][index] + mobilization.participants
           chart_line[:arrestable_pledges][index] = chart_line[:arrestable_pledges][index] + mobilization.arrestable_pledges

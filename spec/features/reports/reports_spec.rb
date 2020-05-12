@@ -163,7 +163,7 @@ feature 'mobilization chart' do
   scenario 'should render metrics' do
     page.assert_selector('.metric', count: 9)
 
-    expected = GrowthActivity.mobilization_type_options.push('People Engaged')
+    expected = GrowthActivity.growth_activity_type_options.push('People Engaged')
     expect(page.all('.metric').map{ |metric| metric.find('.subtitle').native.text }.sort).to eq(expected.sort)
 
     page.all('.metric').each do |metric|
@@ -210,7 +210,7 @@ def create_mobilizations
   GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
-      mobilization_type: 'House Meetings',
+      growth_activity_type: 'House Meetings',
       event_type: 'Virtual',
       participants: 7,
       new_members_sign_ons: 3,
@@ -224,7 +224,7 @@ def create_mobilizations
   GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
-      mobilization_type: 'House Meetings',
+      growth_activity_type: 'House Meetings',
       event_type: 'Virtual',
       participants: 1,
       new_members_sign_ons: 7,
@@ -239,7 +239,7 @@ def create_mobilizations
   GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
-      mobilization_type: 'House Meetings',
+      growth_activity_type: 'House Meetings',
       event_type: 'Virtual',
       participants: 2,
       new_members_sign_ons: 4,
@@ -254,7 +254,7 @@ def create_mobilizations
   GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
-      mobilization_type: 'House Meetings',
+      growth_activity_type: 'House Meetings',
       event_type: 'Virtual',
       participants: 1,
       new_members_sign_ons: 3,

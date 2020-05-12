@@ -634,13 +634,13 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns global weekly data by default" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 6})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 6})
 
       get :mobilizations, params: {}
       json_response = JSON.parse(response.body)
       expect(json_response["labels"][0]).to eq("Week ending #{DateTime.now.strftime("%d %B")}")
-      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.mobilization_type_options.sort)
+      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.growth_activity_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0], [0], [0], [0], [3], [0], [0], [0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0], [0], [0], [0], [7], [0], [0], [0]])
       expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0], [0], [0], [0], ["0.01"], [0], [0], [0]])
@@ -648,8 +648,8 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns monthly data" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 1})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 1})
 
       get :mobilizations, params: {dateRange: 'month'}
       json_response = JSON.parse(response.body)
@@ -657,7 +657,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["labels"][2]).to eq("Week ending #{(DateTime.now - 7.days).strftime("%d %B")}")
       expect(json_response["labels"][1]).to eq("Week ending #{(DateTime.now - 14.days).strftime("%d %B")}")
       expect(json_response["labels"][0]).to eq("Week ending #{(DateTime.now - 21.days).strftime("%d %B")}")
-      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.mobilization_type_options.sort)
+      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.growth_activity_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 5, 0, 3], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 8, 0, 7], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, "99.0", 0, "0.01"], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
@@ -665,16 +665,16 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns quarterly data" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), growth_activity_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
 
       get :mobilizations, params: {dateRange: 'quarter'}
       json_response = JSON.parse(response.body)
       expect(json_response["labels"][2]).to eq("Month of #{DateTime.now.strftime("%B %Y")}")
       expect(json_response["labels"][1]).to eq("Month of #{(DateTime.now - 1.months).strftime("%B %Y")}")
       expect(json_response["labels"][0]).to eq("Month of #{(DateTime.now - 2.months).strftime("%B %Y")}")
-      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.mobilization_type_options.sort)
+      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.growth_activity_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [4, 0, 3], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [8, 0, 7], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], ["99.0", 0, "0.01"], [0, 0, 0], [0, 0, 0], [0, 0, 0]])
@@ -682,9 +682,9 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns bi-annual data" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, mobilization_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), mobilization_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), mobilization_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), growth_activity_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
 
       get :mobilizations, params: {dateRange: 'half-year'}
       json_response = JSON.parse(response.body)
@@ -694,7 +694,7 @@ RSpec.describe ReportsController, type: :controller do
       expect(json_response["labels"][2]).to eq("Month of #{(DateTime.now - 3.months).strftime("%B %Y")}")
       expect(json_response["labels"][1]).to eq("Month of #{(DateTime.now - 4.months).strftime("%B %Y")}")
       expect(json_response["labels"][0]).to eq("Month of #{(DateTime.now - 5.months).strftime("%B %Y")}")
-      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.mobilization_type_options.sort)
+      expect(json_response["data"].map { |actual| actual["label"] }.sort).to eq(GrowthActivity.growth_activity_type_options.sort)
       expect(json_response["data"].map { |actual| actual["new"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 5, 0, 4, 0, 3], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["participants"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 9, 0, 8, 0, 7], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
       expect(json_response["data"].map { |actual| actual["total_donation_subscriptions"] }).to eq([[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, "103.99", 0, "99.0", 0, "0.01"], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]])
@@ -706,7 +706,7 @@ RSpec.describe ReportsController, type: :controller do
       FactoryBot.create(:chapter, name: 'My chapter in US') do |chapter|
         FactoryBot.create(:us_address, chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 101,
                           total_donation_subscriptions: 101.00,
                           total_one_time_donations: 101.00,
@@ -716,7 +716,7 @@ RSpec.describe ReportsController, type: :controller do
       FactoryBot.create(:chapter, name: 'My chapter in MX') do |chapter|
         FactoryBot.create(:address, country: 'Mexico', chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 102,
                           total_donation_subscriptions: 102.00,
                           total_one_time_donations: 102.00,
@@ -738,7 +738,7 @@ RSpec.describe ReportsController, type: :controller do
       FactoryBot.create(:chapter, name: 'My chapter in US region 3') do |chapter|
         FactoryBot.create(:us_address, state_province: 'Mississippi', chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 105,
                           total_donation_subscriptions: 105.00,
                           total_one_time_donations: 105.00,
@@ -748,7 +748,7 @@ RSpec.describe ReportsController, type: :controller do
       FactoryBot.create(:chapter, name: 'My chapter in US region 2') do |chapter|
         FactoryBot.create(:us_address, state_province: 'Pennsylvania', chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 101,
                           total_donation_subscriptions: 101.00,
                           total_one_time_donations: 101.00,
@@ -770,7 +770,7 @@ RSpec.describe ReportsController, type: :controller do
       FactoryBot.create(:chapter, name: 'My chapter in Sonora, MX') do |chapter|
         FactoryBot.create(:address, country: 'Mexico', state_province: 'Sonora', chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 77,
                           total_donation_subscriptions: 77.77,
                           total_one_time_donations: 77.77,
@@ -780,7 +780,7 @@ RSpec.describe ReportsController, type: :controller do
       FactoryBot.create(:chapter, name: 'My chapter in Nuevo leon, MX') do |chapter|
         FactoryBot.create(:address, country: 'Mexico', state_province: 'Nuevo León', chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 87,
                           total_donation_subscriptions: 87.77,
                           total_one_time_donations: 87.77,
@@ -804,7 +804,7 @@ RSpec.describe ReportsController, type: :controller do
         mozart_chapter_id = chapter[:id]
         FactoryBot.create(:address, country: 'Mexico', state_province: 'Sonora', chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 77,
                           total_donation_subscriptions: 77.77,
                           total_one_time_donations: 77.77,
@@ -814,7 +814,7 @@ RSpec.describe ReportsController, type: :controller do
       FactoryBot.create(:chapter, name: 'Chapter Liszt') do |chapter|
         FactoryBot.create(:address, country: 'Mexico', state_province: 'Sonora', chapter: chapter)
         FactoryBot.create(:growth_activity, chapter: chapter,
-                          mobilization_type: '1:1 Recruiting / Other',
+                          growth_activity_type: '1:1 Recruiting / Other',
                           participants: 87,
                           total_donation_subscriptions:87.77,
                           total_one_time_donations: 87.77,

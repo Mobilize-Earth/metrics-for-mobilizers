@@ -9,11 +9,11 @@ FactoryBot.define do
     newsletter_sign_ups { Faker::Number.number(digits: 2) }
     user { FactoryBot.create(:user) }
     chapter { FactoryBot.create(:chapter, {name: Faker::String.random(length: 15)}) }
-    mobilization_type { GrowthActivity.mobilization_type_options.sample }
+    growth_activity_type { GrowthActivity.growth_activity_type_options.sample }
     event_type { ['Virtual', 'In Person'].sample }
     factory :virtual_mobilization do
       event_type { 'Virtual' }
-      mobilization_type {'Rebel Ringing'}
+      growth_activity_type {'Rebel Ringing'}
     end
   end
 end
