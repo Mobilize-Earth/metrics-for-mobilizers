@@ -10,7 +10,7 @@
     - apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
     - npm install yarn -g
     - gem install bundler --no-document
-    - bundle install --jobs $(nproc) "${FLAGS[@]}" --path=bundler
+    - bundle install --path=bundler
     - export RAILS_ENV=test
     - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
     - export RUBYOPT='-W:no-deprecated -W:no-experimental'
