@@ -22,8 +22,6 @@ stages:
 test:unit:
   extends: .base
   stage: Tests
-  cache:
-    policy: pull-push
   tags:
     - docker
   script:
