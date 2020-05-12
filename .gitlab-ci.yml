@@ -7,7 +7,7 @@
       - vendor/ruby
     policy: pull
   before_script:
-    - setup-apkcache && apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
+    - apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
     - npm install yarn -g
     - gem install bundler --no-document
     - bundle install
@@ -22,6 +22,8 @@ stages:
 test:unit:
   extends: .base
   stage: Tests
+  cache:
+    policy: pull-push
   tags:
     - docker
   script:
