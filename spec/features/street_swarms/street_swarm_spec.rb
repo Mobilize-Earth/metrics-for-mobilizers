@@ -11,26 +11,26 @@ feature 'submitting street swarm' do
   end
 
   scenario 'with 10 participants should save to database' do
-    fill_in 'street_swarm_xr_members_attended', with: '11'
+    fill_in 'street_swarm_mobilizers_attended', with: '11'
     find('input[name="commit"]').click
-    expect(StreetSwarm.last.xr_members_attended).to eq(11)
+    expect(StreetSwarm.last.mobilizers_attended).to eq(11)
   end
 
   scenario 'with 1 participants should show a success message' do
-    fill_in 'street_swarm_xr_members_attended', with: '1'
+    fill_in 'street_swarm_mobilizers_attended', with: '1'
     find('input[name="commit"]').click
     expect(page).to have_css '.alert-success'
   end
 
   scenario 'with -1 participants should not save to database' do
     number_of_records = StreetSwarm.count
-    fill_in 'street_swarm_xr_members_attended', with: '-1'
+    fill_in 'street_swarm_mobilizers_attended', with: '-1'
     find('input[name="commit"]').click
     expect(StreetSwarm.count).to eq(number_of_records)
   end
 
   scenario 'with -1 participants should show a fail message' do
-    fill_in 'street_swarm_xr_members_attended', with: '-1'
+    fill_in 'street_swarm_mobilizers_attended', with: '-1'
     find('input[name="commit"]').click
     expect(page).to have_css '.alert-danger'
   end

@@ -3,14 +3,14 @@
     <%= hidden_field_tag :report_date, "", id: "arrestable-report-date"%>
     <div class="form-group">
         <div>
-            <%= f.label :xra_members, "Number of members *", class: "action-form-label" %>
-            <%= f.text_field :xra_members, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
+            <%= f.label :mobilizers, "Number of mobilizers *", class: "action-form-label" %>
+            <%= f.text_field :mobilizers, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
         </div>
     </div>
     <div class="form-group">
         <div>
-            <%= f.label :xra_not_members, "Number of non-members (Friends) *", class: "action-form-label" %>
-            <%= f.text_field :xra_not_members, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
+            <%= f.label :not_mobilizers, "Number of non-mobilizers (Friends) *", class: "action-form-label" %>
+            <%= f.text_field :not_mobilizers, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
         </div>
     </div>
     <div class="form-group">

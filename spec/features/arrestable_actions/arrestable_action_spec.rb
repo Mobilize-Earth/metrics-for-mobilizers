@@ -11,15 +11,15 @@ feature 'submitting arrestable action' do
     end
 
     scenario 'should save in database with right values' do
-        fill_in 'arrestable_action_xra_members', with: '1'
-        fill_in 'arrestable_action_xra_not_members', with: '2'
+        fill_in 'arrestable_action_mobilizers', with: '1'
+        fill_in 'arrestable_action_not_mobilizers', with: '2'
         fill_in 'arrestable_action_trained_arrestable_present', with: '3'
         fill_in 'arrestable_action_arrested', with: '4'
         fill_in 'arrestable_action_days_event_lasted', with: '5'
         fill_in 'arrestable_action_report_comment', with: 'Comment'
         find('input[name="commit"]').click
-        expect(ArrestableAction.last.xra_members).to eq(1)
-        expect(ArrestableAction.last.xra_not_members).to eq(2)
+        expect(ArrestableAction.last.mobilizers).to eq(1)
+        expect(ArrestableAction.last.not_mobilizers).to eq(2)
         expect(ArrestableAction.last.trained_arrestable_present).to eq(3)
         expect(ArrestableAction.last.arrested).to eq(4)
         expect(ArrestableAction.last.days_event_lasted).to eq(5)
@@ -28,14 +28,14 @@ feature 'submitting arrestable action' do
     end
 
     scenario 'should save in database without comment' do
-        fill_in 'arrestable_action_xra_members', with: '1'
-        fill_in 'arrestable_action_xra_not_members', with: '2'
+        fill_in 'arrestable_action_mobilizers', with: '1'
+        fill_in 'arrestable_action_not_mobilizers', with: '2'
         fill_in 'arrestable_action_trained_arrestable_present', with: '3'
         fill_in 'arrestable_action_arrested', with: '4'
         fill_in 'arrestable_action_days_event_lasted', with: '5'
         find('input[name="commit"]').click
-        expect(ArrestableAction.last.xra_members).to eq(1)
-        expect(ArrestableAction.last.xra_not_members).to eq(2)
+        expect(ArrestableAction.last.mobilizers).to eq(1)
+        expect(ArrestableAction.last.not_mobilizers).to eq(2)
         expect(ArrestableAction.last.trained_arrestable_present).to eq(3)
         expect(ArrestableAction.last.arrested).to eq(4)
         expect(ArrestableAction.last.days_event_lasted).to eq(5)
@@ -43,8 +43,8 @@ feature 'submitting arrestable action' do
     end
 
     scenario 'should show a success message' do
-        fill_in 'arrestable_action_xra_members', with: '1'
-        fill_in 'arrestable_action_xra_not_members', with: '2'
+        fill_in 'arrestable_action_mobilizers', with: '1'
+        fill_in 'arrestable_action_not_mobilizers', with: '2'
         fill_in 'arrestable_action_trained_arrestable_present', with: '3'
         fill_in 'arrestable_action_arrested', with: '4'
         fill_in 'arrestable_action_days_event_lasted', with: '5'
@@ -53,8 +53,8 @@ feature 'submitting arrestable action' do
     end
 
     scenario 'should show a error message if record has wrong fields' do
-        fill_in 'arrestable_action_xra_members', with: '1,1'
-        fill_in 'arrestable_action_xra_not_members', with: '2.2'
+        fill_in 'arrestable_action_mobilizers', with: '1,1'
+        fill_in 'arrestable_action_not_mobilizers', with: '2.2'
         fill_in 'arrestable_action_trained_arrestable_present', with: 's'
         fill_in 'arrestable_action_arrested', with: '4.4'
         fill_in 'arrestable_action_days_event_lasted', with: '5-5'
@@ -64,8 +64,8 @@ feature 'submitting arrestable action' do
 
     scenario 'should not save in database if record has wrong fields' do
         expected_records =  ArrestableAction.count
-        fill_in 'arrestable_action_xra_members', with: '1,1'
-        fill_in 'arrestable_action_xra_not_members', with: '2'
+        fill_in 'arrestable_action_mobilizers', with: '1,1'
+        fill_in 'arrestable_action_not_mobilizers', with: '2'
         fill_in 'arrestable_action_trained_arrestable_present', with: '3'
         fill_in 'arrestable_action_arrested', with: '4'
         fill_in 'arrestable_action_days_event_lasted', with: '5'

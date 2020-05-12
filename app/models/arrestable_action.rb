@@ -15,8 +15,8 @@ class ArrestableAction < ApplicationRecord
         :chapter,
         :type_arrestable_action,
         presence: true
-    validates :xra_members,
-        :xra_not_members,
+    validates :mobilizers,
+        :not_mobilizers,
         :trained_arrestable_present,
         :arrested,
         :days_event_lasted,
@@ -28,13 +28,13 @@ class ArrestableAction < ApplicationRecord
     validates_length_of :report_comment, maximum: 2500
 
     def self.to_csv
-        attributes = %w{chapter_name coordinator_email type_arrestable_action xra_members xra_not_members trained_arrestable_present arrested days_event_lasted report_comment report_date created_at}
+        attributes = %w{chapter_name coordinator_email type_arrestable_action mobilizers not_mobilizers trained_arrestable_present arrested days_event_lasted report_comment report_date created_at}
 
         CSV.generate(headers: true) do |csv|
             csv << attributes
 
             all.includes(:chapter, :user).find_each do |m|
-                csv << [m.chapter.name, m.user.email, m.type_arrestable_action, m.xra_members, m.xra_not_members, m.trained_arrestable_present, m.arrested, m.days_event_lasted, m.report_comment, m.report_date, m.created_at]
+                csv << [m.chapter.name, m.user.email, m.type_arrestable_action, m.mobilizers, m.not_mobilizers, m.trained_arrestable_present, m.arrested, m.days_event_lasted, m.report_comment, m.report_date, m.created_at]
             end
         end
     end

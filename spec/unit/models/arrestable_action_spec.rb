@@ -7,56 +7,56 @@ RSpec.describe ArrestableAction, type: :model do
 		end
 		
 		it 'should not take strings in numeric fields' do
-			@arrestable_action.xra_members = 'string'
-			@arrestable_action.xra_not_members = 'string'
+			@arrestable_action.mobilizers = 'string'
+			@arrestable_action.not_mobilizers = 'string'
 			@arrestable_action.trained_arrestable_present = 'string'
 			@arrestable_action.arrested = 'string'
 			@arrestable_action.days_event_lasted = 'string'
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members][0]).to include('must be a number')
-			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:mobilizers][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:not_mobilizers][0]).to include('must be a number')
 			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be a number')
 			expect(@arrestable_action.errors[:arrested][0]).to include('must be a number')
 			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be a number')
 		end
 
 		it 'should not take negative numbers in numeric fields' do
-			@arrestable_action.xra_members = -1
-			@arrestable_action.xra_not_members = -1
+			@arrestable_action.mobilizers = -1
+			@arrestable_action.not_mobilizers = -1
 			@arrestable_action.trained_arrestable_present = -1
 			@arrestable_action.arrested = -1
 			@arrestable_action.days_event_lasted = -1
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members][0]).to include('must be greater than or equal to zero')
-			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be greater than or equal to zero')
+			expect(@arrestable_action.errors[:mobilizers][0]).to include('must be greater than or equal to zero')
+			expect(@arrestable_action.errors[:not_mobilizers][0]).to include('must be greater than or equal to zero')
 			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be greater than or equal to zero')
 			expect(@arrestable_action.errors[:arrested][0]).to include('must be greater than or equal to zero')
 			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be greater than or equal to zero')
 		end
 
 		it 'should not take float in numeric fields' do
-			@arrestable_action.xra_members = 0.1
-			@arrestable_action.xra_not_members = 0.1
+			@arrestable_action.mobilizers = 0.1
+			@arrestable_action.not_mobilizers = 0.1
 			@arrestable_action.trained_arrestable_present = 0.1
 			@arrestable_action.arrested = 0.1
 			@arrestable_action.days_event_lasted = 0.1
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members][0]).to include("must be a number")
-			expect(@arrestable_action.errors[:xra_not_members][0]).to include('must be a number')
+			expect(@arrestable_action.errors[:mobilizers][0]).to include("must be a number")
+			expect(@arrestable_action.errors[:not_mobilizers][0]).to include('must be a number')
 			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('must be a number')
 			expect(@arrestable_action.errors[:arrested][0]).to include('must be a number')
 			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('must be a number')
 		end
 
 		it 'should not take numeric fields greater than 1 billion' do
-			@arrestable_action.xra_members = 1000000000+1
-			@arrestable_action.xra_not_members = 1000000000+1
+			@arrestable_action.mobilizers = 1000000000+1
+			@arrestable_action.not_mobilizers = 1000000000+1
 			@arrestable_action.trained_arrestable_present = 1000000000+1
 			@arrestable_action.arrested = 1000000000+1
 			@arrestable_action.days_event_lasted = 1000000000+1
 			@arrestable_action.valid?
-			expect(@arrestable_action.errors[:xra_members][0]).to include('is too long')
-			expect(@arrestable_action.errors[:xra_not_members][0]).to include('is too long')
+			expect(@arrestable_action.errors[:mobilizers][0]).to include('is too long')
+			expect(@arrestable_action.errors[:not_mobilizers][0]).to include('is too long')
 			expect(@arrestable_action.errors[:trained_arrestable_present][0]).to include('is too long')
 			expect(@arrestable_action.errors[:arrested][0]).to include('is too long')
 			expect(@arrestable_action.errors[:days_event_lasted][0]).to include('is too long')

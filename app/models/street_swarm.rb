@@ -11,19 +11,19 @@ class StreetSwarm < ApplicationRecord
   end
 
   validates :user, :chapter, presence: true
-  validates :xr_members_attended,
+  validates :mobilizers_attended,
             numericality: { only_integer: true,
                             greater_than_or_equal_to: 1,
                             less_than_or_equal_to: 1_000_000_000 }
 
   def self.to_csv
-    attributes = %w{chapter_name coordinator_email xr_members_attended report_date created_at}
+    attributes = %w{chapter_name coordinator_email mobilizers_attended report_date created_at}
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
 
       all.includes(:chapter, :user).find_each do |m|
-        csv << [m.chapter.name, m.user.email, m.xr_members_attended, m.report_date, m.created_at]
+        csv << [m.chapter.name, m.user.email, m.mobilizers_attended, m.report_date, m.created_at]
       end
     end
   end

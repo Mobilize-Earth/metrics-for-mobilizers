@@ -13,7 +13,7 @@ class StreetSwarmsController < ApplicationController
     @street_swarm = StreetSwarm.new(
       user_id: current_user.id,
       chapter_id: current_user.chapter.id,
-      xr_members_attended: params[:street_swarm][:xr_members_attended],
+      mobilizers_attended: params[:street_swarm][:mobilizers_attended],
       report_date: report_date
     )
     if @street_swarm.save

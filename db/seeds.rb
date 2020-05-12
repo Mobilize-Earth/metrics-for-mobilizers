@@ -76,8 +76,8 @@ def create_chapters(chapter_id, type, days_offset)
   NUMBER_OF_FORMS_SUBMISSIONS.times do |i|
     ArrestableAction.create!(
         type_arrestable_action: 'Local (50+)',
-        xra_members: Faker::Number.number(digits: 2),
-        xra_not_members: Faker::Number.number(digits: 2),
+        mobilizers: Faker::Number.number(digits: 2),
+        not_mobilizers: Faker::Number.number(digits: 2),
         trained_arrestable_present: Faker::Number.number(digits: 2),
         arrested: Faker::Number.number(digits: 2),
         chapter: chapter,
@@ -111,7 +111,7 @@ def create_chapters(chapter_id, type, days_offset)
     )
 
     StreetSwarm.create!(
-        xr_members_attended: Faker::Number.number(digits: 2),
+        mobilizers_attended: Faker::Number.number(digits: 2),
         chapter: chapter,
         user: user,
         created_at: Date.today - days_offset.days
