@@ -1,0 +1,10 @@
+<div>
+  <% if local_assigns.has_key? :pre_title %>
+    <p class="pre-title"><%= pre_title %></p>
+  <% end %>
+  <h1 class="title"><%= title %></h1>
+  <h5 class="description"><%= subtitle %></h5>
+  <% if local_assigns.has_key? :disclaimer %>
+    <p class="disclaimer"><%= disclaimer %></p>
+  <% end %>
+</div>

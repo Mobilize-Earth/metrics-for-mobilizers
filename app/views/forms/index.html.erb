@@ -1,28 +1,14 @@
 <div class="container-fluid default-background reporting">
   <%= render 'layouts/messages', flash: flash %>
-
-  <div class="form-index-header">
-    <div class="form-title reporting-header">
-      <div>
-        <h1 class="form-chapter-name-heading">
-          <%= @chapter.name %>
-        </h1>
-      </div>
-      <div class="">
-        <div class="">
-          <%= render 'layouts/date' %>
-        </div>
-      </div>
-
-      <div class="">
-        <div class="form-index-subhead">
-          Click cards below complete each category and build your weekly report.
-        </div>
+  <div class="reporting-tiles-container">
+    <div class="reporting-header">
+      <div class="row">
+        <%= render 'layouts/page_header',
+                   title: @chapter.name,
+                   subtitle: render(partial: 'layouts/date'),
+                   disclaimer: 'Click cards below complete each category and build your weekly report.'%>
       </div>
     </div>
-  </div>
-
-  <div class="reporting-tiles-container">
     <div class="row">
       <%= link_to growth_activities_path, :action => 'go', :class => "col-9 col-sm-4 col-md-3 form-tile" do %>
         <div>
