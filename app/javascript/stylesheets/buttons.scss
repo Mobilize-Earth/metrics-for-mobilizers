@@ -16,6 +16,13 @@
   }
 }
 
+@media(max-width: 767px) {
+  .submit-button {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+}
+
 .cancel-button {
   border: 1px solid $dark-red;
   background-color: rgba(0,0,0,0);

@@ -143,7 +143,7 @@ en:
               less_than_or_equal_to: "is too big"
               not_a_number: "must be a number"
             total_donation_subscriptions:
-              format: "Total one time donations %{message}"
+              format: "Total monthly donor subscriptions %{message}"
               greater_than_or_equal_to: "must be greater than or equal to 0"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"

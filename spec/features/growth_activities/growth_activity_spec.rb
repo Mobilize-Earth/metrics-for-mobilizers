@@ -13,7 +13,7 @@ feature 'navigation' do
     end
 
     scenario 'should navigate to forms index when user clicks back to forms action' do
-        click_on 'Back to forms'
+        click_on 'Back to Report Entry Menu'
         expect(page).to have_current_path forms_index_path, ignore_query: true
     end
 
