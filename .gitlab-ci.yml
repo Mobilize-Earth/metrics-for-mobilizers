@@ -1,31 +1,30 @@
 image: "ruby:2.7.0-alpine"
 
-stages:
-  - Unit Tests
-  - Integration Tests
-  - Build and Push Image
-
-Unit Tests:
-  stage: Unit Tests
+.base:
   before_script:
-    - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm
+    - apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
     - npm install yarn -g
     - gem install bundler --no-document
     - bundle install
     - export RAILS_ENV=test
+
+stages:
+  - Tests
+  - Build and Push Image
+
+test:unit:
+  stage: Tests
+  extends: .base
   tags:
     - docker
   script:
     - rake db:migrate
     - bundle exec rspec spec/unit
 
-Intergration Tests:
-  stage: Integration Tests
+test:integration:
+  stage: Tests
+  extends: .base
   before_script:
-    - apk update && apk add --no-cache build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver
-    - npm install yarn -g
-    - gem install bundler --no-document
-    - bundle install
     - export CHROMEDRIVER_PATH=/usr/bin/chromedriver
     - export RUBYOPT='-W:no-deprecated -W:no-experimental'
     - export RAILS_ENV=test
