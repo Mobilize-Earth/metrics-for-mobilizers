@@ -35,8 +35,8 @@ Rails.application.routes.draw do
   post '/forms/street', to: 'street_swarms#create'
   get '/forms/actions', to: 'arrestable_actions#new', as: 'arrestable_actions'
   post '/forms/actions', to: 'arrestable_actions#create'
-  get '/forms/mobilization', to: 'mobilizations#new', as: 'mobilizations'
-  post '/forms/mobilization', to: 'mobilizations#create'
+  get '/forms/growth_activity', to: 'growth_activities#new', as: 'growth_activities'
+  post '/forms/growth_activity', to: 'growth_activities#create'
   get '/forms/blitzing', to: 'social_media_blitzings#new', as: 'social_media_blitzings'
   post '/forms/blitzing', to: 'social_media_blitzings#create'
 

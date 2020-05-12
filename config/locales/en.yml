@@ -104,7 +104,7 @@ en:
               not_an_integer: "Attendees must be a number"
               less_than_or_equal_to: "Attendees is too long"
               not_a_number: "Attendees must be a number"
-        mobilization:
+        growth_activity:
           attributes:
             donation_subscriptions:
               format: "Donor subscriptions %{message}"

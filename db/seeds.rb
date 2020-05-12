@@ -15,7 +15,7 @@ NUMBER_OF_PAST_US_CHAPTERS = 5
 NUMBER_OF_PAST_GLOBAL_CHAPTERS = 5
 
 ArrestableAction.destroy_all
-Mobilization.destroy_all
+GrowthActivity.destroy_all
 Training.destroy_all
 StreetSwarm.destroy_all
 SocialMediaBlitzing.destroy_all
@@ -87,12 +87,12 @@ def create_chapters(chapter_id, type, days_offset)
     )
 
     participants = Faker::Number.number(digits: 2)
-    Mobilization.create!(
+    GrowthActivity.create!(
         participants: participants,
         new_members_sign_ons: participants / 2,
         donation_subscriptions: Faker::Number.number(digits: 2),
         arrestable_pledges: Faker::Number.number(digits: 2),
-        mobilization_type: Mobilization.mobilization_type_options.sample,
+        mobilization_type: GrowthActivity.mobilization_type_options.sample,
         event_type: ['Virtual', 'In Person'].sample,
         total_one_time_donations: Faker::Number.decimal(l_digits: 2, r_digits: 2),
         total_donation_subscriptions: Faker::Number.decimal(l_digits: 2, r_digits: 2),

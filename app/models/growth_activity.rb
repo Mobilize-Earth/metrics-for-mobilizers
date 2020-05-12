@@ -1,6 +1,6 @@
 require 'csv'
 
-class Mobilization < ApplicationRecord
+class GrowthActivity < ApplicationRecord
     belongs_to :user
     belongs_to :chapter
 
@@ -34,7 +34,7 @@ class Mobilization < ApplicationRecord
             :greater_than_or_equal_to => 0,
             less_than_or_equal_to: 1_000_000_000
         }
-    validates :mobilization_type, presence: true, :inclusion => { message: "must be a valid mobilization type", in: Mobilization.mobilization_type_options }
+    validates :mobilization_type, presence: true, :inclusion => { message: "must be a valid mobilization type", in: GrowthActivity.mobilization_type_options }
     validates :total_one_time_donations,
               :total_donation_subscriptions,
               numericality: {

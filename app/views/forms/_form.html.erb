@@ -5,7 +5,7 @@
         <a class="nav-link action-btn-active" id="v-pills-home-tab" data-toggle="pill"
           href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false"><%= type %></a>
       <% end %>
-      <% if current_page?(mobilizations_path)%>
+      <% if current_page?(growth_activities_path)%>
         <a class="nav-link action-btn-active" id="v-pills-home-tab" data-toggle="pill"
            href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Social Media Blitzing</a>
       <% end %>
@@ -15,7 +15,7 @@
         <div class="report-form-body" id="hide-when-type-selected">
           <div class="default-tab-text">Form will appear here</div>
         </div>
-        <% if current_page?(arrestable_actions_path) || current_page?(mobilizations_path)%>
+        <% if current_page?(arrestable_actions_path) || current_page?(growth_activities_path)%>
           <h2 id="form-title"></h2>
           <%= yield %>
         <% else %>
@@ -97,7 +97,7 @@
               swarmForm.style.display = "none";
               arrestableForm.style.display = "block";
           }
-      } else if (url.includes('forms/mobilization')) {
+      } else if (url.includes('forms/growth_activity')) {
           if(navLink === "Social Media Blitzing") {
               blitzForm.style.display = "block";
               mobilizationForm.style.display = "none";

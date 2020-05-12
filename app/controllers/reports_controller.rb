@@ -70,10 +70,10 @@ class ReportsController < ApplicationController
                                      pluck(:id, :active_members, :total_subscription_amount, :total_arrestable_pledges)
     end
 
-    mobilizations_this_period = Mobilization.where(chapter_id: chapter_data.map(&:first)).
+    mobilizations_this_period = GrowthActivity.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
         pluck(:newsletter_sign_ups, :arrestable_pledges, :new_members_sign_ons, :total_donation_subscriptions, :chapter_id)
-    mobilizations_previous_period = Mobilization.where(chapter_id: chapter_data.map(&:first)).
+    mobilizations_previous_period = GrowthActivity.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - calculate_days_ago_for_previous_period(date_range_days).days).beginning_of_day, (DateTime.now - date_range_days.days).beginning_of_day).
         pluck(:newsletter_sign_ups, :arrestable_pledges)
 
@@ -192,7 +192,7 @@ class ReportsController < ApplicationController
   def all_countries(date_range_days)
     addresses_with_chapters = Chapter.with_addresses.group_by { |c| c.address.country }
 
-    mobilizations_this_period = Mobilization.with_addresses.
+    mobilizations_this_period = GrowthActivity.with_addresses.
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
         group_by { |c| c.chapter.address.country }
 
@@ -237,11 +237,11 @@ class ReportsController < ApplicationController
           where(addresses: {country: 'United States', state_province: v[:states]}).pluck(:id)
 
       region_chapters = Chapter.with_addresses.
-          includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+          includes(:growth_activities, :arrestable_actions, :street_swarms, :trainings).
           where(id: chapter_ids).
           group_by { |c| c.address.country }
 
-      mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+      mobilizations_this_period = GrowthActivity.with_addresses.where(chapter_id: chapter_ids).
           where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
           group_by { |c| c.chapter.address.country }
 
@@ -271,7 +271,7 @@ class ReportsController < ApplicationController
         result[:trainings] = filtered_trainings.length
         result[:arrestable_pledges] = chapters.sum(&:total_arrestable_pledges)
         result[:actions] = filtered_street_swarms.length + filtered_arrestable_actions.length
-        result[:mobilizations] = filtered_mobilizations.length
+        result[:growth_activities] = filtered_mobilizations.length
         result[:subscriptions] =  chapters.sum(&:total_subscription_amount).to_int
       end
       result
@@ -284,11 +284,11 @@ class ReportsController < ApplicationController
         where(addresses: {country: 'United States', state_province: states}).pluck(:id)
 
     states_with_chapters = Chapter.with_addresses.
-        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        includes(:growth_activities, :arrestable_actions, :street_swarms, :trainings).
         where(id: chapter_ids).
         group_by { |c| c.address.state_province }
 
-    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+    mobilizations_this_period = GrowthActivity.with_addresses.where(chapter_id: chapter_ids).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
         group_by { |c| c.chapter.address.state_province }
 
@@ -326,11 +326,11 @@ class ReportsController < ApplicationController
     country = CS.countries[country.to_sym]
     chapter_ids = Chapter.with_addresses.where(addresses: {country: country}).pluck(:id)
     states_with_chapters = Chapter.with_addresses.
-        includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+        includes(:growth_activities, :arrestable_actions, :street_swarms, :trainings).
         where(id: chapter_ids).
         group_by { |c| c.address.state_province }
 
-    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+    mobilizations_this_period = GrowthActivity.with_addresses.where(chapter_id: chapter_ids).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
         group_by { |c| c.chapter.address.state_province }
 
@@ -369,11 +369,11 @@ class ReportsController < ApplicationController
     country = CS.countries[country.to_sym]
     chapter_ids = Chapter.with_addresses.where(addresses: {country: country, state_province: state}).pluck(:id)
     states_chapters = Chapter.with_addresses.
-                      includes(:mobilizations, :arrestable_actions, :street_swarms, :trainings).
+                      includes(:growth_activities, :arrestable_actions, :street_swarms, :trainings).
                       where(id: chapter_ids).
                       group_by { |c| c.id }
 
-    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter_ids).
+    mobilizations_this_period = GrowthActivity.with_addresses.where(chapter_id: chapter_ids).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
         group_by { |c| c.chapter.id }
 
@@ -412,7 +412,7 @@ class ReportsController < ApplicationController
   def chapter_report(id, date_range_days)
     chapter = Chapter.find(id)
 
-    mobilizations_this_period = Mobilization.with_addresses.where(chapter_id: chapter.id).
+    mobilizations_this_period = GrowthActivity.with_addresses.where(chapter_id: chapter.id).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day)
 
     trainings_this_period = Training.with_addresses.where(chapter_id: chapter.id).
@@ -500,7 +500,7 @@ class ReportsController < ApplicationController
   end
 
   def get_chart_data(period, country_id, region_id, state, chapter_id)
-    result = Mobilization.mobilization_type_options.map { |type| {
+    result = GrowthActivity.mobilization_type_options.map { |type| {
       label: type,
       new: get_array_of_empty_values(period),
       participants: get_array_of_empty_values(period),
@@ -541,9 +541,9 @@ class ReportsController < ApplicationController
   def get_mobilizations(start_date, end_date, output, index, country, states, chapter_id)
     state_filter = {'addresses.state_province' => states} unless states.nil?
     country_filter = 'country=?' unless country.nil?
-    chapter_filter = 'mobilizations.chapter_id=?' unless chapter_id.nil?
-    Mobilization.left_outer_joins(:address)
-                .where('mobilizations.created_at BETWEEN ? AND ?', start_date, end_date)
+    chapter_filter = 'growth_activities.chapter_id=?' unless chapter_id.nil?
+    GrowthActivity.left_outer_joins(:address)
+                .where('growth_activities.created_at BETWEEN ? AND ?', start_date, end_date)
                 .where(country_filter, country)
                 .where(chapter_filter, chapter_id)
                 .where(state_filter).each do |mobilization|

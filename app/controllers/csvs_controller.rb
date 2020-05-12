@@ -9,7 +9,7 @@ class CsvsController < ApplicationController
       temp_file = Tempfile.new("all-data-#{Date.today}.zip")
 
       Zip::File.open(temp_file.path, Zip::File::CREATE) do |zipfile|
-        zipfile.get_output_stream("growth-activities-#{Date.today}.csv") { |f| f.puts(Mobilization.to_csv) }
+        zipfile.get_output_stream("growth-activities-#{Date.today}.csv") { |f| f.puts(GrowthActivity.to_csv) }
         zipfile.get_output_stream("trainings-#{Date.today}.csv") { |f| f.puts(Training.to_csv) }
         zipfile.get_output_stream("street-swarms-#{Date.today}.csv") { |f| f.puts(StreetSwarm.to_csv) }
         zipfile.get_output_stream("arrestable-actions-#{Date.today}.csv") { |f| f.puts(ArrestableAction.to_csv) }

@@ -163,7 +163,7 @@ feature 'mobilization chart' do
   scenario 'should render metrics' do
     page.assert_selector('.metric', count: 9)
 
-    expected = Mobilization.mobilization_type_options.push('People Engaged')
+    expected = GrowthActivity.mobilization_type_options.push('People Engaged')
     expect(page.all('.metric').map{ |metric| metric.find('.subtitle').native.text }.sort).to eq(expected.sort)
 
     page.all('.metric').each do |metric|
@@ -207,7 +207,7 @@ def create_mobilizations
   user = FactoryBot.create(:user, {email: 'aa@bb.com'})
   chapter = FactoryBot.create(:chapter, {name: 'hello world'})
 
-  Mobilization.create!(
+  GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
       mobilization_type: 'House Meetings',
@@ -221,7 +221,7 @@ def create_mobilizations
       newsletter_sign_ups: 10
   )
 
-  Mobilization.create!(
+  GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
       mobilization_type: 'House Meetings',
@@ -236,7 +236,7 @@ def create_mobilizations
       created_at: (DateTime.now - 14.days)
   )
 
-  Mobilization.create!(
+  GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
       mobilization_type: 'House Meetings',
@@ -251,7 +251,7 @@ def create_mobilizations
       created_at: ((DateTime.now - 2.months) - 1.days)
   )
 
-  Mobilization.create!(
+  GrowthActivity.create!(
       user_id: user.id,
       chapter_id: chapter.id,
       mobilization_type: 'House Meetings',

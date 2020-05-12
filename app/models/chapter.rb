@@ -2,7 +2,7 @@ class Chapter < ApplicationRecord
   has_many :users
   has_one :address, inverse_of: :chapter, dependent: :destroy
   has_many :trainings
-  has_many :mobilizations
+  has_many :growth_activities
   has_many :street_swarms
   has_many :arrestable_actions
 
