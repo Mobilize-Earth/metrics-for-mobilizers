@@ -1,49 +1,49 @@
 <%= form_for @arrestable_action do |f| %>
-    <%= hidden_field_tag :type_arrestable_action , "", id: "training-type-input" %>
-    <%= hidden_field_tag :report_date, "", id: "arrestable-report-date"%>
-    <div class="form-group">
-        <div>
-            <%= f.label :mobilizers, "Number of mobilizers *", class: "action-form-label" %>
-            <%= f.text_field :mobilizers, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
-        </div>
+  <%= hidden_field_tag :type_arrestable_action , "", id: "training-type-input" %>
+  <%= hidden_field_tag :report_date, "", id: "arrestable-report-date"%>
+  <div class="form-group">
+    <div>
+      <%= f.label :mobilizers, "Number of Mobilizers *", class: "action-form-label" %>
+      <%= f.text_field :mobilizers, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
     </div>
-    <div class="form-group">
-        <div>
-            <%= f.label :not_mobilizers, "Number of non-mobilizers (Friends) *", class: "action-form-label" %>
-            <%= f.text_field :not_mobilizers, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
-        </div>
+  </div>
+  <div class="form-group">
+    <div>
+      <%= f.label :not_mobilizers, "Number of Non-Mobilizers (Friends) *", class: "action-form-label" %>
+      <%= f.text_field :not_mobilizers, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
     </div>
-    <div class="form-group">
-        <div>
-            <%= f.label :trained_arrestable_present, "Number of trained arrestable present *", class: "action-form-label" %>
-            <%= f.text_field :trained_arrestable_present, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
-        </div>
+  </div>
+  <div class="form-group">
+    <div>
+      <%= f.label :trained_arrestable_present, "Number of Trained Arrestable Present *", class: "action-form-label" %>
+      <%= f.text_field :trained_arrestable_present, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
     </div>
-    <div class="form-group">
-        <div>
-            <%= f.label :arrested, "Number of arrested *", class: "action-form-label" %>
-            <%= f.text_field :arrested, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
-        </div>
+  </div>
+  <div class="form-group">
+    <div>
+      <%= f.label :arrested, "Number of Arrested *", class: "action-form-label" %>
+      <%= f.text_field :arrested, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
     </div>
-    <div class="form-group">
-        <div>
-            <%= f.label :days_event_lasted, "Number of days the event lasted *", class: "action-form-label" %>
-            <%= f.text_field :days_event_lasted, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
-        </div>
+  </div>
+  <div class="form-group">
+    <div>
+      <%= f.label :days_event_lasted, "Number of Days the Event Lasted *", class: "action-form-label" %>
+      <%= f.text_field :days_event_lasted, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
     </div>
-    <div class="form-group">
-        <div>
-            <%= f.label :report_comment, "Report comment", class: "action-form-label" %>
-            <%= f.text_area :report_comment, class: "form-control clearable", placeholder: 'Enter Comment', :maxlength => 2500%>
-        </div>
+  </div>
+  <div class="form-group">
+    <div>
+      <%= f.label :report_comment, "Report Comment", class: "action-form-label" %>
+      <%= f.text_area :report_comment, class: "form-control clearable", placeholder: 'Enter Comment', :maxlength => 2500%>
     </div>
-    <div class="form-group">
-        <div>
-            <%= link_to 'Cancel', arrestable_actions_path, class: "btn cancel-button"%>
-            <%= f.submit "Submit Section", class: "btn submit-button"%>
-        </div>
-        <p class="warning">Cannot undo this action</p>
+  </div>
+  <div class="form-group">
+    <div>
+      <%= link_to 'Cancel', arrestable_actions_path, class: "btn cancel-button"%>
+      <%= f.submit "Submit Section", class: "btn submit-button"%>
     </div>
+    <p class="warning">Cannot undo this action</p>
+  </div>
 <% end %>
 <script>
     var localTime = new Date();

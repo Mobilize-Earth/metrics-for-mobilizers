@@ -72,7 +72,7 @@ class ReportsController < ApplicationController
 
     mobilizations_this_period = GrowthActivity.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - date_range_days.days).beginning_of_day, DateTime.now.end_of_day).
-        pluck(:newsletter_sign_ups, :arrestable_pledges, :new_members_sign_ons, :total_donation_subscriptions, :chapter_id)
+        pluck(:newsletter_sign_ups, :arrestable_pledges, :new_mobilizer_sign_ons, :total_donation_subscriptions, :chapter_id)
     mobilizations_previous_period = GrowthActivity.where(chapter_id: chapter_data.map(&:first)).
         where('created_at BETWEEN ? AND ?' , (DateTime.now - calculate_days_ago_for_previous_period(date_range_days).days).beginning_of_day, (DateTime.now - date_range_days.days).beginning_of_day).
         pluck(:newsletter_sign_ups, :arrestable_pledges)
@@ -549,7 +549,7 @@ class ReportsController < ApplicationController
                 .where(state_filter).each do |mobilization|
       output.each do |chart_line|
         if chart_line[:label] == mobilization.growth_activity_type
-          chart_line[:new][index] = chart_line[:new][index] + mobilization.new_members_sign_ons
+          chart_line[:new][index] = chart_line[:new][index] + mobilization.new_mobilizer_sign_ons
           chart_line[:participants][index] = chart_line[:participants][index] + mobilization.participants
           chart_line[:arrestable_pledges][index] = chart_line[:arrestable_pledges][index] + mobilization.arrestable_pledges
           chart_line[:total_donation_subscriptions][index] = chart_line[:total_donation_subscriptions][index] + mobilization.total_donation_subscriptions

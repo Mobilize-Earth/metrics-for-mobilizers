@@ -89,7 +89,7 @@ def create_chapters(chapter_id, type, days_offset)
     participants = Faker::Number.number(digits: 2)
     GrowthActivity.create!(
         participants: participants,
-        new_members_sign_ons: participants / 2,
+        new_mobilizer_sign_ons: participants / 2,
         donation_subscriptions: Faker::Number.number(digits: 2),
         arrestable_pledges: Faker::Number.number(digits: 2),
         growth_activity_type: GrowthActivity.growth_activity_type_options.sample,

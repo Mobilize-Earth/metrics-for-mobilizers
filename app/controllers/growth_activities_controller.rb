@@ -18,7 +18,7 @@ class GrowthActivitiesController < ApplicationController
             event_type: params[:growth_activity][:event_type],
             participants: params[:growth_activity][:participants],
             mobilizers_involved: params[:growth_activity][:mobilizers_involved],
-            new_members_sign_ons: params[:growth_activity][:new_members_sign_ons],
+            new_mobilizer_sign_ons: params[:growth_activity][:new_mobilizer_sign_ons],
             total_donation_subscriptions: params[:growth_activity][:total_donation_subscriptions],
             total_one_time_donations: params[:growth_activity][:total_one_time_donations],
             donation_subscriptions: params[:growth_activity][:donation_subscriptions],
@@ -30,7 +30,7 @@ class GrowthActivitiesController < ApplicationController
             flash[:success] = "#{@growth_activity.growth_activity_type} activity was successfully reported!"
             redirect_to growth_activities_path
             chapter = Chapter.find(current_user.chapter.id)
-            update_chapter_members(chapter, @growth_activity.new_members_sign_ons)
+            update_chapter_members(chapter, @growth_activity.new_mobilizer_sign_ons)
             update_chapter_arrestable_pledges(chapter, @growth_activity.arrestable_pledges)
             update_chapter_subscriptions(chapter, @growth_activity.total_donation_subscriptions)
         else
@@ -41,8 +41,8 @@ class GrowthActivitiesController < ApplicationController
     end
 
     private
-    def update_chapter_members(chapter, new_members_sign_ons)
-      new_active_members = chapter.active_members + new_members_sign_ons
+    def update_chapter_members(chapter, new_mobilizer_sign_ons)
+      new_active_members = chapter.active_members + new_mobilizer_sign_ons
       chapter.update_attribute(:active_members, new_active_members)
     end
 

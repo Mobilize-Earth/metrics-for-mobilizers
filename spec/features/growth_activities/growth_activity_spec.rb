@@ -68,7 +68,7 @@ feature 'submitting mobilization' do
         choose('growth_activity_event_type_in_person')
         fill_in 'growth_activity_participants', with: '1'
         fill_in 'growth_activity_mobilizers_involved', with: '8'
-        fill_in 'growth_activity_new_members_sign_ons', with: '2'
+        fill_in 'growth_activity_new_mobilizer_sign_ons', with: '2'
         fill_in 'growth_activity_total_donation_subscriptions', with: '7.25'
         fill_in 'growth_activity_total_one_time_donations', with: '3.25'
         fill_in 'growth_activity_donation_subscriptions', with: '4'
@@ -79,7 +79,7 @@ feature 'submitting mobilization' do
         expect(GrowthActivity.last.growth_activity_type).to eq('House Meetings')
         expect(GrowthActivity.last.participants).to eq(1)
         expect(GrowthActivity.last.mobilizers_involved).to eq(8)
-        expect(GrowthActivity.last.new_members_sign_ons).to eq(2)
+        expect(GrowthActivity.last.new_mobilizer_sign_ons).to eq(2)
         expect(GrowthActivity.last.total_donation_subscriptions).to eq(7.25)
         expect(GrowthActivity.last.total_one_time_donations).to eq(3.25)
         expect(GrowthActivity.last.donation_subscriptions).to eq(4)
@@ -91,7 +91,7 @@ feature 'submitting mobilization' do
         choose('growth_activity_event_type_virtual')
         fill_in 'growth_activity_participants', with: '1'
         fill_in 'growth_activity_mobilizers_involved', with: '8'
-        fill_in 'growth_activity_new_members_sign_ons', with: '2'
+        fill_in 'growth_activity_new_mobilizer_sign_ons', with: '2'
         fill_in 'growth_activity_total_donation_subscriptions', with: '3'
         fill_in 'growth_activity_total_one_time_donations', with: '3'
         fill_in 'growth_activity_donation_subscriptions', with: '4'
@@ -105,7 +105,7 @@ feature 'submitting mobilization' do
         choose('growth_activity_event_type_virtual')
         fill_in 'growth_activity_participants', with: '1,1'
         fill_in 'growth_activity_mobilizers_involved', with: '1,2'
-        fill_in 'growth_activity_new_members_sign_ons', with: 's'
+        fill_in 'growth_activity_new_mobilizer_sign_ons', with: 's'
         fill_in 'growth_activity_total_donation_subscriptions', with: '3'
         fill_in 'growth_activity_total_one_time_donations', with: '3'
         fill_in 'growth_activity_donation_subscriptions', with: '4'
@@ -120,7 +120,7 @@ feature 'submitting mobilization' do
         choose('growth_activity_event_type_virtual')
         fill_in 'growth_activity_participants', with: '1,1'
         fill_in 'growth_activity_mobilizers_involved', with: '1,2'
-        fill_in 'growth_activity_new_members_sign_ons', with: 's'
+        fill_in 'growth_activity_new_mobilizer_sign_ons', with: 's'
         fill_in 'growth_activity_total_donation_subscriptions', with: '3'
         fill_in 'growth_activity_total_one_time_donations', with: '3'
         fill_in 'growth_activity_donation_subscriptions', with: '4'
@@ -137,7 +137,7 @@ feature 'submitting mobilization' do
         choose('growth_activity_event_type_in_person')
         fill_in 'growth_activity_participants', with: '1'
         fill_in 'growth_activity_mobilizers_involved', with: '8'
-        fill_in 'growth_activity_new_members_sign_ons', with: random_new_members
+        fill_in 'growth_activity_new_mobilizer_sign_ons', with: random_new_members
         fill_in 'growth_activity_total_donation_subscriptions', with: '3.25'
         fill_in 'growth_activity_total_one_time_donations', with: '3.25'
         fill_in 'growth_activity_donation_subscriptions', with: '4'
@@ -152,7 +152,7 @@ feature 'submitting mobilization' do
         choose('growth_activity_event_type_in_person')
         fill_in 'growth_activity_participants', with: '1'
         fill_in 'growth_activity_mobilizers_involved', with: '8'
-        fill_in 'growth_activity_new_members_sign_ons', with: '3'
+        fill_in 'growth_activity_new_mobilizer_sign_ons', with: '3'
         fill_in 'growth_activity_total_donation_subscriptions', with: random_new_members
         fill_in 'growth_activity_total_one_time_donations', with: '3.25'
         fill_in 'growth_activity_donation_subscriptions', with: '4'
@@ -167,7 +167,7 @@ feature 'submitting mobilization' do
         choose('growth_activity_event_type_in_person')
         fill_in 'growth_activity_participants', with: '1'
         fill_in 'growth_activity_mobilizers_involved', with: '8'
-        fill_in 'growth_activity_new_members_sign_ons', with: '0'
+        fill_in 'growth_activity_new_mobilizer_sign_ons', with: '0'
         fill_in 'growth_activity_total_donation_subscriptions', with: '3.25'
         fill_in 'growth_activity_total_one_time_donations', with: '3.25'
         fill_in 'growth_activity_donation_subscriptions', with: '4'

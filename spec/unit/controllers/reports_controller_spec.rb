@@ -227,7 +227,7 @@ RSpec.describe ReportsController, type: :controller do
       members_in_this_period = chapters_in_this_period.sum("active_members") +
           GrowthActivity.where('growth_activities.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
               where('growth_activities.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
-              sum("new_members_sign_ons")
+              sum("new_mobilizer_sign_ons")
 
       pledges = Chapter.sum("total_arrestable_pledges")
       pledges_in_this_period = chapters_in_this_period.sum("total_arrestable_pledges") +
@@ -305,7 +305,7 @@ RSpec.describe ReportsController, type: :controller do
               where(addresses: {country: country}).
               where('growth_activities.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
               where('growth_activities.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
-              sum("new_members_sign_ons")
+              sum("new_mobilizer_sign_ons")
 
       subscriptions = Chapter.with_addresses.
           where(addresses: {country: country}).sum("total_subscription_amount").to_int
@@ -396,7 +396,7 @@ RSpec.describe ReportsController, type: :controller do
               where(addresses: {country: country, state_province: states}).
               where('growth_activities.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
               where('growth_activities.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
-              sum("new_members_sign_ons")
+              sum("new_mobilizer_sign_ons")
 
       subscriptions = Chapter.with_addresses.
           where(addresses: {country: country, state_province: states}).sum("total_subscription_amount").to_int
@@ -489,7 +489,7 @@ RSpec.describe ReportsController, type: :controller do
               where(addresses: {state_province: state}).
               where('growth_activities.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
               where('growth_activities.chapter_id NOT IN (?)', chapters_in_this_period.map(&:id)).
-              sum("new_members_sign_ons")
+              sum("new_mobilizer_sign_ons")
 
       subscriptions = Chapter.with_addresses.
           where(addresses: {state_province: state}).
@@ -616,7 +616,7 @@ RSpec.describe ReportsController, type: :controller do
       new_members_in_this_period = GrowthActivity.with_addresses.
           where(chapter: old_chapter_id).
           where('growth_activities.created_at >= ?', (DateTime.now - 6.days).beginning_of_day).
-          sum("new_members_sign_ons")
+          sum("new_mobilizer_sign_ons")
 
       new_subscriptions_in_this_period = GrowthActivity.with_addresses.
           where(chapter: old_chapter).
@@ -634,8 +634,8 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns global weekly data by default" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 6})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_mobilizer_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), growth_activity_type: 'House Meetings', participants: 8, new_mobilizer_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 6})
 
       get :mobilizations, params: {}
       json_response = JSON.parse(response.body)
@@ -648,8 +648,8 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns monthly data" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 1})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_mobilizer_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 14.days), growth_activity_type: 'House Meetings', participants: 8, new_mobilizer_sign_ons: 5, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 1})
 
       get :mobilizations, params: {dateRange: 'month'}
       json_response = JSON.parse(response.body)
@@ -665,9 +665,9 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns quarterly data" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), growth_activity_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_mobilizer_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), growth_activity_type: 'House Meetings', participants: 8, new_mobilizer_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), growth_activity_type: 'House Meetings', participants: 9, new_mobilizer_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
 
       get :mobilizations, params: {dateRange: 'quarter'}
       json_response = JSON.parse(response.body)
@@ -682,9 +682,9 @@ RSpec.describe ReportsController, type: :controller do
     end
 
     it "returns bi-annual data" do
-      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_members_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), growth_activity_type: 'House Meetings', participants: 8, new_members_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
-      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), growth_activity_type: 'House Meetings', participants: 9, new_members_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
+      FactoryBot.create(:growth_activity, {created_at: DateTime.now, growth_activity_type: 'House Meetings', participants: 7, new_mobilizer_sign_ons: 3, total_donation_subscriptions: 0.01, total_one_time_donations: 0.01, arrestable_pledges: 5})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 2.months), growth_activity_type: 'House Meetings', participants: 8, new_mobilizer_sign_ons: 4, total_donation_subscriptions: 99, total_one_time_donations: 99, arrestable_pledges: 7})
+      FactoryBot.create(:growth_activity, {created_at: (DateTime.now - 4.months), growth_activity_type: 'House Meetings', participants: 9, new_mobilizer_sign_ons: 5, total_donation_subscriptions: 103.99, total_one_time_donations: 103.99, arrestable_pledges: 9})
 
       get :mobilizations, params: {dateRange: 'half-year'}
       json_response = JSON.parse(response.body)

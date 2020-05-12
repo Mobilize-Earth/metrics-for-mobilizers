@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :growth_activity do
     participants { 1 }
-    new_members_sign_ons { Faker::Number.number(digits: 2) }
+    new_mobilizer_sign_ons { Faker::Number.number(digits: 2) }
     total_donation_subscriptions { Faker::Number.decimal(l_digits: 2, r_digits: 2) }
     total_one_time_donations { Faker::Number.decimal(l_digits: 2, r_digits: 2) }
     donation_subscriptions { 1 }
