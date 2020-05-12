@@ -1,4 +1,5 @@
 <div class="default-background">
+  <%= render "forms/form_footer", title: 'Arrestable Actions' %>
   <%= render 'layouts/messages', flash: flash %>
   <%= render 'forms/form_header', title: 'Actions', subtitle: 'Click on tabs below to complete a form <strong>for each instance</strong> of an ‘Action’ your chapter completed this week.'.html_safe %>
   <%= render "forms/form", arrestable_action: @arrestable_action, street_swarm: @street_swarm do |f| %>
@@ -8,6 +9,5 @@
     <div class="report-form-body" id="swarm-form-body">
       <%= render 'street_swarms/form_body' %>
     </div>
-<% end %>
-  <%= render "forms/form_footer", title: 'Arrestable Actions' %>
+  <% end %>
 </div>

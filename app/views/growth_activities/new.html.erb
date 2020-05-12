@@ -1,5 +1,6 @@
 <div class="default-background">
-    <%= render 'layouts/messages', flash: flash %>
+  <%= render "forms/form_footer", title: 'Mobilizations' %>
+  <%= render 'layouts/messages', flash: flash %>
     <%= render 'forms/form_header', title: 'Growth Activities',
                subtitle: 'Click on tabs below to complete a form <strong>for each instance</strong> of a ‘Growth Activity’ your chapter completed this week.'.html_safe %>
     <%= render "forms/form", growth_activity: @growth_activity, social_media_blitzing: @social_media_blitzing do |f| %>
@@ -10,5 +11,4 @@
         <%= render 'social_media_blitzings/form_body' %>
       </div>
     <% end %>
-    <%= render "forms/form_footer", title: 'Mobilizations' %>
 </div>

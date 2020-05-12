@@ -1,9 +1,9 @@
 <div class="default-background">
+  <%= render "forms/form_footer", title: "Training" %>
   <%= render 'layouts/messages', flash: flash %>
   <%= render 'forms/form_header', title: 'Trainings',
              subtitle: 'Click on tabs below to complete a form <strong>for each instance</strong> of a ‘Training’ your chapter completed this week.'.html_safe %>
   <%= render "forms/form", training: @training do |f| %>
     <%= render 'trainings/form_body' %>
   <% end %>
-  <%= render "forms/form_footer", title: "Training" %>
 </div>

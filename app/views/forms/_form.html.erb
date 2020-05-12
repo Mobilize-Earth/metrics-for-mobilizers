@@ -36,6 +36,10 @@
   const startFormWithType = (navLink, shouldClearForm) => {
       document.getElementsByClassName('tab-content')[0].style.display = 'block';
       document.getElementsByClassName('tab-content')[0].style.backgroundColor = 'white';
+      const height = document.getElementById('v-pills-tab').offsetHeight
+      const width = document.getElementById('v-pills-home-tab').offsetWidth
+      document.getElementsByClassName('action-form-content')[0].style.minHeight = `${height}px`;
+      document.getElementsByClassName('action-form-content')[0].style.minWidth = `${width}px`;
 
     setFormType(navLink.textContent);
     updateParticipantsLabel(navLink.textContent);
