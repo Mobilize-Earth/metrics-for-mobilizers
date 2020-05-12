@@ -2,8 +2,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
-  config.hosts << "reporting.organise.earth"
-
+  config.hosts << "reporting.dev.organise.earth"
   config.cache_classes = true
 
   # Eager load code on boot. This eager loads most of Rails and
@@ -23,7 +22,6 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = true
-
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
 
@@ -40,6 +38,30 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+
+    # config.action_mailer.delivery_method = :sendmail
+    # # Defaults to:
+    # config.action_mailer.sendmail_settings = {
+    #   location: '/usr/sbin/sendmail',
+    #   arguments: '-i'
+    # }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              '185.203.114.191',
+    port:                 25,
+    domain:               'organise.earth',
+   }
+
+    config.action_mailer.perform_deliveries = true
+    # Don't care if the mailer can't send if false.
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.perform_caching = false
+
+    config.action_mailer.default_options = { from: 'reporting@staging.organise.earth' }
+
+    config.action_mailer.default_url_options = { host: 'reporting.dev.organise.earth' }
+
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
@@ -50,7 +72,7 @@ Rails.application.configure do
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :info
+  config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -61,8 +83,6 @@ Rails.application.configure do
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "climate_movement_reporting_tool_production"
-
-  config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -90,6 +110,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector

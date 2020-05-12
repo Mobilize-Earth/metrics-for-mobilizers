@@ -2,3 +2,4 @@
 /tmp/*
 /log/development.log
 /log/test.log
+*.key

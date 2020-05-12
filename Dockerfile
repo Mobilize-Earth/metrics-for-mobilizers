@@ -12,11 +12,14 @@ COPY Gemfile.lock /app/Gemfile.lock
 COPY startup.sh /app/startup
 
 RUN gem install sassc -- --disable-march-tune-native
-RUN bundle install
+RUN bundle install --without deployment test
 
 COPY . /app
 
+ARG RAILS_ENV
+
 RUN yarn
+RUN SECRET_KEY_BASE=1 RAILS_ENV=production rails assets:precompile
 
 EXPOSE 3000
 
