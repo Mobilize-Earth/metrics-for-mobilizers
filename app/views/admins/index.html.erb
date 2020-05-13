@@ -51,6 +51,13 @@
                     <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>
                 <% end %>
+                <% if @chapters.empty? %>
+                <div class="row align-items-center justify-content-center">
+                  <div class="col empty-chapters ">
+                    No chapters registered in the application
+                  </div>
+                </div>
+                <% end %>
               </div>
             </div>
 
