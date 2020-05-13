@@ -15,7 +15,8 @@
       </div>
       <div class="form-row chapter-row">
         <%= f.label "Phone number *" %>
-        <%= f.text_field :phone_number, class: "form-control", :maxlength => 30 %>
+        <%= f.text_field :phone_number, class: "form-control", :maxlength => 30, placeholder: '5555555555'%>
+        <small class="form-text text-muted text-center">Please only enter digits. Special characters are not allowed.</small>
       </div>
       <% if f.object.class.require_password_on_accepting %>
         <div class="form-row chapter-row">
