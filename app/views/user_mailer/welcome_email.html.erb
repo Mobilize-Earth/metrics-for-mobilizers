@@ -20,7 +20,7 @@
         You can now enter your weekly reports and see the results of the movement.<br/>
         You belong to <%= @user.chapter.name %> chapter
         <% if @user.chapter.has_address? %>
-             located in <%= @user.chapter.address.state_province %>, <%= @user.chapter.address.city %>, <%= @user.chapter.address.country %>.
+             located in <%= @user.chapter.address.city %>, <%= @user.chapter.address.state_province %>, <%= @user.chapter.address.country %>.
         <% end %>
     </p>
 <% end %>
