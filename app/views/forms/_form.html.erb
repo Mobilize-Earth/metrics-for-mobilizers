@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="nav col-md-12 action-form">
+  <div class="row action-form">
     <div class="nav flex-column nav-pills col-md-5 col-lg-4 col-xl-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
       <% @types.each do |type| %>
         <a class="nav-link action-btn-active" id="v-pills-home-tab" data-toggle="pill"
@@ -10,8 +10,8 @@
            href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Social Media Blitzing</a>
       <% end %>
     </div>
-    <div class="tab-nav-container">
-      <div class="tab-content col-md-6 action-form-content">
+    <div class="tab-nav-container col-md-6 col-lg-5 col-xl-5">
+      <div class="tab-content action-form-content">
         <div class="tab-pane fade show active" id="tab-container" role="tabpanel" aria-labelledby="v-pills-home-tab">
           <div class="report-form-body" id="hide-when-type-selected">
             <div class="default-tab-text">Form will appear here</div>
@@ -36,19 +36,19 @@
   const type = '<%= params[:training_type] || params[:type] || params[:type_arrestable_action] || params[:growth_activity_type] || params[:social_media_blitzing_type] || params[:street_swarm_type]  ||'' %>';
 
   const startFormWithType = (navLink, shouldClearForm) => {
-      document.getElementsByClassName('tab-content')[0].style.display = 'block';
+      document.getElementsByClassName('tab-nav-container')[0].style.display = 'block';
       document.getElementsByClassName('tab-content')[0].style.backgroundColor = 'white';
       const height = document.getElementById('v-pills-tab').offsetHeight
       const width = document.getElementById('v-pills-home-tab').offsetWidth
       document.getElementsByClassName('action-form-content')[0].style.minHeight = `${height}px`;
       document.getElementsByClassName('action-form-content')[0].style.minWidth = `${width}px`;
 
-    setFormType(navLink.textContent);
-    updateParticipantsLabel(navLink.textContent);
-    shouldClearForm && clearFormFields();
-    unselectAllNavLinks();
-    selectNavLink(navLink);
-    showForm(navLink.textContent);
+      setFormType(navLink.textContent);
+      updateParticipantsLabel(navLink.textContent);
+      shouldClearForm && clearFormFields();
+      unselectAllNavLinks();
+      selectNavLink(navLink);
+      showForm(navLink.textContent);
   };
 
   const setFormType = type => {

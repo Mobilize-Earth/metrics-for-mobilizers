@@ -8,9 +8,14 @@
     box-shadow: $standard-box-shadow;
     color: $black;
     height: 2.75rem;
+    line-height: 1.9rem;
     margin-bottom: 0.625rem;
     text-align: center;
     white-space: nowrap;
+  }
+
+  .nav-pills {
+    padding: 0.5rem;
   }
 
   .nav-pills .nav-link.active {
@@ -45,6 +50,7 @@
     border-radius: 0.25rem;
     padding: 1.25rem;
     z-index: 1;
+    height: 100%;
   }
 
   .warning {
@@ -97,22 +103,29 @@
   display: none;
 }
 
+.tab-nav-container {
+  align-self: stretch;
+}
+
 @media (max-width: 767px) {
   .tab-nav-container {
-    .tab-content {
       display: none;
       background-color: transparent;
       position: absolute;
       margin-bottom: 20px;
-    }
+      right: 0;
   }
 
   .form-header {
     padding-bottom: 0;
   }
 
-  .action-submit-btn {
-    margin-bottom: 5px;
+  .action-form {
+
+    .submit-button {
+      display: block;
+      margin: 0.5rem 0 0 0;
+    }
   }
 }
 

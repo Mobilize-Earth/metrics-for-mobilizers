@@ -1,5 +1,6 @@
 @import "./bootstrap_custom";
 @import "./constants";
+@import "./buttons";
 @import "./header";
 @import "./page_header";
 @import "./landing";
@@ -17,9 +18,8 @@
 @import "./report_table";
 @import "./report_tiles";
 @import "./report_filter";
-@import "./buttons";
 @import "./date_partial";
-@import "./footer.scss";
+@import "./footer";
 
 body {
   font-family: Poppins, sans-serif;
