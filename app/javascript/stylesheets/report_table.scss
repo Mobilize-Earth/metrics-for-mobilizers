@@ -71,7 +71,17 @@ $table-padding: 1rem;
       a {
         text-decoration: underline;
       }
+
+      &.empty_table{
+        color: #9b9b9b;
+        font-weight: 600;
+        letter-spacing: 1.8px;
+        text-align: center;
+        font-size: 16px;
+      }
     }
+
+
 
   }
 }

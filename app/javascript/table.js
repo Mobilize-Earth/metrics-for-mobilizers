@@ -137,9 +137,15 @@ const record = (obj) => {
 function renderTableBody(data) {
     const tableBody = $("table.report-table tbody");
     tableBody.empty();
-    $.each(data, function (i, v) {
-        tableBody.append(record(v));
-    });
+    if(data.length === 0){
+        tableBody.append(`<tr>
+                            <td colspan="9" class="empty_table">No chapters registered for this location.</td>
+                          </tr>`)
+    }else {
+        $.each(data, function (i, v) {
+            tableBody.append(record(v));
+        });
+    }
 }
 
 
