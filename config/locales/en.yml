@@ -173,7 +173,7 @@ en:
         social_media_blitzing:
           attributes:
             number_of_posts:
-              format: "Posts %{message}"
+              format: "Social media posts %{message}"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"
             number_of_people_posting:

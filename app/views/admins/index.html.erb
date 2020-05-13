@@ -36,8 +36,8 @@
                 <div class="column col-4">Name</div>
                 <div class="column col-2">Country</div>
                 <div class="column col-2">State</div>
-                <div class="column col-1">ZIP</div>
-                <div class="column col-2">Created</div>
+                <div class="column col-1 text-right">ZIP</div>
+                <div class="column col-2 text-center">Created</div>
                 <div class="column col-1"></div>
               </div>
               <div class="content-row-container">
@@ -46,8 +46,8 @@
                     <div class="column col-4"><%= chapter.name %></div>
                     <div class="column col-2"><%= !chapter.address.nil? ? chapter.address.country : "N/A" %></div>
                     <div class="column col-2"><%= !chapter.address.nil? ? chapter.address.state_province : "N/A" %></div>
-                    <div class="column col-1"><%= !chapter.address.nil? ? chapter.address.zip_code : "N/A" %></div>
-                    <div class="column col-2"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
+                    <div class="column col-1 text-right"><%= !chapter.address.nil? ? chapter.address.zip_code : "N/A" %></div>
+                    <div class="column col-2 text-center"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
                     <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
                   </div>
                 <% end %>
