@@ -51,13 +51,6 @@
     }
   }
 
-  .login-button, .logout-button {
-    @include standard-hover-state();
-
-    border: 2px solid $green;
-    padding: 0.5rem 2rem;
-  }
-
   .header-right {
     @include standard-hover-state();
 

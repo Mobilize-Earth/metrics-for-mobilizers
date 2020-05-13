@@ -6,9 +6,10 @@
     top: 0;
     z-index: 2;
     background-color: $background-green;
-    padding: 10px;
-    margin-top: -20px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
   }
+
   .report-page-header {
     padding-left: 25px;
 
@@ -19,11 +20,12 @@
   }
 
   #report-page-breadcrumbs {
-    padding-left: 25px;
+    padding-left: 1rem;
 
     h5 {
       font-size: 1rem;
       line-height: 2.5rem;
+
       @media (max-width: 576px) {
         line-height: 2rem;
         padding-top: 10px;
@@ -53,15 +55,15 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    margin-left: auto;
+    margin-right: 1rem;
   }
 
   .nav {
-    padding-right: 10px;
     margin-left: 15px;
-    
+
     @media (max-width: 576px) {
-      margin-left: 0;
-      padding-bottom: 20px;
+      font-size: 90%;
     }
   }
 
@@ -72,7 +74,6 @@
     background-color: white;
     border-radius: 3px;
     text-align: center;
-    width: 60px;
     box-shadow: $standard-box-shadow;
     cursor: pointer;
   }
@@ -82,14 +83,7 @@
   }
 
   .csv-download {
-    text-align: right;
-    padding-right: 40px;
-    a {
-      color: $green;
-
-      &:hover {
-        text-decoration: none;
-      }
-    }
+    margin-right: 1.5rem;
+    margin-left: auto;
   }
 }

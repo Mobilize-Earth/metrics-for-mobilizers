@@ -98,20 +98,23 @@
 }
 
 @media (max-width: 767px) {
-  .tab-content {
-    display: none;
-    background-color: transparent;
-    position: absolute;
-    margin-bottom: 20px;
+  .tab-nav-container {
+    .tab-content {
+      display: none;
+      background-color: transparent;
+      position: absolute;
+      margin-bottom: 20px;
+    }
   }
+
   .form-header {
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
+
   .action-submit-btn {
     margin-bottom: 5px;
   }
 }
-
 
 .show-on-mobile {
   display: none;

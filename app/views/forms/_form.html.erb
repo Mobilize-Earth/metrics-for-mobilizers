@@ -10,19 +10,21 @@
            href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Social Media Blitzing</a>
       <% end %>
     </div>
-    <div class="tab-content col-md-6 action-form-content">
-      <div class="tab-pane fade show active" id="tab-container" role="tabpanel" aria-labelledby="v-pills-home-tab">
-        <div class="report-form-body" id="hide-when-type-selected">
-          <div class="default-tab-text">Form will appear here</div>
-        </div>
-        <% if current_page?(arrestable_actions_path) || current_page?(growth_activities_path)%>
-          <h2 id="form-title"></h2>
-          <%= yield %>
-        <% else %>
-          <div class="report-form-body" id="hide-until-type-selected">
-            <%= yield %>
+    <div class="tab-nav-container">
+      <div class="tab-content col-md-6 action-form-content">
+        <div class="tab-pane fade show active" id="tab-container" role="tabpanel" aria-labelledby="v-pills-home-tab">
+          <div class="report-form-body" id="hide-when-type-selected">
+            <div class="default-tab-text">Form will appear here</div>
           </div>
-        <% end %>
+          <% if current_page?(arrestable_actions_path) || current_page?(growth_activities_path)%>
+            <h2 id="form-title"></h2>
+            <%= yield %>
+          <% else %>
+            <div class="report-form-body" id="hide-until-type-selected">
+              <%= yield %>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

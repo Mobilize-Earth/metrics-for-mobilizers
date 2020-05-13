@@ -1,17 +1,9 @@
 $table-padding: 1rem;
 
-.report-table-description {
-  padding: 0 1rem;
-
-  p {
-    font-size: 16px;
-  }
-}
-
 .report-table-padding-wrapper {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px 10px 0 10px;
 }
+
 .report-table-container {
   max-height: 535px;
   overflow-y: auto;

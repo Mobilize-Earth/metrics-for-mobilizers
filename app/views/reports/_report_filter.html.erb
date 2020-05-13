@@ -1,6 +1,6 @@
 <div class="report-filter-container" id="sticky-filter-container">
   <div class="row">
-    <div id="report-page-breadcrumbs" class="col-md-8 col-sm-12 hidden">
+    <div id="report-page-breadcrumbs" class="hidden">
       <h5>
         <a href="/reports" id="report-breadcrumb-global">Global</a>
         <span id="report-breadcrumb-country-wrapper" class="hidden">
@@ -21,7 +21,7 @@
         </span>
       </h5>
     </div>
-    <div class="report-page-header-right col-md-4 col-sm-12">
+    <div class="report-page-header-right">
       <div>Last <span class="filter-day-count">0</span> days</div>
       <nav class="nav nav-pills nav-justified">
         <a id="filter-week" class="nav-link">1W</a>
@@ -32,25 +32,21 @@
     </div>
   </div>
 </div>
-<div class="report-filter-container">
-  <div class="row">
-    <div class="report-page-header col-8">
-      <h2 id="report-page-title">Global</h2>
-      <h2 class="report-page-subtitle">
-        <span class="report-page-start-date">30 February 2020</span>
-        -
-        <span class="report-page-end-date">32 February 2020</span>
-      </h2>
-    </div>
-    <div class="col-4 csv-download">
-      <% if current_user.role == 'admin' %>
-        <%= link_to csv_download_path, :target => "_blank" do %>
-          <h3 id="csv-download">
-            CSV <span class="fa fa-arrow-down"></span>
-          </h3>
-        <% end %>
+<div class="row report-filter-container">
+  <div class="report-page-header">
+    <h2 id="report-page-title">Global</h2>
+    <h2 class="report-page-subtitle">
+      <span class="report-page-start-date">30 February 2020</span>
+      -
+      <span class="report-page-end-date">32 February 2020</span>
+    </h2>
+  </div>
+  <div class="csv-download">
+    <% if current_user.role == 'admin' %>
+      <%= link_to csv_download_path, target: "_blank", id: "csv-download", class: "btn btn-lg login-button" do %>
+        CSV <span class="fa fa-arrow-down"></span>
       <% end %>
-    </div>
+    <% end %>
   </div>
 </div>
 

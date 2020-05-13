@@ -1,16 +1,16 @@
-.pre-title {
+.page-header {
+  .pre-title {
+  }
 
-}
+  .title {
+    color: $green;
+    padding-bottom: 10px;
+  }
 
-.title {
-  color: $green;
-  padding-bottom: 10px;
-}
+  .description {
+  }
 
-.description {
-  background-color: $background-green;
-}
-
-.disclaimer {
-  color: $green;
+  .disclaimer {
+    color: $green;
+  }
 }
