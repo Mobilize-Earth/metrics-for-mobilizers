@@ -4,7 +4,6 @@
     key: gems_and_packages
     paths:
       - bundler/
-      - node_modules/
     policy: pull
   before_script:
     - apk update && apk add build-base mariadb-dev sqlite-dev nodejs npm chromium chromium-chromedriver

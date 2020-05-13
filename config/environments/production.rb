@@ -2,7 +2,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
-  config.hosts << "reporting.organise.earth"
+  config.hosts << "reporting.mobilize.earth"
 
   config.cache_classes = true
 
@@ -40,6 +40,21 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              '185.203.114.114',
+    port:                 25,
+    domain:               'mobilize.earth',
+   }
+
+    config.action_mailer.perform_deliveries = true
+    # Don't care if the mailer can't send if false.
+    config.action_mailer.raise_delivery_errors = false
+    config.action_mailer.perform_caching = false
+
+    config.action_mailer.default_options = { from: 'reporting@reporting.mobilize.earth' }
+
+    config.action_mailer.default_url_options = { host: 'reporting.mobilize.earth' }
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
