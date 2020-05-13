@@ -41,15 +41,16 @@ class GrowthActivity < ApplicationRecord
                   :greater_than_or_equal_to => 0,
                   less_than_or_equal_to: 1_000_000_000
     }
+    validates_length_of :identifier, maximum: 50
 
     def self.to_csv
-      attributes = %w{chapter_name coordinator_email growth_activity_type event_type participants mobilizers_involved new_mobilizer_sign_ons total_donation_subscriptions donation_subscriptions total_one_time_donations arrestable_pledges newsletter_sign_ups report_date created_at}
+      attributes = %w{chapter_name coordinator_email growth_activity_type event_type participants mobilizers_involved new_mobilizer_sign_ons total_donation_subscriptions donation_subscriptions total_one_time_donations arrestable_pledges newsletter_sign_ups identifier report_date created_at}
 
       CSV.generate(headers: true) do |csv|
         csv << attributes
 
         all.includes(:chapter, :user).find_each do |m|
-          csv << [m.chapter.name, m.user.email, m.growth_activity_type, m.event_type, m.participants, m.mobilizers_involved, m.new_mobilizer_sign_ons, "$#{m.total_donation_subscriptions}", m.donation_subscriptions, "$#{m.total_one_time_donations}", m.arrestable_pledges, m.newsletter_sign_ups, m.report_date, m.created_at]
+          csv << [m.chapter.name, m.user.email, m.growth_activity_type, m.event_type, m.participants, m.mobilizers_involved, m.new_mobilizer_sign_ons, "$#{m.total_donation_subscriptions}", m.donation_subscriptions, "$#{m.total_one_time_donations}", m.arrestable_pledges, m.newsletter_sign_ups, m.identifier, m.report_date, m.created_at]
         end
       end
     end

@@ -16,15 +16,16 @@ class SocialMediaBlitzing < ApplicationRecord
     validates :user,
         :chapter,
         presence: true
+    validates_length_of :identifier, maximum: 50
 
     def self.to_csv
-        attributes = %w{chapter_name coordinator_email number_of_posts number_of_people_posting report_date created_at}
+        attributes = %w{chapter_name coordinator_email number_of_posts number_of_people_posting identifier report_date created_at}
 
         CSV.generate(headers: true) do |csv|
             csv << attributes
 
             all.includes(:chapter, :user).find_each do |m|
-                csv << [m.chapter.name, m.user.email, m.number_of_posts, m.number_of_people_posting, m.report_date, m.created_at]
+                csv << [m.chapter.name, m.user.email, m.number_of_posts, m.number_of_people_posting, m.identifier, m.report_date, m.created_at]
             end
         end
     end

@@ -21,6 +21,7 @@ class ArrestableActionsController < ApplicationController
             arrested: params[:arrestable_action][:arrested],
             days_event_lasted: params[:arrestable_action][:days_event_lasted],
             report_comment: params[:arrestable_action][:report_comment],
+            identifier: params[:arrestable_action][:identifier],
             report_date: report_date
         )
         if @arrestable_action.save

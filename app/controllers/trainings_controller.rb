@@ -18,6 +18,7 @@ class TrainingsController < ApplicationController
       training_type: params[:training_type],
       chapter: current_user.chapter,
       user: current_user,
+      identifier: params[:training][:identifier],
       report_date: report_date
     )
 

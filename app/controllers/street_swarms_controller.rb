@@ -14,6 +14,7 @@ class StreetSwarmsController < ApplicationController
       user_id: current_user.id,
       chapter_id: current_user.chapter.id,
       mobilizers_attended: params[:street_swarm][:mobilizers_attended],
+      identifier: params[:street_swarm][:identifier],
       report_date: report_date
     )
     if @street_swarm.save

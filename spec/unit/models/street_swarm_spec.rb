@@ -37,5 +37,16 @@ RSpec.describe StreetSwarm, type: :model do
       expect(@street_swarm.errors[:mobilizers_attended])
         .to include('must be less than or equal to 1000000000')
     end
+
+    it 'should not take values with length greater than permitted' do
+      @street_swarm.identifier = generate_random_string(51)
+      @street_swarm.valid?
+      expect(@street_swarm.errors[:identifier]).to include('Identifier is too long (maximum is 50 characters)')
+    end
   end
+end
+
+def generate_random_string(size=1)
+  characters = [('a'..'z'), ('A'..'Z')].map(&:to_a).flatten
+  (0...size).map { characters[rand(characters.size)] }.join
 end

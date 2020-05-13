@@ -89,5 +89,16 @@ RSpec.describe GrowthActivity, type: :model do
             expect(@growth_activity.errors[:growth_activity_type]).to include('can\'t be blank')
             expect(@growth_activity.errors[:event_type]).to include('can\'t be blank')
         end
+
+        it 'should not take values with length greater than permitted' do
+            @growth_activity.identifier = generate_random_string(51)
+            @growth_activity.valid?
+            expect(@growth_activity.errors[:identifier]).to include('Identifier is too long (maximum is 50 characters)')
+        end
     end
+end
+
+def generate_random_string(size=1)
+    characters = [('a'..'z'), ('A'..'Z')].map(&:to_a).flatten
+    (0...size).map { characters[rand(characters.size)] }.join
 end

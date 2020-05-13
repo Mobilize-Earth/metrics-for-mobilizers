@@ -44,7 +44,7 @@ const mobilizationParticipants = chartData => {
 
     for(const data of chartData.data) {
         datasets.push({
-            label: `${data.label} / New Mobilizers`,
+            label: `${data.label} / New Sign Ons`,
             backgroundColor: colors[count],
             data: data.new,
             minBarLength: 2,

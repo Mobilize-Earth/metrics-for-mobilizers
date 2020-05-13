@@ -10,6 +10,12 @@
   </div>
   <div class="form-group">
     <div>
+      <%= f.label :identifier, "Identifier (max 50 characters)", class: "action-form-label" %>
+      <%= f.text_field :identifier, class: "form-control clearable", placeholder: 'Enter Identifier', :maxlength => 50%>
+    </div>
+  </div>
+  <div class="form-group">
+    <div>
       <%= link_to 'Cancel', trainings_path, class: "btn cancel-button"%>
       <%= f.submit "Submit Section", class: "btn submit-button"%>
     </div>

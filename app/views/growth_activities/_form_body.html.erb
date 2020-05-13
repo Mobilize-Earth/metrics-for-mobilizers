@@ -67,6 +67,12 @@
             <%= f.text_field :newsletter_sign_ups, class: "form-control action-form-input clearable", placeholder: 'Enter Number', :maxlength => 10%>
         </div>
     </div>
+  <div class="form-group">
+    <div>
+      <%= f.label :identifier, "Identifier (max 50 characters)", class: "action-form-label" %>
+      <%= f.text_field :identifier, class: "form-control clearable", placeholder: 'Enter Identifier', :maxlength => 50%>
+    </div>
+  </div>
     <div class="form-group">
         <div>
             <%= link_to 'Cancel', growth_activities_path, class: "btn cancel-button"%>

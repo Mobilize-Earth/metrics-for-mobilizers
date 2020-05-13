@@ -68,6 +68,8 @@ en:
           attributes:
             mobilizers_attended:
               format: "Number of participants %{message}"
+            identifier:
+              too_long: "Identifier is too long (maximum is 50 characters)"
         arrestable_action:
           attributes:
             mobilizers:
@@ -97,6 +99,8 @@ en:
               not_a_number: "Days event lasted must be a number"
             report_comment:
               format: "Report comment %{message}"
+            identifier:
+              too_long: "Identifier is too long (maximum is 50 characters)"
         training:
           attributes:
             number_attendees:
@@ -104,6 +108,8 @@ en:
               not_an_integer: "Attendees must be a number"
               less_than_or_equal_to: "Attendees is too long"
               not_a_number: "Attendees must be a number"
+            identifier:
+              too_long: "Identifier is too long (maximum is 50 characters)"
         growth_activity:
           attributes:
             donation_subscriptions:
@@ -154,6 +160,8 @@ en:
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"
               not_a_number: "must be a number"
+            identifier:
+              too_long: "Identifier is too long (maximum is 50 characters)"
         user:
           attributes:
             chapter:
@@ -172,3 +180,5 @@ en:
               format: "People posting %{message}"
               not_an_integer: "must be a number"
               less_than_or_equal_to: "is too big"
+            identifier:
+              too_long: "Identifier is too long (maximum is 50 characters)"

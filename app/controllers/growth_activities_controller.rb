@@ -24,6 +24,7 @@ class GrowthActivitiesController < ApplicationController
             donation_subscriptions: params[:growth_activity][:donation_subscriptions],
             arrestable_pledges: params[:growth_activity][:arrestable_pledges],
             newsletter_sign_ups: params[:growth_activity][:newsletter_sign_ups],
+            identifier: params[:growth_activity][:identifier],
             report_date: report_date
         )
         if @growth_activity.save
