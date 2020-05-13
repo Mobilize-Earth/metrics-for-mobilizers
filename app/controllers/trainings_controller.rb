@@ -23,7 +23,7 @@ class TrainingsController < ApplicationController
     )
 
     if @training.save
-      flash[:success] = "#{@training.training_type} training was successfully created!"
+      flash[:success] = "#{@training.training_type} training was successfully registered!"
       redirect_to trainings_path
     else
       flash.now[:errors] = @training.errors.messages.values.flatten
