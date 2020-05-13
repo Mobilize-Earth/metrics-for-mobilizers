@@ -53,7 +53,7 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   # Don't care if the mailer can't send if false.
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_options = { from: 'reporting@local.organise.earth' }
+  config.action_mailer.default_options = { from: 'reporting-dev@organise.earth' }
 
   config.action_mailer.perform_caching = false
 
