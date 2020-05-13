@@ -2,8 +2,8 @@ class GrowthActivitiesController < ApplicationController
 
     def new
         @types = GrowthActivity.growth_activity_type_options
-        @growth_activity = GrowthActivity.new
-        @social_media_blitzing = SocialMediaBlitzing.new
+        @growth_activity = create_growth_activity
+        @social_media_blitzing = create_social_media_blitzing
         authorize! :new, GrowthActivitiesController
     end
 
@@ -37,7 +37,7 @@ class GrowthActivitiesController < ApplicationController
         else
             flash[:errors] = @growth_activity.errors.full_messages
             @types = GrowthActivity.growth_activity_type_options
-            redirect_to growth_activities_path(params.permit(:growth_activity_type))
+            redirect_to growth_activities_path(growth_activity_type: params[:growth_activity_type], last_growth: params[:growth_activity].to_json)
         end
     end
 
@@ -59,5 +59,19 @@ class GrowthActivitiesController < ApplicationController
     def update_chapter_subscriptions(chapter, donation_subscriptions)
       new_donation_subscriptions = chapter.total_subscription_amount + donation_subscriptions
       chapter.update_attribute(:total_subscription_amount, new_donation_subscriptions)
+    end
+
+    private
+    def create_social_media_blitzing
+      social_media_blitzing_created = SocialMediaBlitzing.new
+      social_media_blitzing_created.from_json(params[:last_blitzing]) unless params[:last_blitzing].blank?
+      social_media_blitzing_created
+    end
+
+    private
+    def create_growth_activity
+      create_growth_created = GrowthActivity.new
+      create_growth_created.from_json(params[:last_growth]) unless params[:last_growth].blank?
+      create_growth_created
     end
 end

@@ -24,7 +24,7 @@ class SocialMediaBlitzingsController < ApplicationController
         else
             flash[:errors] = @social_media_blitzing.errors.full_messages
             @types = SocialMediaBlitzing.social_media_blitzing_type_options
-            redirect_to growth_activities_path(params.permit(:social_media_blitzing_type))
+            redirect_to growth_activities_path(social_media_blitzing_type: params[:social_media_blitzing_type], last_blitzing: params[:social_media_blitzing].to_json)
         end
     end
 end

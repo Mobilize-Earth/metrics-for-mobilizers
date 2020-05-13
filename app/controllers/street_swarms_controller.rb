@@ -23,7 +23,7 @@ class StreetSwarmsController < ApplicationController
     else
       flash[:errors] = @street_swarm.errors.full_messages
       @types = StreetSwarm.options
-      redirect_to arrestable_actions_path(params.permit(:street_swarm_type))
+      redirect_to arrestable_actions_path(street_swarm_type: params[:street_swarm_type], last_swarm: params[:street_swarm].to_json)
     end
   end
 end
