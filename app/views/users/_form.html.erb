@@ -1,40 +1,44 @@
 <div class="container-fluid">
   <div class="row">
-      <div class="user-form-div">
-          <%= form_for @user, url: submit_url do |f| %>
-            <%= hidden_field_tag :id, @user.id %>
-            <% unless @user.new_record? %>
-              <div class="form-row chapter-row">
-                <%= f.label :first_name, "First name *" %>
-                <%= f.text_field :first_name, autofocus: true, class: "form-control", :maxlength => 50 %>
-              </div>
-              <div class="form-row chapter-row">
-                <%= f.label :last_name, "Last name *" %>
-                <%= f.text_field :last_name, class: "form-control", :maxlength => 50 %>
-              </div>
-              <div class="form-row chapter-row">
-                <%= f.label :phone_number, "Phone number *" %>
-                <%= f.text_field :phone_number, class: "form-control", :maxlength => 30 %>
-              </div>
-            <% end %>
+    <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+      <div class="admin-form-title"><%= title %></div>
+      <div class="admin-form-subtitle">* Required</div>
+      <div class="admin-form-body">
+        <%= form_for @user, url: submit_url do |f| %>
+          <%= hidden_field_tag :id, @user.id %>
+          <% unless @user.new_record? %>
             <div class="form-row chapter-row">
-                <%= f.label :email, "Email *"%>
-                <%= f.email_field :email, class: "form-control", :maxlength => 50 %>
+              <%= f.label :first_name, "First name *" %>
+              <%= f.text_field :first_name, autofocus: true, class: "form-control", :maxlength => 50 %>
             </div>
             <div class="form-row chapter-row">
-                <%= f.label :role, "Role *" %>
-                <%= f.select(:role, Role.roles.map {|k, v| [v, k]}, {}, {class: "select form-control"}) %>
+              <%= f.label :last_name, "Last name *" %>
+              <%= f.text_field :last_name, class: "form-control", :maxlength => 50 %>
             </div>
             <div class="form-row chapter-row">
-                <%= f.label :chapter, "Chapter", id: "chapter-label" %>
-                <%= f.collection_select :chapter_id, Chapter.order(:name),:id,:name, {include_blank: true}, {class: "form-control"} %>
-            </div>
-            <div class="form-row options-form-div">
-              <%= link_to 'Cancel', admins_index_path, class: "btn cancel-button"%>
-              <%= f.submit 'Submit', class: "btn submit-button"%>
+              <%= f.label :phone_number, "Phone number *" %>
+              <%= f.text_field :phone_number, class: "form-control", :maxlength => 30 %>
             </div>
           <% end %>
+          <div class="form-row chapter-row">
+              <%= f.label :email, "Email *"%>
+              <%= f.email_field :email, class: "form-control", :maxlength => 50 %>
+          </div>
+          <div class="form-row chapter-row">
+              <%= f.label :role, "Role *" %>
+              <%= f.select(:role, Role.roles.map {|k, v| [v, k]}, {}, {class: "select form-control"}) %>
+          </div>
+          <div class="form-row chapter-row">
+              <%= f.label :chapter, "Chapter", id: "chapter-label" %>
+              <%= f.collection_select :chapter_id, Chapter.order(:name),:id,:name, {include_blank: true}, {class: "form-control"} %>
+          </div>
+          <div class="form-row action-buttons">
+            <%= link_to 'Cancel', admins_index_path, class: "btn cancel-button"%>
+            <%= f.submit 'Submit', class: "btn submit-button"%>
+          </div>
+        <% end %>
       </div>
+    </div>
   </div>
 </div>
 

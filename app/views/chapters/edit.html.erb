@@ -1,5 +1,5 @@
 <div class="default-background">
-  <h1 class="chapter-title">Update <%= @chapter.name %></h1>
-
-  <%= render "chapters/form" %>
+  <%= render 'layouts/messages', flash: flash %>
+  <%= render "chapters/form", title: "Update #{@chapter.name}" %>
+  <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
 </div>

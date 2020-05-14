@@ -1,5 +1,5 @@
-<div class="default-background ">
-  <h1 class="chapter-title"> Add Chapter </h1>
-
-<%= render "chapters/form" %>
+<div class="default-background">
+  <%= render 'layouts/messages', flash: flash %>
+  <%= render "chapters/form", title: 'Add Chapter' %>
+  <%= image_tag('/images/half_circle.png', class: 'half-logo')%>
 </div>
