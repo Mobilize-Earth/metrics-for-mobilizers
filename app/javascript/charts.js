@@ -14,15 +14,44 @@ const totalParticipantsDiv = () => `<div class="metric total-metric">
     <div class="subtitle">People Engaged</div>
     <div class="description">Total grouped activity</div>
 </div>`;
+const getParticipants = chartData => {
+   const participants = [];
 
-const chartOptions = {
+    for(const labelIndex in chartData.labels) {
+        const label = chartData.labels[labelIndex];
+
+        participants[label] = {};
+        for(const data of chartData.data) {
+            participants[label][data.label] = data.participants[labelIndex];
+        }
+    }
+
+    return participants;
+}
+
+const chartOptions = participants => ({
     title: {
         display: false
     },
     legend: {
         display: false
     },
-    tooltips: {},
+    tooltips: participants ? {
+        enabled: true,
+        callbacks: {
+            label: function (tooltipItem, data) {
+                const label = data.datasets[tooltipItem.datasetIndex].label || '';
+                if(label.includes('New Sign Ons')) {
+                    return `${label}: ${tooltipItem.value}`;
+                }
+
+                const mobilizationType = label.substring(0, label.indexOf('|') - 1);
+                const participantCount = participants[tooltipItem.label][mobilizationType];
+
+                return `${mobilizationType} | Total People Engaged: ${participantCount}`;
+            }
+        }
+    } : {},
     maintainAspectRatio: false,
     scales: {
         xAxes: [{
@@ -35,7 +64,7 @@ const chartOptions = {
             }
         }]
     }
-};
+});
 
 const mobilizationParticipants = chartData => {
     const datasets = [];
@@ -44,14 +73,16 @@ const mobilizationParticipants = chartData => {
 
     for(const data of chartData.data) {
         datasets.push({
-            label: `${data.label} / New Sign Ons`,
+            label: `${data.label} | New Sign Ons`,
             backgroundColor: colors[count],
             data: data.new,
             minBarLength: 2,
             stack: count });
 
+        const label = `${data.label} | Non-Converted`;
+
         datasets.push({
-            label: `${data.label} / Non-Converted`,
+            label,
             backgroundColor: '#a6a6a6',
             data: removeNewMembersFromCount(data.new, data.participants),
             stack: count });
@@ -71,7 +102,7 @@ const mobilizationParticipants = chartData => {
             labels: chartData.labels,
             datasets
         },
-        options: chartOptions
+        options: chartOptions(getParticipants(chartData))
     })
 };
 
@@ -162,7 +193,7 @@ const mobilizationArrestablePledges = chartData => {
             labels: chartData.labels,
             datasets
         },
-        options: chartOptions
+        options: chartOptions()
     })
 };
 
