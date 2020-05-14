@@ -31,14 +31,7 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:              '185.203.114.191',
-    port:                 25,
-    domain:               'organise.earth',
-   }
-
-  # Use these configs to point at a local mailcatcher
+  # Use these configs to point at a local mailcatcher if sendmail doesn't work
   # config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 
   config.action_mailer.delivery_method = :sendmail
