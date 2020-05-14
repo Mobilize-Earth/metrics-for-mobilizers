@@ -48,7 +48,7 @@
                     <div class="column col-2"><%= !chapter.address.nil? ? chapter.address.state_province : "N/A" %></div>
                     <div class="column col-1 text-right"><%= !chapter.address.nil? ? chapter.address.zip_code : "N/A" %></div>
                     <div class="column col-2 text-center"><%= chapter.created_at.strftime("%m/%d/%Y") %></div>
-                    <div class="column col-1"><a href="<%= edit_chapter_path chapter.id %>"><span class="fa fa-pencil"></span></a></div>
+                    <div class="column col-1"><%= link_to '', edit_chapter_path(chapter.id), class: "fa fa-pencil", title: 'Edit Chapter' %></div>
                   </div>
                 <% end %>
                 <% if @chapters.empty? %>
@@ -82,9 +82,9 @@
                     <% end %>
                     <div class="column col-2"><%= user.created_at.strftime("%m/%d/%Y") %></div>
                     <% if user.invitation_token.nil? %>
-                      <div class="column col-1"><a href="<%= edit_user_path user.id %>"><span class="fa fa-pencil"></span></a></div>
+                      <div class="column col-1"><%= link_to '', edit_user_path(user.id), class: "fa fa-pencil", title: 'Edit User' %></div>
                     <% else %>
-                      <div class="column col-1"><%= link_to '', resend_user_invitation_path(user.id), method: :post, class: "fa fa-envelope", id: "resend_user_email" %></div>
+                      <div class="column col-1"><%= link_to '', resend_user_invitation_path(user.id), method: :post, class: "fa fa-envelope", id: "resend_user_email", title: 'Resend invite email' %></div>
                     <% end %>
                   </div>
                 <% end %>
