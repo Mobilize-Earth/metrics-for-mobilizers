@@ -57,7 +57,7 @@ class UsersController < ApplicationController
     def resend_user_invitation
       @user = User.find(params[:id])
       invite_valid_user
-      flash[:success] = "A new email invitation for user #{@user.email} was successfully sended"
+      flash[:success] = "A new email invitation for user #{@user.email} was successfully sent!"
       redirect_to admins_index_path
     end
 end

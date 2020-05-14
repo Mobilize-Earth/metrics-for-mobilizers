@@ -1,4 +1,4 @@
-<div class="default-background">
+<div class="content">
   <%= render 'layouts/messages', flash: flash %>
   <div class="admin-page container">
     <%= render 'layouts/page_header',
@@ -7,7 +7,7 @@
                disclaimer: '*Each chapter has a limit of 2 Coordinators.'%>
     <div class="row">
       <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12 outer-box">
-        <div class="left-nav">
+        <div class="left-nav full-height">
           <h5 class="nav-title">Onboarding</h5>
           <a class="left-nav-item selected" id="users-nav-link">
             <div class="left-nav-icon extra-padding"><span class="fa fa-user"></span></div>
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12 outer-box">
-        <div class="content">
+        <div class="admin-page-content">
           <div class="content-top-row">
             <a id="link-chapters" href="<%= new_chapter_path %>">
               Add Chapter <span class="fa fa-plus-circle"></span>
@@ -30,7 +30,7 @@
               <span class="fa fa-plus-circle"></span>
             </a>
           </div>
-          <div class="content-container container">
+          <div class="container">
             <div id="content-chapters">
               <div class="content-header row">
                 <div class="column col-4">Name</div>

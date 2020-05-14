@@ -8,8 +8,7 @@
 @import "./fonts";
 @import "./forms";
 @import "./admin";
-@import "./chapter";
-@import "./chapter_form";
+@import "./admin_forms";
 @import "./reporting";
 @import "./action_forms";
 @import "./report_charts";
@@ -24,4 +23,9 @@ body {
   background-color: $background-green;
   font-size: 16px;
   color: $black;
+}
+
+.content {
+  min-height: calc(100vh - 160px - 2.5rem);
+  margin: 2.5rem 0;
 }
