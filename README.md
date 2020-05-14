@@ -45,6 +45,13 @@ git clone https://code.organise.earth/rilau/climate-movement-reporting-tool.git
   rake db:migrate
 ```
 
+
+If you hit an error installing mysql2 during bundle install try running
+
+`bundle config --local build.mysql2 "--with-ldflags=-L/usr/local/opt/openssl/lib --with-cppflags=-I/usr/local/opt/openssl/include"`
+
+and doing a second `bundle install`
+
 # Starting up Rails
 
 ```
