@@ -134,35 +134,87 @@ feature 'navigation' do
     end
 end
 
-feature 'send mail'do
+feature 'send email'do
     before :each do
         @admin_user = FactoryBot.create(:administrator)
         sign_in(@admin_user.email, @admin_user.password)
         find_link('link-users').click
-        fill_in 'user_email', with: 'test1@test.com'
     end
   
-    it "when new data reviewer is registered" do
-        click_button 'Submit'
-      
-        email_content = get_email_html
+    scenario 'when new data reviewer is registered' do
+        create_user_with_role('Data Reviewer')
+
+        email_content = get_email_html(1)
         link_url = email_content.xpath("//a")[0][:href]
         expect(link_url).to include 'http://localhost:3000/users/invitation/accept?invitation_token='
         expect(email_content).to have_content("Accept Invitation")
         expect(email_content).to have_content("Data Reviewer")
     end
 
-    it "when new admin is registered" do
-        select 'Administrator', from: 'user_role'
-        click_button 'Submit'
-      
-        email_content = UserMailer.deliveries[0].body.encoded
+    scenario 'when new admin is registered' do
+        create_user_with_role('Administrator')
+
+        email_content = get_email_html(1)
         expect(email_content).to have_content("Administrator")
     end
 
-    def get_email_html
-        sleep 5 # Prevent flaky failures due to mail not being delivered yet
-        email_body = Devise::Mailer.deliveries[0].body.encoded
-        Nokogiri::HTML.parse(email_body).document
+    scenario 'should show errorors' do
+        create_user_with_exteral_coordinator_role
+
+        email_content = get_email_html(1)
+        expect(email_content).to have_content("External Coordinator")
     end
+end
+
+feature 'resend invitation email'do
+    before :each do
+        @admin_user = FactoryBot.create(:administrator)
+        sign_in(@admin_user.email, @admin_user.password)
+        find_link('link-users').click
+    end
+
+    scenario 'should show the user created' do
+        create_user_with_role('Administrator')
+
+        expect(page).to have_content('test1@test.com')
+    end
+
+    scenario 'should show a success message when email is sended' do
+        create_user_with_role('Administrator')
+        find_link('resend_user_email').click
+
+        expect(page).to have_css '.alert-success'
+    end
+
+
+    scenario 'should send a email when click resend link' do
+        create_user_with_role('Administrator')
+        find_link('resend_user_email').click
+
+        email_content = get_email_html(2)
+        link_url = email_content.xpath("//a")[0][:href]
+        expect(link_url).to include 'http://localhost:3000/users/invitation/accept?invitation_token='
+        expect(Devise::Mailer.deliveries.size).to eq(2)
+    end
+end
+
+def create_user_with_role(role)
+    fill_in 'user_email', with: 'test1@test.com'
+    select role, from: 'user_role'
+    click_button 'Submit'
+end
+
+def create_user_with_exteral_coordinator_role
+    FactoryBot.create :chapter, name: 'Test chapter'
+
+    fill_in 'user_email', with: 'test1@test.com'
+    select 'External Coordinator', from: 'user_role'
+    select 'Test chapter'
+    click_button 'Submit'
+end
+
+def get_email_html(email_number)
+    sleep 5 # Prevent flaky failures due to mail not being delivered yet
+    email_body = Devise::Mailer.deliveries[email_number - 1].body.encoded
+    Nokogiri::HTML.parse(email_body).document
 end

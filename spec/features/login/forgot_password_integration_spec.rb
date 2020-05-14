@@ -14,7 +14,7 @@ feature 'forgot password', :devise do
 
     click_button "Email me a recovery link"
 
-    email_content = get_email_html
+    email_content = get_forgot_email_html
     link_url = email_content.xpath("//a")[0][:href]
     img_src = email_content.xpath("//img")[0][:src]
 
@@ -61,7 +61,7 @@ feature 'forgot password', :devise do
   end
 end
 
-def get_email_html
+def get_forgot_email_html
   sleep 5 # Prevent flaky failures due to mail not being delivered yet
   email_body = Devise::Mailer.deliveries[0].body.encoded
   Nokogiri::HTML.parse(email_body).document

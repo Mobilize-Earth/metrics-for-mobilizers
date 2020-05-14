@@ -55,4 +55,6 @@ Rails.application.routes.draw do
   get '/locations/cities', to: 'locations#cities'
 
   get '/csvs/download', to: 'csvs#download', as: 'csv_download'
+
+  post 'resend_user_invitation/:id', to: 'users#resend_user_invitation', as: 'resend_user_invitation'
 end
