@@ -16,16 +16,27 @@ function updateTable() {
     getContext();
     xhr = $.getJSON('/reports/table', queryParams);
     xhr.done((result) => {
-        if (Object.keys(result).length > 1) {
-            data = result.sort((x, y) => y.members - x.members);
-            renderTableBody(result);
-        } else {
-            renderTableBody(result);
-        }
+        if (queryParams.chapter) result = [result.result];
+        data = normalize(result);
+        data = result.sort((x, y) => y.members - x.members);
+        renderTableBody(result);
     });
     xhr.always(() => {
         xhr = undefined;//clear request
     });
+}
+
+function normalize(data) {
+    return data.map(v => {
+        if (!v.members) v.members = 0;
+        if (!v.chapters) v.chapters = 0;
+        if (!v.signups) v.signups = 0;
+        if (!v.trainings) v.trainings = 0;
+        if (!v.arrestable_pledges) v.arrestable_pledges = 0;
+        if (!v.actions) v.actions = 0;
+        if (!v.mobilizations) v.mobilizations = 0;
+        if (!v.subscriptions) v.subscriptions = 0;
+    })
 }
 
 function getContext() {
@@ -123,14 +134,14 @@ const record = (obj) => {
 
     return `<tr>
               <td scope="row">${linkElement}</td>
-              <td>${obj.chapters === undefined ? 0 : numberFormatter.format(obj.chapters)}</td>
-              <td>${obj.members === undefined ? 0 : numberFormatter.format(obj.members)}</td>
-              <td>$${obj.subscriptions === undefined ? 0 : numberFormatter.format(obj.subscriptions)}</td>
-              <td>${obj.arrestable_pledges === undefined ? 0 : numberFormatter.format(obj.arrestable_pledges)}</td>
-              <td>${obj.mobilizations === undefined ? 0 : numberFormatter.format(obj.mobilizations)}</td>
-              <td>${obj.trainings === undefined ? 0 : numberFormatter.format(obj.trainings)}</td>
-              <td>${obj.signups === undefined ? 0 : numberFormatter.format(obj.signups)}</td>
-              <td>${obj.actions === undefined ? 0 : numberFormatter.format(obj.actions)}</td>
+              <td>${numberFormatter.format(obj.chapters)}</td>
+              <td>${numberFormatter.format(obj.members)}</td>
+              <td>$${numberFormatter.format(obj.subscriptions)}</td>
+              <td>${numberFormatter.format(obj.arrestable_pledges)}</td>
+              <td>${numberFormatter.format(obj.mobilizations)}</td>
+              <td>${numberFormatter.format(obj.trainings)}</td>
+              <td>${numberFormatter.format(obj.signups)}</td>
+              <td>${numberFormatter.format(obj.actions)}</td>
             </tr>`
 };
 

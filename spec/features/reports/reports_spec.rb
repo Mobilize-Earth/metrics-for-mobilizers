@@ -203,6 +203,71 @@ feature 'reports page authorization' do
   # end
 end
 
+feature 'table' do
+  before(:each) do
+    @user = FactoryBot.create(:coordinator)
+    # We have to add an address to coordinator chapter
+    first_chapter = Chapter.first
+    FactoryBot.create :us_address, chapter: first_chapter
+
+    sign_in(@user.email, @user.password)
+  end
+
+  feature 'showing all data' do
+    before(:each) do
+      @us_chapter = FactoryBot.create :chapter, name: 'us chapter', total_mobilizers: 100
+      FactoryBot.create :us_address, chapter: @us_chapter
+
+      @mx_chapter = FactoryBot.create :chapter, name: 'mx chapter', total_mobilizers: 50
+      FactoryBot.create :address, country: 'Mexico', chapter: @mx_chapter
+
+      visit reports_path
+      find('.report-table > tbody tr:nth-child(1)') # wait to have this element in the DOM, to be sure click handlers have been registered
+    end
+
+    scenario 'should contain data group by country' do
+      records = find('.report-table > tbody')
+      expect(records).to have_text 'United States'
+      expect(records).to have_text 'Mexico'
+    end
+
+    scenario 'should be sorted by mobilizers' do
+      records = find('.report-table > tbody')
+      expect(records.find('tr:nth-child(1)')).to have_text 'United States'
+      expect(records.find('tr:nth-child(2)')).to have_text 'Mexico'
+    end
+
+    scenario 'should sort by country when click on country header' do
+      find('.report-table', text: 'Countries').click
+
+      records = find('.report-table > tbody')
+      expect(records.find('tr:nth-child(1)')).to have_text 'Mexico'
+      expect(records.find('tr:nth-child(2)')).to have_text 'United States'
+    end
+
+    scenario 'should show expected data' do
+      @mx_chapter.update(total_mobilizers: 2, total_subscription_amount: 3, total_arrestable_pledges:4)
+      FactoryBot.create_list(:growth_activity, 5, chapter: @mx_chapter, newsletter_sign_ups:1)
+      FactoryBot.create_list(:training, 6, chapter: @mx_chapter, user: @user)
+      FactoryBot.create_list(:arrestable_action, 8, chapter: @mx_chapter, user: @user)
+
+      visit reports_path
+
+      mx_records = find('.report-table > tbody tr', text: 'Mexico')
+      expect(mx_records.find('td:nth-child(2)')).to have_text '1'
+      expect(mx_records.find('td:nth-child(3)')).to have_text '2'
+      expect(mx_records.find('td:nth-child(4)')).to have_text '3'
+      expect(mx_records.find('td:nth-child(5)')).to have_text '4'
+      expect(mx_records.find('td:nth-child(6)')).to have_text '5'
+      expect(mx_records.find('td:nth-child(7)')).to have_text '6'
+      expect(mx_records.find('td:nth-child(8)')).to have_text '5'
+      expect(mx_records.find('td:nth-child(9)')).to have_text '8'
+    end
+  end
+
+
+end
+
 def create_mobilizations
   user = FactoryBot.create(:user, {email: 'aa@bb.com'})
   chapter = FactoryBot.create(:chapter, {name: 'hello world'})

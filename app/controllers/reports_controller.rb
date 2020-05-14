@@ -271,7 +271,7 @@ class ReportsController < ApplicationController
         result[:trainings] = filtered_trainings.length
         result[:arrestable_pledges] = chapters.sum(&:total_arrestable_pledges)
         result[:actions] = filtered_street_swarms.length + filtered_arrestable_actions.length
-        result[:growth_activities] = filtered_mobilizations.length
+        result[:mobilizations] = filtered_mobilizations.length
         result[:subscriptions] =  chapters.sum(&:total_subscription_amount).to_int
       end
       result
