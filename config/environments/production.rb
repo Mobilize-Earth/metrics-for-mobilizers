@@ -2,7 +2,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
-  config.hosts << "reporting.mobilize.earth"
+  config.hosts << ""
 
   config.cache_classes = true
 
@@ -42,9 +42,9 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              '185.203.114.114',
-    port:                 25,
-    domain:               'reporting.mobilize.earth',
+    address:              '',
+    port:                 ,
+    domain:               '',
    }
 
     config.action_mailer.perform_deliveries = true
@@ -52,9 +52,9 @@ Rails.application.configure do
     config.action_mailer.raise_delivery_errors = false
     config.action_mailer.perform_caching = false
 
-    config.action_mailer.default_options = { from: 'donotreply@reporting.mobilize.earth' }
+    config.action_mailer.default_options = { from: '' }
 
-    config.action_mailer.default_url_options = { host: 'reporting.mobilize.earth' }
+    config.action_mailer.default_url_options = { host: '' }
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
