@@ -3,7 +3,7 @@ module Regions
   def self.us_regions
     {
       region_1: {
-        name: 'Upper East',
+        name: 'Upper East Coast',
         states: [
           'Connecticut',
           'Maine',
@@ -29,7 +29,7 @@ module Regions
         ]
       },
       region_3: {
-        name: 'South Atlantic & Gulf Coast',
+        name: 'Southeast',
         states: [
           'Alabama',
           'Florida',
@@ -49,7 +49,7 @@ module Regions
         states: %w[Arkansas Kansas Louisiana Missouri Oklahoma Texas]
       },
       region_6: {
-        name: 'Inner Mountain',
+        name: 'InterMountain',
         states: [
           'Arizona',
           'Colorado',
