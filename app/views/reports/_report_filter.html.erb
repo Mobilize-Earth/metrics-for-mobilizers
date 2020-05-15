@@ -1,3 +1,14 @@
+<div class="row">
+  <div class="col-12">
+    <div class="csv-download">
+      <% if current_user.role == 'admin' %>
+        <%= link_to csv_download_path, target: "_blank", id: "csv-download", class: "btn btn-lg login-button" do %>
+          CSV <span class="fa fa-arrow-down"></span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
 <div class="report-filter-container" id="sticky-filter-container">
   <div class="row">
     <div id="report-page-breadcrumbs" class="hidden">
@@ -40,13 +51,6 @@
       -
       <span class="report-page-end-date">32 February 2020</span>
     </h2>
-  </div>
-  <div class="csv-download">
-    <% if current_user.role == 'admin' %>
-      <%= link_to csv_download_path, target: "_blank", id: "csv-download", class: "btn btn-lg login-button" do %>
-        CSV <span class="fa fa-arrow-down"></span>
-      <% end %>
-    <% end %>
   </div>
 </div>
 
