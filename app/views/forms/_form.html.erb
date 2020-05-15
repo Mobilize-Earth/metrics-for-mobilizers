@@ -44,7 +44,6 @@
       document.getElementsByClassName('action-form-content')[0].style.minWidth = `${width}px`;
 
       setFormType(navLink.textContent);
-      updateParticipantsLabel(navLink.textContent);
       shouldClearForm && clearFormFields();
       unselectAllNavLinks();
       selectNavLink(navLink);
@@ -59,15 +58,6 @@
           document.getElementById('blitz-type-input').value = type;
       }
       document.getElementById('training-type-input').value = type;
-  };
-
-  const updateParticipantsLabel = type => {
-      let participantsLabel = $('#participants_label');
-      if(type === 'Fly Posting / Chalking') {
-          participantsLabel.text("Number of Flyers Distributed *");
-      } else  {
-          participantsLabel.text("Number of People Engaged *");
-      }
   };
 
   const clearFormFields = () => {
